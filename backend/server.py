@@ -80,6 +80,12 @@ class TournamentCreate(BaseModel):
     country: str
     description: str
 
+class TournamentFilter(BaseModel):
+    game_type: Optional[str] = None
+    country: Optional[str] = None
+    mode: Optional[str] = None
+    status: Optional[str] = None
+
 class PaymentCreate(BaseModel):
     tournament_id: str
     amount: float
