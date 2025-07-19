@@ -13,7 +13,7 @@ import {
   Award
 } from 'lucide-react';
 import { apiService } from '../services/api';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const Home = () => {
