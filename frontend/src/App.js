@@ -29,7 +29,7 @@ import AdminUsers from './pages/admin/AdminUsers';
 import AdminAnalytics from './pages/admin/AdminAnalytics';
 
 // Hooks
-import { useAuth } from './hooks/useAuth';
+import { useAuth } from './context/AuthContext';
 
 const App = () => {
   return (
