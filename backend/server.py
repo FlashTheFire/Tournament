@@ -16,6 +16,7 @@ import base64
 from typing import Union
 import qrcode
 from io import BytesIO
+import asyncio
 
 # Load environment variables
 load_dotenv()
