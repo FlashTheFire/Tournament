@@ -376,6 +376,261 @@ async def get_tournament(tournament_id: str):
     
     return tournament
 
+@app.post("/api/auth/verify-freefire")
+async def verify_free_fire_uid(verify_data: FreeFrieUserVerify, current_user: dict = Depends(get_current_user)):
+    """Verify Free Fire UID and get user information"""
+    try:
+        # Call demo Free Fire API
+        ff_user_data = await get_free_fire_user_info(verify_data.free_fire_uid)
+        
+        # Update user's Free Fire information
+        users_collection.update_one(
+            {"user_id": current_user["user_id"]},
+            {
+                "$set": {
+                    "free_fire_uid": verify_data.free_fire_uid,
+                    "free_fire_data": ff_user_data,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        return {
+            "message": "Free Fire UID verified successfully",
+            "user_data": ff_user_data
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to verify Free Fire UID: {str(e)}")
+
+@app.post("/api/payments/create-qr")
+async def create_payment_qr(payment_data: PaymentCreate, current_user: dict = Depends(get_current_user)):
+    """Generate Paytm QR code for tournament registration"""
+    # Check if tournament exists
+    tournament = tournaments_collection.find_one({"tournament_id": payment_data.tournament_id})
+    if not tournament:
+        raise HTTPException(status_code=404, detail="Tournament not found")
+    
+    # Check if user already registered
+    existing_registration = registrations_collection.find_one({
+        "tournament_id": payment_data.tournament_id,
+        "user_id": current_user["user_id"]
+    })
+    if existing_registration:
+        raise HTTPException(status_code=400, detail="Already registered for this tournament")
+    
+    # Create order ID
+    order_id = f"ORD_{payment_data.tournament_id}_{current_user['user_id']}_{uuid.uuid4().hex[:8]}"
+    
+    try:
+        # Generate QR code using demo Paytm API
+        qr_data = await generate_paytm_qr(order_id, payment_data.amount)
+        
+        # Save payment record
+        payment_doc = {
+            "order_id": order_id,
+            "user_id": current_user["user_id"],
+            "tournament_id": payment_data.tournament_id,
+            "amount": payment_data.amount,
+            "status": "pending",
+            "qr_code": qr_data["qr_code"],
+            "expires_at": datetime.fromisoformat(qr_data["expires_at"]),
+            "created_at": datetime.utcnow()
+        }
+        
+        payments_collection.insert_one(payment_doc)
+        
+        return {
+            "order_id": order_id,
+            "qr_code": qr_data["qr_code"],
+            "amount": payment_data.amount,
+            "expires_at": qr_data["expires_at"]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to create payment: {str(e)}")
+
+@app.get("/api/payments/{order_id}/status")
+async def check_payment(order_id: str, current_user: dict = Depends(get_current_user)):
+    """Check payment status"""
+    # Find payment record
+    payment = payments_collection.find_one({"order_id": order_id, "user_id": current_user["user_id"]})
+    if not payment:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    
+    try:
+        # Check status using demo Paytm API
+        status_data = await check_payment_status(order_id)
+        
+        # Update payment status
+        payments_collection.update_one(
+            {"order_id": order_id},
+            {
+                "$set": {
+                    "status": status_data["status"],
+                    "transaction_id": status_data.get("transaction_id"),
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        # If payment successful, register user for tournament
+        if status_data["status"] == "success":
+            tournament_id = payment["tournament_id"]
+            
+            # Check if not already registered
+            existing_registration = registrations_collection.find_one({
+                "tournament_id": tournament_id,
+                "user_id": current_user["user_id"]
+            })
+            
+            if not existing_registration:
+                # Create registration
+                registration_doc = {
+                    "registration_id": str(uuid.uuid4()),
+                    "tournament_id": tournament_id,
+                    "user_id": current_user["user_id"],
+                    "payment_order_id": order_id,
+                    "registered_at": datetime.utcnow(),
+                    "status": "confirmed"
+                }
+                registrations_collection.insert_one(registration_doc)
+                
+                # Update tournament participant count
+                tournaments_collection.update_one(
+                    {"tournament_id": tournament_id},
+                    {"$inc": {"current_participants": 1}}
+                )
+                
+                # Update user wallet balance (add any refund if needed)
+                # For now, just track successful payment
+        
+        return {
+            "order_id": order_id,
+            "status": status_data["status"],
+            "transaction_id": status_data.get("transaction_id"),
+            "amount": payment["amount"]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to check payment status: {str(e)}")
+
+@app.post("/api/tournaments/{tournament_id}/register")
+async def register_for_tournament(tournament_id: str, current_user: dict = Depends(get_current_user)):
+    """Register for a tournament (free tournaments or with confirmed payment)"""
+    tournament = tournaments_collection.find_one({"tournament_id": tournament_id})
+    if not tournament:
+        raise HTTPException(status_code=404, detail="Tournament not found")
+    
+    # Check if tournament is full
+    if tournament["current_participants"] >= tournament["max_participants"]:
+        raise HTTPException(status_code=400, detail="Tournament is full")
+    
+    # Check if registration deadline passed
+    if datetime.utcnow() > tournament["registration_deadline"]:
+        raise HTTPException(status_code=400, detail="Registration deadline has passed")
+    
+    # Check if user already registered
+    existing_registration = registrations_collection.find_one({
+        "tournament_id": tournament_id,
+        "user_id": current_user["user_id"]
+    })
+    if existing_registration:
+        raise HTTPException(status_code=400, detail="Already registered for this tournament")
+    
+    # For free tournaments (entry_fee = 0)
+    if tournament["entry_fee"] == 0:
+        registration_doc = {
+            "registration_id": str(uuid.uuid4()),
+            "tournament_id": tournament_id,
+            "user_id": current_user["user_id"],
+            "payment_order_id": None,
+            "registered_at": datetime.utcnow(),
+            "status": "confirmed"
+        }
+        registrations_collection.insert_one(registration_doc)
+        
+        # Update participant count
+        tournaments_collection.update_one(
+            {"tournament_id": tournament_id},
+            {"$inc": {"current_participants": 1}}
+        )
+        
+        return {"message": "Successfully registered for tournament", "registration_id": registration_doc["registration_id"]}
+    else:
+        # For paid tournaments, require payment first
+        raise HTTPException(status_code=400, detail="Payment required for this tournament. Use /api/payments/create-qr endpoint first.")
+
+@app.get("/api/user/tournaments")
+async def get_user_tournaments(current_user: dict = Depends(get_current_user)):
+    """Get user's registered tournaments"""
+    # Get user's registrations
+    registrations = list(registrations_collection.find({"user_id": current_user["user_id"]}))
+    
+    # Get tournament details for each registration
+    user_tournaments = []
+    for registration in registrations:
+        tournament = tournaments_collection.find_one({"tournament_id": registration["tournament_id"]})
+        if tournament:
+            tournament.pop("_id", None)
+            tournament["start_time"] = tournament["start_time"].isoformat()
+            tournament["registration_deadline"] = tournament["registration_deadline"].isoformat() 
+            tournament["created_at"] = tournament["created_at"].isoformat()
+            tournament["updated_at"] = tournament["updated_at"].isoformat()
+            tournament["registration_status"] = registration["status"]
+            tournament["registered_at"] = registration["registered_at"].isoformat()
+            user_tournaments.append(tournament)
+    
+    return {"tournaments": user_tournaments}
+
+@app.get("/api/leaderboards")
+async def get_leaderboards(
+    game_type: Optional[str] = "free_fire",
+    tournament_id: Optional[str] = None,
+    limit: int = 50
+):
+    """Get leaderboards - demo data for now"""
+    # Mock leaderboard data
+    mock_leaderboard = [
+        {
+            "rank": 1,
+            "user_id": "user1",
+            "username": "ProGamer_FF",
+            "kills": 245,
+            "wins": 89,
+            "points": 8750,
+            "level": 65,
+            "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+        },
+        {
+            "rank": 2,
+            "user_id": "user2", 
+            "username": "FF_Champion",
+            "kills": 220,
+            "wins": 82,
+            "points": 8200,
+            "level": 72,
+            "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+        },
+        # Add more mock data...
+    ]
+    
+    # Add more mock entries
+    for i in range(3, limit + 1):
+        mock_leaderboard.append({
+            "rank": i,
+            "user_id": f"user{i}",
+            "username": f"Player_{i:03d}",
+            "kills": max(10, 250 - (i * 5)),
+            "wins": max(5, 90 - (i * 2)),
+            "points": max(100, 9000 - (i * 50)),
+            "level": max(10, 70 - i),
+            "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+        })
+    
+    return {
+        "leaderboard": mock_leaderboard[:limit],
+        "game_type": game_type,
+        "tournament_id": tournament_id
+    }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
