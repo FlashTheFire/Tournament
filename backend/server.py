@@ -12,6 +12,10 @@ from passlib.context import CryptContext
 import uuid
 import httpx
 import json
+import base64
+from typing import Union
+import qrcode
+from io import BytesIO
 
 # Load environment variables
 load_dotenv()
