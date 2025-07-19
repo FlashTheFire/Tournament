@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { User, Bell, Shield, Gamepad2 } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthContext';
 
 const Settings = () => {
   const { user } = useAuth();
