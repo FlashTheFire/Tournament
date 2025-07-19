@@ -114,6 +114,108 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
+# Demo API Functions
+async def get_free_fire_user_info(uid: str) -> Dict[str, Any]:
+    """Demo Free Fire API - returns mock user data"""
+    # Simulate API call delay
+    await asyncio.sleep(0.5)
+    
+    # Mock user data based on UID
+    mock_users = {
+        "123456789": {
+            "uid": "123456789",
+            "username": "ProGamer_FF",
+            "level": 65,
+            "rank": "Heroic",
+            "total_matches": 1250,
+            "wins": 342,
+            "kills": 8750,
+            "survival_rate": "27.4%",
+            "avg_damage": 1847,
+            "headshot_rate": "18.5%",
+            "profile_pic": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+            "is_verified": True
+        },
+        "987654321": {
+            "uid": "987654321", 
+            "username": "FF_Champion",
+            "level": 72,
+            "rank": "Grand Master",
+            "total_matches": 2100,
+            "wins": 689,
+            "kills": 15420,
+            "survival_rate": "32.8%",
+            "avg_damage": 2156,
+            "headshot_rate": "22.1%",
+            "profile_pic": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+            "is_verified": True
+        }
+    }
+    
+    # Return mock data or default
+    return mock_users.get(uid, {
+        "uid": uid,
+        "username": f"Player_{uid[-4:]}",
+        "level": 45,
+        "rank": "Elite",
+        "total_matches": 850,
+        "wins": 187,
+        "kills": 4250,
+        "survival_rate": "22.0%",
+        "avg_damage": 1456,
+        "headshot_rate": "15.2%",
+        "profile_pic": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "is_verified": False
+    })
+
+async def generate_paytm_qr(order_id: str, amount: float) -> Dict[str, Any]:
+    """Demo Paytm API - generates mock QR code"""
+    await asyncio.sleep(0.3)
+    
+    # Generate a simple QR code with order info
+    qr_data = f"paytm://pay?order_id={order_id}&amount={amount}&merchant=demo"
+    
+    # Create QR code
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(qr_data)
+    qr.make(fit=True)
+    
+    # Convert to base64 image
+    img = qr.make_image(fill_color="black", back_color="white")
+    buffer = BytesIO()
+    img.save(buffer, format='PNG')
+    qr_base64 = base64.b64encode(buffer.getvalue()).decode()
+    
+    return {
+        "qr_code": f"data:image/png;base64,{qr_base64}",
+        "order_id": order_id,
+        "amount": amount,
+        "status": "pending",
+        "expires_at": (datetime.utcnow() + timedelta(minutes=15)).isoformat()
+    }
+
+async def check_payment_status(order_id: str) -> Dict[str, Any]:
+    """Demo Paytm API - returns mock payment status"""
+    await asyncio.sleep(0.2)
+    
+    # Simulate different payment statuses based on order_id
+    if "success" in order_id.lower():
+        status = "success"
+    elif "failed" in order_id.lower():
+        status = "failed"
+    else:
+        # Random status for demo
+        import random
+        status = random.choice(["success", "pending", "failed"])
+    
+    return {
+        "order_id": order_id,
+        "status": status,
+        "transaction_id": f"TXN_{order_id}_{uuid.uuid4().hex[:8]}",
+        "amount": 100.0,  # Mock amount
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
 # API Routes
 @app.get("/api/health")
 async def health_check():
