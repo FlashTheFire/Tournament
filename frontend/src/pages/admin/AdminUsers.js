@@ -74,7 +74,7 @@ const AdminUsers = () => {
       setTotalUsers(data.total_count || 0);
     } catch (error) {
       console.error('Failed to load users:', error);
-      toast.error('Failed to load users');
+      safeToast.error('Failed to load users');
     } finally {
       setLoading(false);
     }
