@@ -13,6 +13,7 @@ httpcore==1.0.9
 websockets==12.0
 email-validator==2.1.0
 Pillow==10.1.0
+pypng==0.20220715.0
 requests==2.31.0
 qrcode[pil]==7.4.2
 numpy==1.24.3
