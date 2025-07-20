@@ -521,15 +521,15 @@ const Home = () => {
 
         {/* Mobile-first hero content */}
         <div className="relative z-10 text-center w-full px-4 sm:px-6 lg:px-8">
-          {/* Mobile-optimized main title */}
+          {/* Desktop: Horizontal layout with compact text sizes */}
           <motion.h1 
-            className="font-black font-gaming leading-none mb-8 sm:mb-12
+            className="font-black font-gaming leading-none mb-6 sm:mb-8
               /* Mobile: compact hero title */
               text-4xl
               /* Tablet: medium hero title */
-              sm:text-6xl md:text-7xl
-              /* Desktop: massive hero title */
-              lg:text-8xl xl:text-9xl
+              sm:text-5xl md:text-6xl
+              /* Desktop: reduced hero title */
+              lg:text-7xl xl:text-8xl
             "
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -553,13 +553,13 @@ const Home = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-gray-200 leading-relaxed drop-shadow-lg max-w-7xl mx-auto font-medium mb-8 sm:mb-16
+            className="text-gray-200 leading-relaxed drop-shadow-lg max-w-5xl mx-auto font-medium mb-6 sm:mb-12
               /* Mobile: compact description */
-              text-base
+              text-sm
               /* Tablet: medium description */
-              sm:text-xl md:text-2xl
-              /* Desktop: large description */
-              lg:text-4xl
+              sm:text-lg md:text-xl
+              /* Desktop: reduced description size */
+              lg:text-2xl
             "
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -570,15 +570,15 @@ const Home = () => {
             real-time analytics, and massive prize pools!
           </motion.p>
           
-          {/* Mobile-first live stats - Different layouts for mobile vs desktop */}
+          {/* Horizontal stats layout on desktop */}
           <motion.div
-            className="mb-8 sm:mb-16 max-w-7xl mx-auto
+            className="mb-6 sm:mb-12 max-w-6xl mx-auto
               /* Mobile: single column stack */
-              grid grid-cols-1 gap-4
+              grid grid-cols-1 gap-3
               /* Tablet: 3 columns */
-              sm:grid-cols-3 sm:gap-6
-              /* Desktop: spacious 3 columns */
-              lg:gap-8
+              sm:grid-cols-3 sm:gap-4
+              /* Desktop: horizontal 4 columns with reduced spacing */
+              lg:grid-cols-4 lg:gap-6
             "
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -587,18 +587,21 @@ const Home = () => {
             {[
               { icon: Activity, label: 'Live Battles', value: liveStats.liveMatches, color: 'text-neon-green', gradient: 'from-neon-green/20 to-emerald-500/20', border: 'border-neon-green/30' },
               { icon: Users, label: 'Elite Warriors', value: `${Math.floor(liveStats.activePlayers/1000)}K+`, color: 'text-neon-purple', gradient: 'from-neon-purple/20 to-electric-purple/20', border: 'border-neon-purple/30' },
-              { icon: Crown, label: 'Prize Pool', value: `₹${Math.floor(liveStats.totalPrizePool/100000)/10}M`, color: 'text-yellow-400', gradient: 'from-yellow-400/20 to-orange-500/20', border: 'border-yellow-400/30' }
+              { icon: Crown, label: 'Prize Pool', value: `₹${Math.floor(liveStats.totalPrizePool/100000)/10}M`, color: 'text-yellow-400', gradient: 'from-yellow-400/20 to-orange-500/20', border: 'border-yellow-400/30' },
+              { icon: Trophy, label: 'Tournaments', value: liveStats.totalTournaments, color: 'text-neon-blue', gradient: 'from-neon-blue/20 to-cyan-500/20', border: 'border-neon-blue/30' }
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
                 className={`glass bg-gradient-to-br ${stat.gradient} border ${stat.border} relative overflow-hidden backdrop-blur-2xl text-center
                   /* Mobile: compact stat card */
-                  rounded-2xl p-4
-                  /* Desktop: spacious stat card */
-                  lg:rounded-3xl lg:p-6 xl:p-8
+                  rounded-xl p-3
+                  /* Tablet: medium card */
+                  sm:rounded-2xl sm:p-4
+                  /* Desktop: compact horizontal card */
+                  lg:rounded-2xl lg:p-4
                 `}
-                whileHover={{ scale: 1.05, y: -10, rotateY: 5 }}
-                animate={{ y: [-3, 3, -3] }}
+                whileHover={{ scale: 1.05, y: -5 }}
+                animate={{ y: [-2, 2, -2] }}
                 transition={{ 
                   y: { duration: 4, repeat: Infinity, delay: index * 0.7 },
                   scale: { duration: 0.3 }
@@ -610,29 +613,35 @@ const Home = () => {
                   transition={{ duration: 25, repeat: Infinity, ease: "linear", delay: index * 3 }}
                   className="relative z-10"
                 >
-                  <stat.icon className={`${stat.color} mx-auto mb-3 sm:mb-4 drop-shadow-2xl
+                  <stat.icon className={`${stat.color} mx-auto mb-2 drop-shadow-2xl
                     /* Mobile: smaller icon */
-                    h-8 w-8
-                    /* Desktop: larger icon */
-                    sm:h-12 sm:w-12 lg:h-16 lg:w-16
+                    h-6 w-6
+                    /* Tablet: medium icon */
+                    sm:h-8 sm:w-8
+                    /* Desktop: compact icon */
+                    lg:h-10 lg:w-10
                   `} />
                 </motion.div>
                 <div className="relative z-10">
                   <motion.p 
-                    className={`${stat.color} font-gaming font-black drop-shadow-2xl mb-2
+                    className={`${stat.color} font-gaming font-black drop-shadow-2xl mb-1
                       /* Mobile: compact stat value */
-                      text-2xl
-                      /* Desktop: large stat value */
-                      sm:text-3xl lg:text-5xl
+                      text-xl
+                      /* Tablet: medium value */
+                      sm:text-2xl
+                      /* Desktop: compact value */
+                      lg:text-3xl
                     `}
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
                   >{stat.value}</motion.p>
                   <p className="text-white font-semibold
                     /* Mobile: small label */
-                    text-sm
-                    /* Desktop: larger label */
-                    sm:text-lg lg:text-xl
+                    text-xs
+                    /* Tablet: medium label */
+                    sm:text-sm
+                    /* Desktop: compact label */
+                    lg:text-base
                   ">{stat.label}</p>
                 </div>
               </motion.div>
