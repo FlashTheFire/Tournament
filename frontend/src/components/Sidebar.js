@@ -419,20 +419,20 @@ const Sidebar = ({ isOpen, onClose }) => {
         )}
       </AnimatePresence>
 
-      {/* Mobile-First Sidebar - Full Overlay */}
+      {/* Mobile-First Sidebar - Left Aligned with Proper Width */}
       <motion.aside
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
         className={`fixed left-0 top-0 h-full glass-mobile border-r border-white/10 z-50 kinetic-waves
-          /* Mobile: full overlay with glassmorphic background */
-          w-full
-          /* Small mobile: slightly narrower */
+          /* Mobile: 85% width for better content visibility */
+          w-[85%] max-w-sm
+          /* Small mobile: fixed width */
           xs:w-80
           /* Tablet: medium sidebar width */  
           sm:w-80
           /* Desktop: spacious sidebar - always overlay, never changes layout */
-          lg:w-80
+          lg:w-96
         `}
         style={{
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))',
