@@ -13,7 +13,11 @@ import {
   Gamepad2,
   Zap,
   Star,
-  Shield
+  Shield,
+  Activity,
+  Timer,
+  Gift,
+  Award
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useLocation } from 'react-router-dom';
@@ -194,7 +198,7 @@ const Navbar = ({ onMenuClick }) => {
               /* Desktop: larger wallet text */
               sm:text-sm
             ">
-              ₹{user?.wallet_balance?.toLocaleString() || '0'}
+              {user?.wallet_balance?.toLocaleString() || '0'}
             </span>
           </motion.div>
 
