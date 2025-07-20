@@ -87,9 +87,11 @@ const Navbar = ({ onMenuClick }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
       className="glass-mobile border-b border-white/10 relative z-40
-        /* Mobile: compact navbar padding */
-        px-4 py-3
-        /* Desktop: spacious navbar padding */
+        /* Mobile: very compact navbar padding */
+        px-2 py-2
+        /* Small mobile: slightly more padding */
+        xs:px-4 xs:py-3
+        /* Tablet: normal padding */
         sm:px-6 sm:py-4
       "
     >
