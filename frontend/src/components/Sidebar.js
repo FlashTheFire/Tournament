@@ -419,7 +419,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         )}
       </AnimatePresence>
 
-      {/* Mobile-First Sidebar - Left Aligned with Full Width Text */}
+      {/* LEFT SIDE Sidebar - Ensuring it opens from LEFT */}
       <motion.aside
         initial="closed"
         animate={isOpen ? "open" : "closed"}
@@ -439,6 +439,9 @@ const Sidebar = ({ isOpen, onClose }) => {
           backdropFilter: 'blur(32px)',
           borderImage: 'linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(139, 92, 246, 0.3), rgba(255, 0, 128, 0.3)) 1',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+          // Explicitly ensure left positioning
+          left: '0px',
+          right: 'auto',
         }}
       >
         <div className={`flex flex-col h-full relative z-10 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
