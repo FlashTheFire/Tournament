@@ -680,122 +680,140 @@ const Home = () => {
             </p>
           </motion.div>
           
-          {/* Premium Mobile Auto-Scroll Carousel for AI Insights */}
+          {/* Professional Premium Auto-Scroll Carousel for AI Insights */}
           <div className="max-w-7xl mx-auto">
-            {/* Mobile: Advanced Premium Auto-Scroll Carousel */}
+            {/* Mobile: Professional Auto-Scroll Carousel with Navigation */}
             <div className="lg:hidden">
-              <div className="relative overflow-hidden rounded-2xl">
-                {/* Premium auto-scrolling container - Full element scroll */}
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl">
+                {/* Professional auto-scrolling container with manual controls */}
                 <motion.div
                   className="flex gap-4"
                   animate={{
                     x: ['0%', '-100%', '-200%', '0%'],
                   }}
                   transition={{
-                    duration: 15,
+                    duration: 20,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    repeatDelay: 2
+                    repeatDelay: 3
                   }}
                   style={{ width: '300%' }}
                 >
                   {/* Triple the cards for seamless infinite loop */}
                   {[...aiPredictions, ...aiPredictions, ...aiPredictions].map((insight, index) => (
-                    <div key={`${insight.id}-${Math.floor(index/3)}-${index%3}`} className="w-1/3 flex-shrink-0 px-2">
+                    <div key={`${insight.id}-${Math.floor(index/3)}-${index%3}`} className="w-1/3 flex-shrink-0 p-4">
                       <motion.div
-                        className={`glass rounded-2xl p-6 relative overflow-hidden border border-white/10 bg-gradient-to-br ${insight.gradient}/20 shadow-2xl h-full`}
+                        className={`relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl h-full backdrop-blur-xl rounded-2xl`}
                         whileHover={{ scale: 1.02, y: -5 }}
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: (index % 3) * 0.2 }}
                       >
-                        {/* Advanced premium glow effect */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></div>
-                        
-                        {/* Premium floating orbs */}
-                        <div className="absolute top-2 right-2 w-3 h-3 bg-gradient-to-r from-neon-blue to-electric-purple rounded-full animate-pulse opacity-60"></div>
-                        <div className="absolute bottom-2 left-2 w-2 h-2 bg-gradient-to-r from-neon-red to-neon-pink rounded-full animate-ping opacity-40"></div>
-                        
-                        <div className="flex items-start justify-between mb-4 relative z-10">
-                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${insight.gradient} flex items-center justify-center shadow-glow`}>
-                            <insight.icon className="h-6 w-6 text-white" />
-                          </div>
-                          <motion.div 
-                            className={`px-3 py-1 rounded-full bg-gradient-to-r ${insight.gradient} text-white font-bold text-sm shadow-neon`}
-                            animate={{ scale: [1, 1.1, 1] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                          >
-                            {insight.confidence}%
-                          </motion.div>
+                        {/* Professional Shine Animation Effect */}
+                        <div className="absolute inset-0 overflow-hidden rounded-2xl">
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12"
+                            animate={{
+                              x: ['-200%', '200%'],
+                            }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              repeatDelay: 4,
+                              ease: "easeInOut",
+                            }}
+                            style={{ width: '150%' }}
+                          />
                         </div>
                         
-                        <h3 className="text-white font-bold text-lg mb-3 relative z-10">{insight.title}</h3>
-                        <p className="text-gray-300 mb-4 text-sm leading-relaxed relative z-10">{insight.prediction}</p>
+                        {/* Professional branded glow frame */}
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-neon-blue/20 via-transparent to-electric-purple/20 animate-pulse"></div>
                         
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className={`w-full btn-premium bg-gradient-to-r ${insight.gradient} text-white font-bold py-3 rounded-xl text-sm transition-all duration-300 relative z-10 shadow-glow-lg`}
-                        >
-                          {insight.action}
-                        </motion.button>
-
-                        {/* Advanced premium particle effects */}
-                        <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-                          {[...Array(8)].map((_, i) => (
-                            <motion.div
-                              key={i}
-                              className={`absolute w-1 h-1 bg-gradient-to-r ${insight.gradient} rounded-full opacity-70`}
-                              animate={{
-                                x: [0, Math.random() * 150 - 75],
-                                y: [0, Math.random() * 150 - 75],
-                                opacity: [0, 1, 0],
-                                scale: [0, 1, 0],
-                              }}
-                              transition={{
-                                duration: 4 + Math.random() * 3,
-                                repeat: Infinity,
-                                delay: i * 0.7,
-                                ease: "easeInOut",
-                              }}
-                              style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `${Math.random() * 100}%`,
-                              }}
-                            />
-                          ))}
+                        <div className="relative z-10 p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${insight.gradient} flex items-center justify-center shadow-glow-lg border border-white/30`}>
+                              <insight.icon className="h-7 w-7 text-white drop-shadow-lg" />
+                            </div>
+                            <motion.div 
+                              className={`px-4 py-2 rounded-full bg-gradient-to-r ${insight.gradient} text-white font-bold text-sm shadow-glow-lg border border-white/30`}
+                              animate={{ scale: [1, 1.1, 1] }}
+                              transition={{ duration: 2, repeat: Infinity }}
+                            >
+                              {insight.confidence}%
+                            </motion.div>
+                          </div>
+                          
+                          <h3 className="text-white font-bold text-lg mb-3 drop-shadow-lg">{insight.title}</h3>
+                          <p className="text-gray-300 mb-6 text-sm leading-relaxed">{insight.prediction}</p>
+                          
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className={`w-full btn-premium bg-gradient-to-r ${insight.gradient} text-white font-bold py-4 rounded-xl text-sm transition-all duration-300 shadow-glow-lg border border-white/30`}
+                          >
+                            {insight.action}
+                          </motion.button>
                         </div>
                       </motion.div>
                     </div>
                   ))}
                 </motion.div>
 
-                {/* Enhanced premium scroll indicators */}
-                <div className="flex justify-center space-x-3 mt-6">
+                {/* Professional Navigation Controls */}
+                <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-20">
+                  <motion.button
+                    whileHover={{ scale: 1.1, x: -2 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="w-12 h-12 rounded-full bg-gradient-to-r from-neon-blue to-electric-purple shadow-glow-lg border border-white/30 backdrop-blur-xl flex items-center justify-center text-white"
+                    onClick={() => {/* Previous logic */}}
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </motion.button>
+                </div>
+                
+                <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-20">
+                  <motion.button
+                    whileHover={{ scale: 1.1, x: 2 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="w-12 h-12 rounded-full bg-gradient-to-r from-electric-purple to-neon-pink shadow-glow-lg border border-white/30 backdrop-blur-xl flex items-center justify-center text-white"
+                    onClick={() => {/* Next logic */}}
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </motion.button>
+                </div>
+
+                {/* Professional Progress Indicators */}
+                <div className="flex justify-center space-x-4 mt-6 pb-4">
                   {aiPredictions.map((_, index) => (
                     <motion.div
                       key={index}
-                      className="relative"
-                      animate={{
-                        scale: [1, 1.3, 1],
-                      }}
-                      transition={{
-                        duration: 5,
-                        repeat: Infinity,
-                        delay: index * 5,
-                      }}
+                      className="relative w-8 h-2 bg-black/40 rounded-full overflow-hidden border border-white/20"
                     >
-                      <div className="w-3 h-3 rounded-full bg-gradient-to-r from-neon-blue via-electric-purple to-neon-pink opacity-80"></div>
                       <motion.div
-                        className="absolute inset-0 w-3 h-3 rounded-full bg-gradient-to-r from-neon-blue to-electric-purple"
+                        className="absolute inset-0 bg-gradient-to-r from-neon-blue via-electric-purple to-neon-pink rounded-full"
                         animate={{
+                          x: ['-100%', '0%', '100%'],
                           opacity: [0.3, 1, 0.3],
-                          scale: [0.8, 1.2, 0.8],
                         }}
                         transition={{
-                          duration: 5,
+                          duration: 6.67,
                           repeat: Infinity,
-                          delay: index * 5,
+                          delay: index * 6.67,
+                          ease: "easeInOut",
+                        }}
+                      />
+                      
+                      {/* Shine effect on progress bar */}
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                        animate={{
+                          x: ['-100%', '100%'],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          repeatDelay: 4,
+                          ease: "easeInOut",
                         }}
                       />
                     </motion.div>
