@@ -147,11 +147,11 @@ const AppContent = () => {
     <div className="flex h-screen overflow-hidden relative z-10">
       {user && (
         <>
-          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-          <div className="flex-1 flex flex-col min-w-0">
+          {/* Full-screen main content - no sidebar layout changes */}
+          <div className="w-full flex flex-col min-w-0">
             <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
             <main className="flex-1 overflow-auto relative
-              /* Mobile: very compact padding to prevent overflow */
+              /* Mobile: full-screen padding */
               px-2 py-3
               /* Small mobile: slightly more padding */
               xs:px-4 xs:py-4
@@ -305,6 +305,9 @@ const AppContent = () => {
               </AnimatePresence>
             </main>
           </div>
+          
+          {/* Overlay Sidebar - Always on top */}
+          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         </>
       )}
       
