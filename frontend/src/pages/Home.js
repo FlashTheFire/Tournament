@@ -1054,43 +1054,44 @@ const Home = () => {
             ">Join the most epic battles</p>
           </motion.div>
           
-          {/* Professional Premium Tournament Auto-Scroll Carousel */}
+          {/* Professional Touch-Enabled Tournament Carousel */}
           <div className="max-w-7xl mx-auto">
-            {/* Mobile: Professional Tournament Auto-Scroll Carousel with Navigation */}
+            {/* Mobile: Professional Touch-Enabled Tournament Carousel */}
             <div className="lg:hidden">
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl">
-                {/* Professional auto-scrolling container with manual controls */}
+              <div 
+                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={() => handleTouchEnd('tournament')}
+              >
+                {/* Professional tournament carousel container */}
                 <motion.div
-                  className="flex gap-6"
+                  className="flex"
                   animate={{
-                    x: ['0%', '-100%', '-200%', '0%'],
+                    x: `${-tournamentCurrentIndex * 100}%`,
                   }}
                   transition={{
-                    duration: 24,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    repeatDelay: 4
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
                   }}
-                  style={{ width: '300%' }}
+                  style={{ width: `${Math.min(tournaments.length, 3) * 100}%` }}
                 >
-                  {/* Triple the tournament cards for seamless infinite loop */}
-                  {[...tournaments.slice(0, 3), ...tournaments.slice(0, 3), ...tournaments.slice(0, 3)].map((tournament, index) => (
-                    <div key={`${tournament.tournament_id}-${Math.floor(index/3)}-${index%3}`} className="w-1/3 flex-shrink-0 p-4">
+                  {tournaments.slice(0, 3).map((tournament, index) => (
+                    <div key={tournament.tournament_id} className="w-full flex-shrink-0 p-4">
                       <motion.div
                         className="tournament-card relative overflow-hidden border border-white/20 hover:border-neon-blue/50 group shadow-2xl h-full backdrop-blur-xl rounded-2xl bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60"
-                        initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ delay: (index % 3) * 0.15, type: "spring", stiffness: 100 }}
-                        whileHover={{ 
-                          y: -10, 
-                          scale: 1.02,
-                          transition: { type: "spring", stiffness: 300, damping: 20 }
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ 
+                          opacity: index === tournamentCurrentIndex ? 1 : 0.7,
+                          scale: index === tournamentCurrentIndex ? 1 : 0.95 
                         }}
+                        transition={{ duration: 0.5 }}
                       >
-                        {/* Professional Shine Animation Effect for Tournaments */}
+                        {/* Professional Tournament Shine Animation */}
                         <div className="absolute inset-0 overflow-hidden rounded-2xl">
                           <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent transform -skew-x-12"
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12"
                             animate={{
                               x: ['-200%', '200%'],
                             }}
@@ -1111,11 +1112,7 @@ const Home = () => {
                             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                           />
                           
-                          {/* Professional branded overlay */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                          
-                          {/* Premium branded frame */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-neon-blue/10 via-transparent to-electric-purple/10 animate-pulse"></div>
                           
                           {/* Enhanced Status Badge */}
                           <div className="absolute top-4 lg:top-6 left-4 lg:left-6">
@@ -1158,7 +1155,6 @@ const Home = () => {
                               {tournament.name}
                             </h3>
                             
-                            {/* Enhanced info cards */}
                             <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:items-center sm:justify-between">
                               <motion.div 
                                 className="flex items-center space-x-2 backdrop-blur-xl bg-black/50 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl border border-white/30 shadow-glow-lg"
@@ -1204,7 +1200,7 @@ const Home = () => {
                     whileHover={{ scale: 1.1, x: -2 }}
                     whileTap={{ scale: 0.9 }}
                     className="w-14 h-14 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 shadow-glow-lg border border-white/30 backdrop-blur-xl flex items-center justify-center text-black font-bold"
-                    onClick={() => {/* Previous logic */}}
+                    onClick={prevTournamentSlide}
                   >
                     <ChevronLeft className="h-7 w-7" />
                   </motion.button>
@@ -1215,48 +1211,47 @@ const Home = () => {
                     whileHover={{ scale: 1.1, x: 2 }}
                     whileTap={{ scale: 0.9 }}
                     className="w-14 h-14 rounded-full bg-gradient-to-r from-orange-500 to-red-500 shadow-glow-lg border border-white/30 backdrop-blur-xl flex items-center justify-center text-white font-bold"
-                    onClick={() => {/* Next logic */}}
+                    onClick={nextTournamentSlide}
                   >
                     <ChevronRight className="h-7 w-7" />
                   </motion.button>
                 </div>
 
-                {/* Professional Tournament Progress Indicators */}
-                <div className="flex justify-center space-x-4 mt-6 pb-4">
+                {/* Professional Tournament Progress Bar */}
+                <div className="flex justify-center space-x-2 mt-6 pb-4">
                   {tournaments.slice(0, 3).map((_, index) => (
-                    <motion.div
+                    <motion.button
                       key={index}
-                      className="relative w-10 h-2 bg-black/40 rounded-full overflow-hidden border border-white/20"
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        index === tournamentCurrentIndex 
+                          ? 'w-10 bg-gradient-to-r from-yellow-400 to-orange-500' 
+                          : 'w-2 bg-white/30'
+                      }`}
+                      onClick={() => {
+                        setIsTournamentAutoPlaying(false);
+                        setTournamentCurrentIndex(index);
+                        setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
+                      }}
+                      whileHover={{ scale: 1.2 }}
                     >
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 rounded-full"
-                        animate={{
-                          x: ['-100%', '0%', '100%'],
-                          opacity: [0.3, 1, 0.3],
-                        }}
-                        transition={{
-                          duration: 8,
-                          repeat: Infinity,
-                          delay: index * 8,
-                          ease: "easeInOut",
-                        }}
-                      />
-                      
-                      {/* Shine effect on tournament progress bar */}
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
-                        animate={{
-                          x: ['-100%', '100%'],
-                        }}
-                        transition={{
-                          duration: 2.5,
-                          repeat: Infinity,
-                          repeatDelay: 5,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    </motion.div>
+                      {index === tournamentCurrentIndex && (
+                        <motion.div
+                          className="h-full bg-gradient-to-r from-white/50 to-transparent rounded-full"
+                          animate={{ x: ['-100%', '100%'] }}
+                          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                        />
+                      )}
+                    </motion.button>
                   ))}
+                </div>
+
+                {/* Tournament Auto-play indicator */}
+                <div className="absolute top-4 right-4 z-20">
+                  <motion.div
+                    className={`w-3 h-3 rounded-full ${isTournamentAutoPlaying ? 'bg-orange-400' : 'bg-gray-400'}`}
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  />
                 </div>
               </div>
             </div>
