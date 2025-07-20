@@ -21,6 +21,7 @@ import PremiumHamburgerMenu from './PremiumHamburgerMenu';
 
 const Navbar = ({ onMenuClick }) => {
   const { user, logout } = useAuth();
+  const location = useLocation();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
