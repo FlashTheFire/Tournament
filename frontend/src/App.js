@@ -24,6 +24,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import AIAnalytics from './pages/AIAnalytics';
 import HamburgerDemo from './pages/HamburgerDemo';
+import AdvancedGaming from './pages/AdvancedGaming';
 
 // Admin Pages
 import AdminPanel from './pages/admin/AdminPanel';
