@@ -469,21 +469,89 @@ body {
   }
 }
 
-/* Responsive Typography */
-@media (max-width: 768px) {
-  .text-9xl { font-size: 4rem; }
-  .text-8xl { font-size: 3.5rem; }
-  .text-7xl { font-size: 3rem; }
-  .text-6xl { font-size: 2.5rem; }
-  .text-5xl { font-size: 2rem; }
+/* Mobile-First Responsive Typography */
+@media (max-width: 767px) {
+  /* Mobile typography - base styles for mobile first */
+  .text-9xl { font-size: 2.5rem; }  /* 40px on mobile */
+  .text-8xl { font-size: 2.25rem; } /* 36px on mobile */
+  .text-7xl { font-size: 2rem; }    /* 32px on mobile */
+  .text-6xl { font-size: 1.75rem; } /* 28px on mobile */
+  .text-5xl { font-size: 1.5rem; }  /* 24px on mobile */
+  .text-4xl { font-size: 1.25rem; } /* 20px on mobile */
+  .text-3xl { font-size: 1.125rem; }/* 18px on mobile */
+  .text-2xl { font-size: 1rem; }    /* 16px on mobile */
+  .text-xl { font-size: 0.875rem; } /* 14px on mobile */
+  
+  /* Mobile-specific utility classes */
+  .mobile-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .mobile-card {
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+  
+  .mobile-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    min-height: 2.75rem; /* 44px minimum touch target */
+  }
 }
 
-@media (max-width: 480px) {
-  .text-9xl { font-size: 3rem; }
-  .text-8xl { font-size: 2.75rem; }
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet specific styles */
+  .text-9xl { font-size: 3.5rem; }
+  .text-8xl { font-size: 3rem; }
   .text-7xl { font-size: 2.5rem; }
-  .text-6xl { font-size: 2rem; }
-  .text-5xl { font-size: 1.75rem; }
+  .text-6xl { font-size: 2.25rem; }
+  .text-5xl { font-size: 2rem; }
+  
+  .tablet-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Desktop styles - enhanced from mobile base */
+  .text-9xl { font-size: 8rem; }    /* 128px on desktop */
+  .text-8xl { font-size: 6rem; }    /* 96px on desktop */
+  .text-7xl { font-size: 4.5rem; }  /* 72px on desktop */
+  .text-6xl { font-size: 3.75rem; } /* 60px on desktop */
+  .text-5xl { font-size: 3rem; }    /* 48px on desktop */
+  
+  .desktop-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  .desktop-card {
+    border-radius: 1.5rem;
+    padding: 2rem;
+  }
+  
+  .desktop-button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    min-height: 3rem;
+  }
+}
+
+/* Enhanced Mobile-First Glass Effects */
+.glass-mobile {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+@media (min-width: 1024px) {
+  .glass-mobile {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
 }
 
 /* Professional Animation Curves */
