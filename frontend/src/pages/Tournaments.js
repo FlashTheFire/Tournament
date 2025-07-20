@@ -498,18 +498,18 @@ const Tournaments = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
       >
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-1 font-gaming">ACTIVE BATTLES</h2>
-            <p className="text-gray-400">Choose your battlefield and dominate</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-1 font-gaming">ACTIVE BATTLES</h2>
+            <p className="text-gray-400 text-xs sm:text-sm">Choose your battlefield and dominate</p>
           </div>
           <div className="flex items-center space-x-2">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="w-2 h-2 bg-neon-green rounded-full"
+              className="w-2 h-2 bg-neon-green rounded-full flex-shrink-0"
             />
-            <span className="text-neon-green font-semibold text-sm">Live Updates</span>
+            <span className="text-neon-green font-semibold text-xs sm:text-sm">Live Updates</span>
           </div>
         </div>
 
