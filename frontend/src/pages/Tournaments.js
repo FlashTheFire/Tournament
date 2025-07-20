@@ -612,7 +612,7 @@ const Tournaments = () => {
           )}
         </AnimatePresence>
 
-        {/* Collapsible Filter Cards */}
+        {/* Desktop - Collapsible Filter Cards (inline) */}
         <AnimatePresence>
           {showFilters && (
             <motion.div
@@ -620,7 +620,7 @@ const Tournaments = () => {
               animate={{ opacity: 1, height: "auto", y: 0 }}
               exit={{ opacity: 0, height: 0, y: -20 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+              className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-3"
             >
               {[
                 {
@@ -667,7 +667,7 @@ const Tournaments = () => {
                   >
                     <div className="relative overflow-hidden rounded-xl border border-white/20 hover:border-neon-blue/50 transition-all duration-300">
                       {/* Background Image */}
-                      <div className="relative h-32 sm:h-36">
+                      <div className="relative h-24 sm:h-28">
                         <img 
                           src={filter.image} 
                           alt={filter.title}
@@ -677,24 +677,24 @@ const Tournaments = () => {
                         <div className={`absolute inset-0 bg-gradient-to-t ${filter.gradient}/20`}></div>
                         
                         {/* Filter Icon */}
-                        <div className="absolute top-3 left-3">
-                          <div className={`w-8 h-8 bg-gradient-to-r ${filter.gradient} rounded-lg flex items-center justify-center shadow-glow`}>
-                            <FilterIcon className="h-4 w-4 text-white" />
+                        <div className="absolute top-2 left-2">
+                          <div className={`w-6 h-6 bg-gradient-to-r ${filter.gradient} rounded-lg flex items-center justify-center shadow-glow`}>
+                            <FilterIcon className="h-3 w-3 text-white" />
                           </div>
                         </div>
                         
                         {/* Title */}
-                        <div className="absolute bottom-3 left-3 right-3">
-                          <h4 className="text-white font-bold text-sm sm:text-base mb-1">{filter.title}</h4>
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <h4 className="text-white font-bold text-sm">{filter.title}</h4>
                         </div>
                       </div>
                       
                       {/* Dropdown */}
-                      <div className="p-3 bg-gradient-to-br from-cosmic-dark/90 to-cosmic-black/90 backdrop-blur-sm">
+                      <div className="p-2 bg-gradient-to-br from-cosmic-dark/90 to-cosmic-black/90 backdrop-blur-sm">
                         <select
                           value={filters[filter.key]}
                           onChange={(e) => handleFilterChange(filter.key, e.target.value)}
-                          className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-neon-blue/50 focus:border-neon-blue/50 hover:border-neon-blue/30 transition-all duration-300"
+                          className="w-full bg-white/10 border border-white/20 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:ring-2 focus:ring-neon-blue/50 focus:border-neon-blue/50 hover:border-neon-blue/30 transition-all duration-300"
                         >
                           {filter.options.map(option => (
                             <option key={option.value} value={option.value} className="bg-cosmic-dark text-white">
