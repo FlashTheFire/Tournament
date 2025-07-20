@@ -252,7 +252,7 @@ const Tournaments = () => {
           <div className="absolute inset-0 bg-gradient-to-tr from-neon-red/10 via-transparent to-neon-blue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           
           {/* Battle Status */}
-          <div className="absolute top-6 left-6 flex flex-wrap gap-2">
+          <div className="absolute top-3 sm:top-4 md:top-6 left-3 sm:left-4 md:left-6 flex flex-wrap gap-1 sm:gap-2">
             <motion.div 
               whileHover={{ scale: 1.1 }}
               className={`px-4 py-2 rounded-full text-sm font-bold text-white shadow-glow ${statusBadge.color}`}
