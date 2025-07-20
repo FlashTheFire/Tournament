@@ -446,28 +446,58 @@ const Tournaments = () => {
         </motion.div>
       </motion.div>
 
-      {/* Compact Modern Battle Filters */}
+      {/* Enhanced Battle Filters with Image Cards */}
       <motion.div 
-        className="glass rounded-2xl p-3 sm:p-4 space-y-3 sm:space-y-4 kinetic-waves border border-white/10"
+        className="glass rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-6 kinetic-waves border border-white/10"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-3">
-          <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-neon-blue to-electric-purple rounded-xl flex items-center justify-center flex-shrink-0">
-            <Filter className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+        <div className="flex items-center space-x-3 mb-4">
+          <div className="w-8 h-8 bg-gradient-to-r from-neon-blue to-electric-purple rounded-xl flex items-center justify-center flex-shrink-0">
+            <Filter className="h-4 w-4 text-white" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-white font-bold text-base sm:text-lg truncate">Battle Filters</h3>
+            <h3 className="text-white font-bold text-lg">Battle Filters</h3>
+            <p className="text-gray-400 text-sm">Choose your battlefield</p>
           </div>
         </div>
 
-        {/* Mobile-optimized Filter Dropdowns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">{[
-            { key: 'game_type', options: gameTypes, icon: gameTypes[0].icon },
-            { key: 'country', options: countries, icon: Shield },
-            { key: 'mode', options: modes, icon: Users },
-            { key: 'status', options: statuses, icon: Activity }
+        {/* Image-based Filter Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            {
+              key: 'game_type',
+              title: 'Game Mode',
+              image: 'https://images.unsplash.com/photo-1580234811497-9df7fd2f357e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwxfHxnYW1pbmd8ZW58MHx8fGJsdWV8MTc1Mjk4ODc4N3ww&ixlib=rb-4.1.0&q=85',
+              options: gameTypes,
+              icon: Target,
+              gradient: 'from-blue-500 to-cyan-600'
+            },
+            {
+              key: 'country',
+              title: 'Region',
+              image: 'https://images.unsplash.com/photo-1504370164829-8c6ef0c41d06?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwyfHxnYW1pbmd8ZW58MHx8fGJsdWV8MTc1Mjk4ODc4N3ww&ixlib=rb-4.1.0&q=85',
+              options: countries,
+              icon: Shield,
+              gradient: 'from-green-500 to-emerald-600'
+            },
+            {
+              key: 'mode',
+              title: 'Battle Mode',
+              image: 'https://images.unsplash.com/photo-1656662961786-b04873ceb4b9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwzfHxnYW1pbmd8ZW58MHx8fGJsdWV8MTc1Mjk4ODc4N3ww&ixlib=rb-4.1.0&q=85',
+              options: modes,
+              icon: Users,
+              gradient: 'from-purple-500 to-pink-600'
+            },
+            {
+              key: 'status',
+              title: 'Status',
+              image: 'https://images.unsplash.com/photo-1612801798930-288967b6d1ef?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwyfHxlc3BvcnRzfGVufDB8fHxibHVlfDE3NTMwMzYxNDZ8MA&ixlib=rb-4.1.0&q=85',
+              options: statuses,
+              icon: Activity,
+              gradient: 'from-red-500 to-orange-600'
+            }
           ].map((filter, index) => {
             const FilterIcon = filter.icon;
             return (
@@ -476,20 +506,47 @@ const Tournaments = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 + index * 0.1 }}
-                className="relative"
+                className="relative group"
               >
-                <FilterIcon className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-neon-blue z-10 pointer-events-none" />
-                <select
-                  value={filters[filter.key]}
-                  onChange={(e) => handleFilterChange(filter.key, e.target.value)}
-                  className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 glass border border-white/20 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-neon-purple focus:border-neon-purple hover:border-neon-purple/50 transition-all duration-300 appearance-none bg-transparent truncate"
-                >
-                  {filter.options.map(option => (
-                    <option key={option.value} value={option.value} className="bg-cosmic-dark text-white">
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative overflow-hidden rounded-xl border border-white/20 hover:border-neon-blue/50 transition-all duration-300">
+                  {/* Background Image */}
+                  <div className="relative h-32 sm:h-36">
+                    <img 
+                      src={filter.image} 
+                      alt={filter.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-black/40"></div>
+                    <div className={`absolute inset-0 bg-gradient-to-t ${filter.gradient}/20`}></div>
+                    
+                    {/* Filter Icon */}
+                    <div className="absolute top-3 left-3">
+                      <div className={`w-8 h-8 bg-gradient-to-r ${filter.gradient} rounded-lg flex items-center justify-center shadow-glow`}>
+                        <FilterIcon className="h-4 w-4 text-white" />
+                      </div>
+                    </div>
+                    
+                    {/* Title */}
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <h4 className="text-white font-bold text-sm sm:text-base mb-1">{filter.title}</h4>
+                    </div>
+                  </div>
+                  
+                  {/* Dropdown */}
+                  <div className="p-3 bg-gradient-to-br from-cosmic-dark/90 to-cosmic-black/90 backdrop-blur-sm">
+                    <select
+                      value={filters[filter.key]}
+                      onChange={(e) => handleFilterChange(filter.key, e.target.value)}
+                      className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-neon-blue/50 focus:border-neon-blue/50 hover:border-neon-blue/30 transition-all duration-300"
+                    >
+                      {filter.options.map(option => (
+                        <option key={option.value} value={option.value} className="bg-cosmic-dark text-white">
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </motion.div>
             );
           })}
