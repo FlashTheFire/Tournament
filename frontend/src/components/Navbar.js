@@ -152,50 +152,52 @@ const Navbar = ({ onMenuClick }) => {
             </div>
           </motion.button>
 
-          {/* Mobile-First Search Bar - Hidden on mobile, visible on tablet+ */}
+          {/* Mobile-First Search Bar - Hidden on tournaments page */}
           <div className="hidden md:block relative">
-            <motion.div
-              animate={{
-                scale: searchFocused ? 1.02 : 1,
-                boxShadow: searchFocused 
-                  ? '0 0 20px rgba(0, 212, 255, 0.3)' 
-                  : '0 0 0px rgba(0, 212, 255, 0)'
-              }}
-              className="relative"
-            >
-              <Search className={`absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${
-                searchFocused ? 'text-neon-blue' : 'text-gray-400'
-              }
-                /* Responsive search icon */
-                h-4 w-4 sm:h-5 sm:w-5
-              `} />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setSearchFocused(false)}
-                placeholder="Search tournaments, players, battles..."
-                className="glass-mobile rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-blue/50 focus:border-neon-blue/50 transition-all duration-300
-                  /* Mobile: compact search input */
-                  w-48 pl-10 pr-4 py-2 text-sm
-                  /* Tablet: medium search input */
-                  md:w-64 md:pl-11 md:pr-5 md:py-2.5
-                  /* Desktop: large search input */
-                  lg:w-80 xl:w-96 lg:pl-12 lg:pr-6 lg:py-3
-                "
-              />
-              {searchQuery && (
-                <motion.button
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
-                >
-                  ×
-                </motion.button>
-              )}
-            </motion.div>
+            {location.pathname !== '/tournaments' && (
+              <motion.div
+                animate={{
+                  scale: searchFocused ? 1.02 : 1,
+                  boxShadow: searchFocused 
+                    ? '0 0 20px rgba(0, 212, 255, 0.3)' 
+                    : '0 0 0px rgba(0, 212, 255, 0)'
+                }}
+                className="relative"
+              >
+                <Search className={`absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${
+                  searchFocused ? 'text-neon-blue' : 'text-gray-400'
+                }
+                  /* Responsive search icon */
+                  h-4 w-4 sm:h-5 sm:w-5
+                `} />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setSearchFocused(true)}
+                  onBlur={() => setSearchFocused(false)}
+                  placeholder="Search tournaments, players, battles..."
+                  className="glass-mobile rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-blue/50 focus:border-neon-blue/50 transition-all duration-300
+                    /* Mobile: compact search input */
+                    w-48 pl-10 pr-4 py-2 text-sm
+                    /* Tablet: medium search input */
+                    md:w-64 md:pl-11 md:pr-5 md:py-2.5
+                    /* Desktop: large search input */
+                    lg:w-80 xl:w-96 lg:pl-12 lg:pr-6 lg:py-3
+                  "
+                />
+                {searchQuery && (
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                  >
+                    ×
+                  </motion.button>
+                )}
+              </motion.div>
+            )}
           </div>
         </div>
 
