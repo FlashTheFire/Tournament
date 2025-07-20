@@ -50,6 +50,7 @@ registrations_collection = db.registrations
 matches_collection = db.matches
 payments_collection = db.payments
 notifications_collection = db.notifications
+leaderboards_collection = db.leaderboards
 
 # Security setup
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
