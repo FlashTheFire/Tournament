@@ -52,9 +52,29 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
+      console.error('Login error details:', error);
+      
+      // Extract clean error message
+      let errorMessage = 'Login failed';
+      
+      if (error.cleanMessage) {
+        errorMessage = error.cleanMessage;
+      } else if (error.response?.data?.detail) {
+        const detail = error.response.data.detail;
+        if (Array.isArray(detail)) {
+          errorMessage = detail.map(err => typeof err === 'object' && err.msg ? err.msg : String(err)).join(', ');
+        } else if (typeof detail === 'string') {
+          errorMessage = detail;
+        } else if (typeof detail === 'object' && detail.msg) {
+          errorMessage = detail.msg;
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       return { 
         success: false, 
-        error: error.response?.data?.detail || 'Login failed'
+        error: errorMessage
       };
     }
   };
