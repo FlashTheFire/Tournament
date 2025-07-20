@@ -68,13 +68,15 @@ const Navbar = ({ onMenuClick }) => {
   const NotificationIcon = ({ type }) => {
     switch (type) {
       case 'tournament':
-        return <Trophy className="h-4 w-4 text-primary-400" />;
+        return <Trophy className="h-5 w-5 text-neon-blue" />;
       case 'payment':
-        return <Wallet className="h-4 w-4 text-green-400" />;
+        return <Wallet className="h-5 w-5 text-neon-green" />;
       case 'achievement':
-        return <Crown className="h-4 w-4 text-yellow-400" />;
+        return <Crown className="h-5 w-5 text-yellow-400" />;
+      case 'reward':
+        return <Star className="h-5 w-5 text-neon-purple" />;
       default:
-        return <Bell className="h-4 w-4 text-gray-400" />;
+        return <Bell className="h-5 w-5 text-gray-400" />;
     }
   };
 
