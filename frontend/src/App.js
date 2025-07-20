@@ -311,6 +311,17 @@ const AppContent = () => {
                 <Register />
               </motion.div>
             } />
+            <Route path="/hamburger-demo" element={
+              <motion.div
+                key="hamburger-demo"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.5 }}
+              >
+                <HamburgerDemo />
+              </motion.div>
+            } />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </div>
