@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, User, Eye, EyeOff, UserPlus, Trophy, Gamepad2, Zap, Crown, Shield, Star } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import toast from 'react-hot-toast';
+import safeToast from '../utils/safeToast';
 
 const Register = () => {
   const [formData, setFormData] = useState({
