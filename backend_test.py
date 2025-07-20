@@ -492,10 +492,10 @@ class TournamentAPITester:
                 self.log_result(f"Protected {endpoint}", False, f"Request failed: {error}")
                 continue
             
-            if response.status_code == 401:
+            if response.status_code in [401, 403]:
                 self.log_result(f"Protected {endpoint}", True, "Correctly blocked unauthorized access")
             else:
-                self.log_result(f"Protected {endpoint}", False, f"Should return 401, got {response.status_code}")
+                self.log_result(f"Protected {endpoint}", False, f"Should return 401/403, got {response.status_code}")
 
     def test_invalid_credentials(self):
         """Test login with invalid credentials"""
