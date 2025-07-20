@@ -255,34 +255,45 @@ const Sidebar = ({ isOpen, onClose }) => {
           )}
         </motion.div>
 
-        {/* Submenu */}
         <AnimatePresence>
           {hasSubmenu && isExpanded && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="ml-4 mt-2 space-y-1 overflow-hidden"
+              initial={{ opacity: 0, height: 0, y: -10 }}
+              animate={{ opacity: 1, height: "auto", y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -10 }}
+              transition={{ duration: 0.4, type: "spring", stiffness: 100 }}
+              className="ml-6 mt-3 space-y-2 overflow-hidden"
             >
               {item.submenu.map((subItem, subIndex) => (
                 <motion.div
                   key={subItem.path}
-                  initial={{ opacity: 0, x: -10 }}
+                  initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: subIndex * 0.05 }}
+                  transition={{ delay: subIndex * 0.1, type: "spring", stiffness: 150 }}
                 >
                   <Link
                     to={subItem.path}
                     onClick={onClose}
-                    className={`flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 group ${
-                      isActiveLink(subItem.path)
-                        ? 'bg-primary-500/20 text-primary-300 border border-primary-400/30'
-                        : 'text-gray-400 hover:bg-white/5 hover:text-gray-300'
-                    }`}
                   >
-                    <subItem.icon className="h-4 w-4" />
-                    <span>{subItem.title}</span>
+                    <motion.div
+                      whileHover={{ scale: 1.02, x: 3 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`flex items-center space-x-3 px-5 py-3 rounded-xl font-medium transition-all duration-300 group relative overflow-hidden ${
+                        isActiveLink(subItem.path)
+                          ? 'bg-gradient-to-r from-neon-purple/20 to-electric-purple/20 text-white border border-neon-purple/30'
+                          : 'glass border border-white/5 text-gray-400 hover:border-neon-purple/20 hover:text-white'
+                      }`}
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-neon-purple/20 transition-colors duration-300">
+                        <subItem.icon className="h-4 w-4" />
+                      </div>
+                      <span className="flex-1">{subItem.title}</span>
+                      {subItem.badge && (
+                        <span className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-gray-600 to-gray-700 text-gray-300 font-bold">
+                          {subItem.badge}
+                        </span>
+                      )}
+                    </motion.div>
                   </Link>
                 </motion.div>
               ))}
