@@ -79,7 +79,7 @@ const AIAnalytics = () => {
       }
     } catch (error) {
       console.error('Failed to load AI data:', error);
-      toast.error('Failed to load AI analysis');
+      safeToast.error('Failed to load AI analysis');
     } finally {
       setLoading(false);
     }
