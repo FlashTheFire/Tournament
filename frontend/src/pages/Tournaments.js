@@ -324,8 +324,8 @@ const Tournaments = () => {
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm">
             <div className="space-y-1">
               <p className="text-gray-400 text-xs uppercase tracking-wide">Entry Fee</p>
-              <p className="text-white font-bold text-lg flex items-center">
-                <DollarSign className="h-5 w-5 mr-2 text-neon-green" />
+              <p className="text-white font-bold text-sm sm:text-base md:text-lg flex items-center">
+                <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-1 sm:mr-2 text-neon-green flex-shrink-0" />
                 ₹{tournament.entry_fee}
               </p>
             </div>
