@@ -562,13 +562,13 @@ const Home = () => {
             real-time analytics, and massive prize pools!
           </motion.p>
           
-          {/* Horizontal stats layout on desktop */}
+          {/* Updated Hero Stats - 2x2 Grid on Mobile */}
           <motion.div
             className="mb-6 sm:mb-12 max-w-6xl mx-auto
-              /* Mobile: single column stack */
-              grid grid-cols-1 gap-3
-              /* Tablet: 3 columns */
-              sm:grid-cols-3 sm:gap-4
+              /* Mobile: 2x2 grid layout as requested */
+              grid grid-cols-2 gap-3
+              /* Tablet: 4 columns */
+              sm:grid-cols-4 sm:gap-6
               /* Desktop: horizontal 4 columns with reduced spacing */
               lg:grid-cols-4 lg:gap-6
             "
