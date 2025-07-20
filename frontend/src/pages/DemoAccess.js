@@ -254,11 +254,25 @@ const DemoAccess = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-sm md:text-lg font-bold text-white mb-2 md:mb-3 group-hover:text-neon-blue transition-colors leading-tight">
+                  <h3 className="font-bold text-white mb-2 md:mb-3 group-hover:text-neon-blue transition-colors leading-tight
+                    /* Mobile: smaller, more compact text */
+                    text-xs
+                    /* Small mobile: slightly larger */
+                    sm:text-sm 
+                    /* Desktop: larger text */
+                    md:text-lg
+                  ">
                     {feature.title}
                   </h3>
                   
-                  <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
+                  <p className="text-gray-400 leading-relaxed
+                    /* Mobile: tiny text, 2 lines max */
+                    text-2xs line-clamp-2
+                    /* Small mobile: small text */
+                    sm:text-xs sm:line-clamp-3
+                    /* Desktop: normal text */
+                    md:text-sm md:line-clamp-none
+                  ">
                     {feature.description}
                   </p>
                 </motion.div>
