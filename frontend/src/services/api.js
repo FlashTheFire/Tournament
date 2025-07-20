@@ -130,7 +130,9 @@ export const apiService = {
   // =====================
   
   async login(credentials) {
+    console.log('🔵 API Service login called with:', credentials);
     const response = await api.post('/api/auth/login', credentials);
+    console.log('🔵 API Service login response:', response);
     return response;
   },
 
