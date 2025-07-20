@@ -21,19 +21,31 @@ const Login = () => {
     setLoading(true);
 
     try {
+      console.log('🔵 Starting login process...');
+      console.log('Form data:', formData);
+      
       const result = await login(formData.email, formData.password);
+      console.log('🔵 Login result received:', result);
+      
       if (result.success) {
         toast.success('Welcome back! 🎮');
         navigate('/');
       } else {
+        console.log('🔴 Login failed with error:', result.error);
+        console.log('🔴 Error type:', typeof result.error);
+        
         // Ensure we only pass string messages to toast
         const errorMessage = typeof result.error === 'string' 
           ? result.error 
           : 'Login failed. Please try again.';
+          
+        console.log('🔵 Processed error message:', errorMessage);
         toast.error(errorMessage);
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('🔴 Login catch block error:', error);
+      console.error('🔴 Error type:', typeof error);
+      console.error('🔴 Error structure:', JSON.stringify(error, null, 2));
       toast.error('Login failed. Please try again.');
     } finally {
       setLoading(false);
