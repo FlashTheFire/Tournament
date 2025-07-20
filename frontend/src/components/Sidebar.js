@@ -324,55 +324,91 @@ const Sidebar = ({ isOpen, onClose }) => {
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
-        className="fixed left-0 top-0 h-full w-80 bg-slate-900/95 backdrop-blur-xl border-r border-white/10 z-50 md:relative md:translate-x-0 md:z-0"
+        className="fixed left-0 top-0 h-full w-80 glass border-r border-white/10 z-50 md:relative md:translate-x-0 md:z-0 kinetic-waves"
       >
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/10">
-            <div className="flex items-center space-x-3">
-              <div className="h-10 w-10 bg-gradient-to-r from-primary-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <GamepadIcon className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-white">Tournament</h1>
-                <p className="text-xs text-gray-400">Gaming Platform</p>
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors md:hidden"
+        <div className="flex flex-col h-full relative z-10">
+          {/* Enhanced Header */}
+          <div className="flex items-center justify-between p-8 border-b border-white/10">
+            <motion.div 
+              className="flex items-center space-x-4"
+              whileHover={{ scale: 1.02 }}
             >
-              <X className="h-5 w-5" />
-            </button>
+              <motion.div 
+                className="relative h-14 w-14 bg-gradient-to-br from-neon-blue via-electric-purple to-neon-red rounded-3xl flex items-center justify-center shadow-glow"
+                whileHover={{ rotate: 5 }}
+              >
+                <Gamepad2 className="h-8 w-8 text-white" />
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-0 border-2 border-dashed border-white/30 rounded-3xl"
+                />
+              </motion.div>
+              <div>
+                <h1 className="text-2xl font-bold text-white font-gaming">FREE FIRE</h1>
+                <p className="text-sm text-neon-blue font-semibold">ULTIMATE ARENA</p>
+              </div>
+            </motion.div>
+            <motion.button
+              onClick={onClose}
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
+              className="p-3 rounded-xl glass border border-white/20 text-gray-400 hover:text-white hover:border-neon-red/50 transition-all duration-300 md:hidden"
+            >
+              <X className="h-6 w-6" />
+            </motion.button>
           </div>
 
-          {/* User Info */}
+          {/* Enhanced User Info */}
           {user && (
-            <div className="px-6 py-4 border-b border-white/10">
-              <div className="flex items-center space-x-3">
-                <div className="h-10 w-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-semibold text-sm">
+            <motion.div 
+              className="px-8 py-6 border-b border-white/10"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <div className="flex items-center space-x-4">
+                <motion.div 
+                  className="relative h-14 w-14 bg-gradient-to-br from-neon-purple to-electric-blue rounded-2xl flex items-center justify-center border-2 border-white/20 shadow-glow"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                >
+                  <span className="text-white font-bold text-lg">
                     {user.full_name?.charAt(0) || user.username?.charAt(0) || 'U'}
                   </span>
-                </div>
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
+                </motion.div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white font-medium text-sm truncate">
+                  <p className="text-white font-bold text-lg truncate">
                     {user.full_name || user.username}
                   </p>
-                  <p className="text-gray-400 text-xs truncate">@{user.username}</p>
+                  <p className="text-gray-400 text-sm truncate flex items-center space-x-2">
+                    <Target className="h-3 w-3" />
+                    <span>@{user.username}</span>
+                  </p>
+                  <div className="flex items-center space-x-2 mt-1">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-green-400 text-xs font-semibold uppercase tracking-wide">Elite Warrior</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Menu Items */}
-          <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+          <nav className="flex-1 px-6 py-6 space-y-3 overflow-y-auto">
             {menuItems.map((item, index) => renderMenuItem(item, index))}
             
             {isAdmin && (
               <>
-                <div className="my-6 px-4">
-                  <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                <div className="my-8 px-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="h-px bg-gradient-to-r from-transparent via-red-500/50 to-transparent flex-1"></div>
+                    <div className="flex items-center space-x-2 px-3 py-1 rounded-full bg-gradient-to-r from-red-500/20 to-pink-600/20 border border-red-500/30">
+                      <Shield className="h-4 w-4 text-red-400" />
+                      <span className="text-red-300 text-xs font-bold uppercase tracking-wide">Admin Zone</span>
+                    </div>
+                    <div className="h-px bg-gradient-to-r from-transparent via-red-500/50 to-transparent flex-1"></div>
+                  </div>
                 </div>
                 {adminMenuItems.map((item, index) => 
                   renderMenuItem(item, menuItems.length + index)
@@ -381,13 +417,23 @@ const Sidebar = ({ isOpen, onClose }) => {
             )}
           </nav>
 
-          {/* Footer */}
-          <div className="p-4 border-t border-white/10">
-            <div className="text-center text-xs text-gray-500">
-              <p>Tournament Platform v1.0</p>
-              <p className="mt-1">© 2025 Gaming Arena</p>
+          {/* Enhanced Footer */}
+          <motion.div 
+            className="p-6 border-t border-white/10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <div className="glass rounded-2xl p-4 text-center border border-neon-blue/20">
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <Flame className="h-4 w-4 text-neon-red animate-pulse" />
+                <span className="text-white text-sm font-bold">Free Fire Arena</span>
+                <Star className="h-4 w-4 text-yellow-400 animate-pulse" />
+              </div>
+              <p className="text-xs text-gray-400">Version 2025.1.0</p>
+              <p className="text-xs text-gray-500 mt-1">© 2025 Ultimate Gaming</p>
             </div>
-          </div>
+          </motion.div>
         </div>
       </motion.aside>
     </>
