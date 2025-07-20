@@ -13,7 +13,6 @@ import {
   Gamepad2,
   Target,
   Crosshair,
-  Scope,
   Flame,
   Activity,
   Timer,
