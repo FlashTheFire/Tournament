@@ -255,8 +255,8 @@ const Register = () => {
                   />
                 </div>
 
-                {/* Password and Confirm Password - Side by Side */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
+                {/* Password and Confirm Password - In One Row for All Devices */}
+                <div className="grid grid-cols-2 gap-3 lg:gap-4">
                   <div>
                     <label htmlFor="password" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
                       <Lock className="h-3 w-3 text-neon-red" />
