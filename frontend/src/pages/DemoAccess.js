@@ -202,13 +202,12 @@ const DemoAccess = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mb-12"
           >
-            <h2 className="text-4xl font-bold text-white text-center mb-8 font-gaming">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-6 md:mb-8 font-gaming">
               🚀 PREMIUM FEATURES SHOWCASE
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
               {features.map((feature, index) => (
                 <motion.div
                   key={feature.title}
@@ -216,15 +215,15 @@ const DemoAccess = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 + index * 0.1 }}
                   whileHover={{ scale: 1.02, y: -5 }}
-                  className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300 group"
+                  className="glass rounded-xl md:rounded-2xl p-4 md:p-6 border border-white/10 hover:border-white/20 transition-all duration-300 group"
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`h-14 w-14 rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center text-2xl group-hover:scale-110 transition-transform`}>
+                  <div className="flex items-start justify-between mb-3 md:mb-4">
+                    <div className={`h-12 w-12 md:h-14 md:w-14 rounded-xl md:rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center text-lg md:text-2xl group-hover:scale-110 transition-transform`}>
                       {feature.icon}
                     </div>
                     
                     <div className="flex items-center space-x-1">
-                      <div className={`w-3 h-3 rounded-full ${
+                      <div className={`w-2 h-2 md:w-3 md:h-3 rounded-full ${
                         feature.status === 'Live' ? 'bg-red-500 animate-pulse' :
                         feature.status === 'New' ? 'bg-green-500' :
                         feature.status === 'AI' ? 'bg-cyan-400' :
@@ -241,11 +240,11 @@ const DemoAccess = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-lg font-bold text-white mb-3 group-hover:text-neon-blue transition-colors">
+                  <h3 className="text-sm md:text-lg font-bold text-white mb-2 md:mb-3 group-hover:text-neon-blue transition-colors leading-tight">
                     {feature.title}
                   </h3>
                   
-                  <p className="text-gray-400 text-sm leading-relaxed">
+                  <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
                     {feature.description}
                   </p>
                 </motion.div>
