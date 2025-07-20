@@ -81,7 +81,7 @@ const Home = () => {
   };
 
   const loadAIFeatures = async () => {
-    // Simulate AI predictions and matchmaking
+    // Static AI predictions - no refresh as per requirement
     setAiPredictions([
       {
         id: 1,
@@ -93,21 +93,22 @@ const Home = () => {
       },
       {
         id: 2,
-        type: 'skill_analysis',
+        type: 'aim_improvement',
         title: 'Aim Improvement Detected',
-        description: 'Your accuracy improved by 15% this week. Keep practicing!',
+        description: 'Your headshot accuracy improved by 15% this week',
         confidence: 92,
-        trend: 'up'
+        improvement: '+15%'
       },
       {
         id: 3,
         type: 'matchmaking',
         title: 'Perfect Match Found',
-        description: 'Found teammates with similar skill level and playstyle',
-        confidence: 85,
+        description: 'Squad teammates with 95% compatibility available',
+        confidence: 95,
         players: 3
       }
     ]);
+    setMatchmakingStatus('ready');
   };
 
   // Premium Free Fire hero images
