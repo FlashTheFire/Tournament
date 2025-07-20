@@ -226,13 +226,13 @@ const Sidebar = ({ isOpen, onClose }) => {
                   : 'glass-mobile border border-white/10 text-gray-300 hover:border-neon-blue/30 hover:text-white'
               }
                 /* Mobile: extra compact menu item for small screens */
-                space-x-2 px-3 py-2.5 rounded-lg text-xs
+                space-x-2 px-3 py-2 rounded-lg text-xs
                 /* Small mobile: slightly larger */
-                xs:space-x-3 xs:px-4 xs:py-3 xs:rounded-xl xs:text-sm
+                xs:space-x-3 xs:px-4 xs:py-2.5 xs:rounded-xl xs:text-sm
                 /* Tablet: normal sizing */
                 sm:text-base
-                /* Desktop: spacious menu item */
-                lg:space-x-4 lg:px-6 lg:py-4 lg:rounded-2xl
+                /* Desktop: compact menu item for tighter layout */
+                lg:space-x-3 lg:px-4 lg:py-2.5 lg:rounded-xl lg:text-sm
               `}
             >
               {/* Background gradient on hover */}
