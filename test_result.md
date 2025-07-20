@@ -291,9 +291,10 @@ metadata:
 test_plan:
   current_focus:
     - "Premium Hamburger Menu Component - Authentication blocking live testing"
-    - "Authentication flow needs investigation for demo credentials"
+    - "Demo authentication flow needs fixing to enable main app responsive testing"
   stuck_tasks:
     - "Premium Hamburger Menu Component - Cannot test live interactions due to auth issues"
+    - "Demo login functionality - Launch Demo button not authenticating users"
   test_all: false
   test_priority: "high_first"
 
