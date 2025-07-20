@@ -102,24 +102,24 @@ const DemoAccess = () => {
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="text-center mb-12"
+            className="text-center"
           >
             <motion.div
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="h-32 w-32 mx-auto mb-8 bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red rounded-3xl flex items-center justify-center"
+              className="h-20 w-20 md:h-32 md:w-32 mx-auto mb-6 bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red rounded-2xl md:rounded-3xl flex items-center justify-center"
             >
-              <Gamepad2 className="h-16 w-16 text-white" />
+              <Gamepad2 className="h-10 w-10 md:h-16 md:w-16 text-white" />
             </motion.div>
 
-            <h1 className="text-7xl font-black text-gradient bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red font-gaming mb-6">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-gradient bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red font-gaming mb-4">
               FREE FIRE ARENA
             </h1>
-            <h2 className="text-3xl font-bold text-white mb-4 font-gaming">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3 font-gaming">
               ULTRA-ADVANCED GAMING PLATFORM 2025
             </h2>
-            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Experience the future of online gaming tournaments with cutting-edge AI features,<br/>
+            <p className="text-base md:text-lg lg:text-xl text-gray-300 mb-6 leading-relaxed px-4">
+              Experience the future of online gaming tournaments with cutting-edge AI features,<br className="hidden md:block"/>
               premium Paytm integration, and god-tier UI design optimized for all devices
             </p>
 
@@ -128,36 +128,36 @@ const DemoAccess = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5 }}
-              className="inline-block glass rounded-2xl p-8 border border-neon-green/30 bg-gradient-to-r from-neon-green/10 to-emerald-500/10 mb-12"
+              className="inline-block glass rounded-2xl p-6 md:p-8 border border-neon-green/30 bg-gradient-to-r from-neon-green/10 to-emerald-500/10 mb-8 w-full max-w-2xl"
             >
-              <div className="flex items-center space-x-3 mb-6">
+              <div className="flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-3 mb-6">
                 <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-neon-green to-emerald-500 flex items-center justify-center">
                   <Lock className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-white font-gaming">DEMO ACCESS</h3>
+                  <h3 className="text-xl md:text-2xl font-bold text-white font-gaming">DEMO ACCESS</h3>
                   <p className="text-neon-green text-sm font-semibold">Full access to all premium features</p>
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div className="glass rounded-xl p-4 border border-white/20">
                   <p className="text-gray-400 text-sm mb-2">Email Address</p>
                   <div className="flex items-center space-x-3">
-                    <code className="text-xl font-mono text-white bg-black/30 px-4 py-2 rounded-lg flex-1">
+                    <code className="text-lg md:text-xl font-mono text-white bg-black/30 px-3 py-2 rounded-lg flex-1 break-all">
                       {demoCredentials.email}
                     </code>
-                    <CheckCircle className="h-5 w-5 text-neon-green" />
+                    <CheckCircle className="h-5 w-5 text-neon-green flex-shrink-0" />
                   </div>
                 </div>
                 
                 <div className="glass rounded-xl p-4 border border-white/20">
                   <p className="text-gray-400 text-sm mb-2">Password</p>
                   <div className="flex items-center space-x-3">
-                    <code className="text-xl font-mono text-white bg-black/30 px-4 py-2 rounded-lg flex-1">
+                    <code className="text-lg md:text-xl font-mono text-white bg-black/30 px-3 py-2 rounded-lg flex-1">
                       {demoCredentials.password}
                     </code>
-                    <CheckCircle className="h-5 w-5 text-neon-green" />
+                    <CheckCircle className="h-5 w-5 text-neon-green flex-shrink-0" />
                   </div>
                 </div>
               </div>
@@ -166,7 +166,7 @@ const DemoAccess = () => {
                 href="/login"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center space-x-3 mt-6 px-8 py-4 bg-gradient-to-r from-neon-green to-emerald-500 rounded-xl text-white font-bold text-lg shadow-glow"
+                className="inline-flex items-center space-x-3 mt-6 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-neon-green to-emerald-500 rounded-xl text-white font-bold text-lg shadow-glow"
               >
                 <span>🚀 Launch Demo</span>
                 <Zap className="h-5 w-5" />
