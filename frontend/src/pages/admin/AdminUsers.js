@@ -84,7 +84,7 @@ const AdminUsers = () => {
     setRefreshing(true);
     await loadUsers();
     setRefreshing(false);
-    toast.success('Users data refreshed');
+    safeToast.success('Users data refreshed');
   };
 
   const handleUpdateUser = async (userId, updateData) => {
