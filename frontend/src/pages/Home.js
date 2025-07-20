@@ -26,6 +26,7 @@ import {
   MapPin,
   Headphones,
   ChevronRight,
+  ChevronLeft,
   ArrowRight,
   Brain,
   BarChart3,
