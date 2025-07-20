@@ -497,18 +497,9 @@ const Home = () => {
           lg:min-h-screen
         "
       >
-        {/* Mobile-optimized background */}
+        {/* Background removed as per requirement */}
         <div className="absolute inset-0 w-full h-full">
-          <motion.div
-            className="w-full h-full bg-center bg-cover bg-no-repeat"
-            style={{
-              backgroundImage: `url('${heroImages[0]}')`
-            }}
-            initial={{ scale: 1.1 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 8 }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-cosmic-black/85 via-cosmic-dark/70 to-cosmic-deep/85"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-neon-red/8 via-transparent to-electric-blue/8"></div>
         </div>
 
