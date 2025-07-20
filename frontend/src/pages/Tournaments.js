@@ -59,9 +59,9 @@ const Tournaments = () => {
 
   const modes = [
     { value: '', label: 'All Modes' },
-    { value: 'solo', label: 'Solo' },
-    { value: 'duo', label: 'Duo' },
-    { value: 'squad', label: 'Squad' }
+    { value: 'solo', label: '👤 Solo (1v1)' },
+    { value: 'duo', label: '👥 Duo (2v2)' },
+    { value: 'squad', label: '🔥 Squad (4v4)' }
   ];
 
   const statuses = [
