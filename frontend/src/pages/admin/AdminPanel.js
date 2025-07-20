@@ -328,7 +328,7 @@ const AdminPanel = () => {
             icon={Shield}
             title="Security Center"
             description="Monitor security & fraud"
-            onClick={() => toast.info('Coming soon!')}
+            onClick={() => safeToast.info('Coming soon!')}
             color="bg-gradient-to-r from-red-500 to-rose-600"
             disabled={true}
           />
