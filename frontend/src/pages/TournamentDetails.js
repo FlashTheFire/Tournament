@@ -145,7 +145,7 @@ const TournamentDetails = () => {
 
   const handleRegister = async () => {
     if (!user) {
-      toast.error('Please login to register for tournaments');
+      safeToast.error('Please login to register for tournaments');
       return;
     }
 
