@@ -432,11 +432,15 @@ const Tournaments = () => {
         </div>
         
         <motion.div 
-          className="text-center sm:text-right flex-shrink-0"
+          className="text-center sm:text-right flex-shrink-0 flex flex-col space-y-2"
           whileHover={{ scale: 1.05 }}
         >
           <div className="glass rounded-xl p-3 sm:p-4 border border-neon-blue/30">
             <p className="text-neon-blue font-bold text-xl sm:text-2xl">{tournaments.length}</p>
+            <p className="text-gray-400 text-xs uppercase tracking-wide">Battle Tournaments</p>
+          </div>
+          <div className="glass rounded-xl p-2 sm:p-3 border border-neon-red/30">
+            <p className="text-neon-red font-bold text-lg sm:text-xl">89</p>
             <p className="text-gray-400 text-xs uppercase tracking-wide">Live Battles</p>
           </div>
         </motion.div>
