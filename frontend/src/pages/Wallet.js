@@ -148,36 +148,50 @@ const Wallet = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
-            className="glass rounded-3xl p-8 text-center bg-gradient-to-br from-neon-green/10 to-emerald-500/10 border border-neon-green/20 relative overflow-hidden"
+            className="glass rounded-3xl p-12 text-center bg-gradient-to-br from-neon-green/10 to-emerald-500/10 border border-neon-green/20 relative overflow-hidden min-h-[280px] flex flex-col justify-center"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-neon-green/5 to-transparent animate-pulse"></div>
             
             <motion.div
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="relative z-10"
+              className="relative z-10 mb-6"
             >
-              <WalletIcon className="h-20 w-20 text-neon-green mx-auto mb-4" />
+              <div className="w-24 h-24 bg-gradient-to-br from-neon-green to-emerald-500 rounded-3xl flex items-center justify-center mx-auto shadow-glow-lg">
+                <WalletIcon className="h-12 w-12 text-white drop-shadow-xl" />
+              </div>
             </motion.div>
             
-            <div className="relative z-10">
-              <p className="text-gray-400 text-lg mb-2">Total Battle Funds</p>
-              <motion.p
+            <div className="relative z-10 space-y-4">
+              <p className="text-gray-300 text-xl font-semibold uppercase tracking-wider">Total Battle Funds</p>
+              <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-                className="text-5xl font-bold text-white mb-2 font-gaming"
+                className="space-y-2"
               >
-                ₹{user?.wallet_balance?.toLocaleString() || '25,340'}
-              </motion.p>
-              <motion.p
+                <p className="text-6xl md:text-7xl font-black text-white font-gaming leading-none">
+                  ₹{user?.wallet_balance?.toLocaleString() || '25,340'}
+                </p>
+                <motion.div
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "100%" }}
+                  transition={{ delay: 0.7, duration: 1 }}
+                  className="h-1 bg-gradient-to-r from-neon-green via-emerald-400 to-neon-green rounded-full mx-auto max-w-xs"
+                ></motion.div>
+              </motion.div>
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.7 }}
-                className="text-neon-green font-semibold"
+                transition={{ delay: 0.9 }}
+                className="flex items-center justify-center space-x-3 pt-2"
               >
-                {paytmService.amountToCoins(user?.wallet_balance || 25340).toLocaleString()} Battle Coins
-              </motion.p>
+                <Coins className="h-6 w-6 text-neon-green animate-pulse" />
+                <span className="text-neon-green font-bold text-xl">
+                  {paytmService.amountToCoins(user?.wallet_balance || 25340).toLocaleString()} Battle Coins
+                </span>
+                <Zap className="h-6 w-6 text-neon-green animate-bounce" />
+              </motion.div>
             </div>
           </motion.div>
 
