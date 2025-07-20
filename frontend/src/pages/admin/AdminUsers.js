@@ -107,11 +107,11 @@ const AdminUsers = () => {
 
     try {
       await apiService.deleteUser(userId);
-      toast.success('User deleted successfully');
+      safeToast.success('User deleted successfully');
       await loadUsers();
     } catch (error) {
       console.error('Failed to delete user:', error);
-      toast.error('Failed to delete user');
+      safeToast.error('Failed to delete user');
     }
   };
 
