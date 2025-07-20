@@ -81,7 +81,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       title: 'Wallet',
       icon: Wallet,
       path: '/wallet',
-      badge: '₹' + (user?.wallet_balance || 0),
+      badge: user?.wallet_balance || 0,
       description: 'Battle funds'
     },
     {
@@ -139,7 +139,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       }
     },
     closed: {
-      x: "-100%",
+      x: "100%",
       transition: {
         type: "spring",
         stiffness: 300,
@@ -177,8 +177,8 @@ const Sidebar = ({ isOpen, onClose }) => {
     if (!badge) return null;
     
     const isAdmin = badge === 'ADMIN';
-    const isCurrency = badge.startsWith('₹');
-    const baseClasses = "ml-auto font-bold uppercase tracking-wide rounded-full text-2xs px-1.5 py-0.5 xs:px-2 xs:py-0.5 lg:text-xs lg:px-3 lg:py-1";
+    const isCurrency = typeof badge === 'number' || (typeof badge === 'string' && badge.toString().match(/^\d/));
+    const baseClasses = "ml-auto font-bold uppercase tracking-wide rounded-full text-2xs px-1.5 py-0.5 xs:px-2 xs:py-0.5 lg:text-xs lg:px-3 lg:py-1 whitespace-nowrap";
     
     if (isAdmin) {
       return <span className={`${baseClasses} bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-glow animate-pulse-glow`}>{badge}</span>;
@@ -187,7 +187,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     if (isCurrency) {
       return (
         <span className={`${baseClasses} bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-glow`}>
-          {badge}
+          {typeof badge === 'number' ? `₹${badge.toLocaleString()}` : badge}
         </span>
       );
     }
@@ -211,14 +211,14 @@ const Sidebar = ({ isOpen, onClose }) => {
     return (
       <div key={item.key} className="mb-1.5 sm:mb-2">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: index * 0.1 }}
         >
           {hasSubmenu ? (
             <motion.button
               onClick={() => toggleMenu(item.key)}
-              whileHover={{ scale: 1.02, x: 5 }}
+              whileHover={{ scale: 1.02, x: -5 }}
               whileTap={{ scale: 0.98 }}
               className={`w-full flex items-center font-semibold transition-all duration-300 group relative overflow-hidden ${
                 isActive
@@ -239,7 +239,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               <div className="absolute inset-0 bg-gradient-to-r from-neon-blue/0 via-neon-blue/5 to-electric-purple/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               <MenuIcon icon={item.icon} isActive={isActive} />
-                <div className="flex-1 text-left relative z-10">
+              <div className="flex-1 text-left relative z-10">
                 <p className="font-bold leading-tight
                   /* Mobile: much smaller title for better fit */
                   text-xs
@@ -263,7 +263,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               </div>
               <MenuBadge badge={item.badge} isActive={isActive} />
               <motion.div
-                animate={{ rotate: isExpanded ? 90 : 0 }}
+                animate={{ rotate: isExpanded ? -90 : 0 }}
                 transition={{ duration: 0.3 }}
                 className="relative z-10"
               >
@@ -276,7 +276,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               onClick={onClose}
             >
               <motion.div
-                whileHover={{ scale: 1.02, x: 5 }}
+                whileHover={{ scale: 1.02, x: -5 }}
                 whileTap={{ scale: 0.98 }}
                 className={`flex items-center font-semibold transition-all duration-300 group relative overflow-hidden ${
                   isActive
@@ -334,15 +334,15 @@ const Sidebar = ({ isOpen, onClose }) => {
               transition={{ duration: 0.4, type: "spring", stiffness: 100 }}
               className="overflow-hidden
                 /* Mobile: compact submenu spacing */
-                ml-4 mt-2 space-y-1
+                mr-4 mt-2 space-y-1
                 /* Desktop: spacious submenu spacing */
-                lg:ml-6 lg:mt-3 lg:space-y-2
+                lg:mr-6 lg:mt-3 lg:space-y-2
               "
             >
               {item.submenu.map((subItem, subIndex) => (
                 <motion.div
                   key={subItem.path}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: subIndex * 0.1, type: "spring", stiffness: 150 }}
                 >
@@ -351,7 +351,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     onClick={onClose}
                   >
                     <motion.div
-                      whileHover={{ scale: 1.02, x: 3 }}
+                      whileHover={{ scale: 1.02, x: -3 }}
                       whileTap={{ scale: 0.98 }}
                       className={`flex items-center font-medium transition-all duration-300 group relative overflow-hidden ${
                         isActiveLink(subItem.path)
@@ -419,20 +419,20 @@ const Sidebar = ({ isOpen, onClose }) => {
         )}
       </AnimatePresence>
 
-      {/* Mobile-First Sidebar - Left Aligned with Proper Width */}
+      {/* Mobile-First Sidebar - Right Aligned with Full Width */}
       <motion.aside
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
-        className={`fixed left-0 top-0 h-full glass-mobile border-r border-white/10 z-50 kinetic-waves
-          /* Mobile: 85% width for better content visibility */
-          w-[85%] max-w-sm
-          /* Small mobile: fixed width */
-          xs:w-80
-          /* Tablet: medium sidebar width */  
-          sm:w-80
+        className={`fixed right-0 top-0 h-full glass-mobile border-l border-white/10 z-50 kinetic-waves
+          /* Mobile: full width for maximum accessibility */
+          w-full
+          /* Small mobile: most of screen width */
+          xs:w-[90%]
+          /* Tablet: balanced sidebar width */  
+          sm:w-96
           /* Desktop: spacious sidebar - always overlay, never changes layout */
-          lg:w-96
+          lg:w-[28rem]
         `}
         style={{
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))',
@@ -442,29 +442,13 @@ const Sidebar = ({ isOpen, onClose }) => {
         }}
       >
         <div className={`flex flex-col h-full relative z-10 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-          {/* Mobile-First Header - Close button only, no duplicate logo */}
+          {/* Mobile-First Header - Close button on left, navigation title on right */}
           <div className="flex items-center justify-between border-b border-white/10
             /* Mobile: compact header */
             p-4
             /* Desktop: spacious header */
             lg:p-6
           ">
-            {/* Simple brand text instead of logo */}
-            <div>
-              <h2 className="text-white font-gaming font-bold
-                /* Mobile: compact title */
-                text-lg
-                /* Desktop: larger title */
-                lg:text-xl
-              ">Navigation</h2>
-              <p className="text-gray-400
-                /* Mobile: small subtitle */
-                text-xs
-                /* Desktop: normal subtitle */
-                lg:text-sm
-              ">Battle Arena Menu</p>
-            </div>
-
             <motion.button
               onClick={onClose}
               whileHover={{ scale: 1.1, rotate: 90 }}
@@ -478,6 +462,22 @@ const Sidebar = ({ isOpen, onClose }) => {
             >
               <X className="h-5 w-5 sm:h-6 sm:w-6" />
             </motion.button>
+
+            {/* Right-aligned brand text */}
+            <div className="text-right">
+              <h2 className="text-white font-gaming font-bold
+                /* Mobile: compact title */
+                text-lg
+                /* Desktop: larger title */
+                lg:text-xl
+              ">Navigation Menu</h2>
+              <p className="text-gray-400
+                /* Mobile: small subtitle */
+                text-xs
+                /* Desktop: normal subtitle */
+                lg:text-sm
+              ">Ultimate Battle Arena</p>
+            </div>
           </div>
 
           {/* Mobile-First User Info */}
@@ -622,7 +622,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 text-2xs
                 /* Desktop: small copyright */
                 lg:text-xs
-              ">© 2025 Ultimate Gaming</p>
+              ">Ultimate Gaming Platform</p>
             </div>
           </motion.div>
         </div>
