@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Menu, 
   Bell, 
@@ -9,7 +9,11 @@ import {
   LogOut, 
   Wallet,
   Trophy,
-  Crown
+  Crown,
+  Gamepad2,
+  Zap,
+  Star,
+  Shield
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -19,6 +23,7 @@ const Navbar = ({ onMenuClick }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
 
   const mockNotifications = [
     {
