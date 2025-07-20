@@ -29,7 +29,7 @@ load_dotenv()
 # Initialize FastAPI app
 app = FastAPI(title="Tournament Platform API", version="1.0.0")
 
-# CORS middleware
+# CORS middleware - Fix for compatibility
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
