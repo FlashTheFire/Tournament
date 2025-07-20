@@ -2,18 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Trophy, 
-  Wallet, 
   Target, 
   Crown, 
   Gamepad2, 
   Users,
-  Star,
-  Shield,
   Zap,
-  QrCode,
   Eye,
-  Award,
-  TrendingUp,
   Lock,
   CheckCircle
 } from 'lucide-react';
