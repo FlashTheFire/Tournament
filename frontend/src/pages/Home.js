@@ -439,11 +439,7 @@ const Home = () => {
           lg:min-h-screen
         "
       >
-        {/* Clean gradient background - no black boxes */}
-        <div className="absolute inset-0 w-full h-full">
-          <div className="absolute inset-0 bg-gradient-to-br from-cosmic-dark/20 via-cosmic-black/10 to-cosmic-deep/20"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-neon-red/5 via-transparent to-electric-blue/5"></div>
-        </div>
+        {/* Clean background - background colored objects removed as requested */}
 
         {/* Mobile-first hero content */}
         <div className="relative z-10 text-center w-full px-4 sm:px-6 lg:px-8">
