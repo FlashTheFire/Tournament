@@ -22,6 +22,22 @@ import { paytmService } from '../services/PaytmService';
 
 const Wallet = () => {
   const { user } = useAuth();
+  const [showQRPayment, setShowQRPayment] = useState(false);
+  const [selectedAmount, setSelectedAmount] = useState(0);
+  const [activeTab, setActiveTab] = useState('balance');
+
+  const handlePaymentSuccess = (paymentData) => {
+    console.log('Payment successful:', paymentData);
+    // Update user balance in context/API
+    // Show success toast is already handled in component
+  };
+
+  const openQRPayment = (amount) => {
+    setSelectedAmount(amount);
+    setShowQRPayment(true);
+  };
+
+  const paymentAmounts = paytmService.getPaymentAmounts();
 
   const transactions = [
     {
