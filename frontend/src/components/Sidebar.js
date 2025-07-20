@@ -324,7 +324,15 @@ const Sidebar = ({ isOpen, onClose }) => {
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
-        className="fixed left-0 top-0 h-full w-80 glass border-r border-white/10 z-50 md:relative md:translate-x-0 md:z-0 kinetic-waves"
+        className={`fixed left-0 top-0 h-full glass border-r border-white/10 z-50 kinetic-waves
+          w-80 sm:w-80 md:w-80 lg:w-80 xl:w-80
+          ${isOpen ? 'md:relative md:translate-x-0 md:z-0' : 'md:relative md:translate-x-0 md:z-0'}
+        `}
+        style={{
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
+          backdropFilter: 'blur(24px)',
+          borderImage: 'linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(139, 92, 246, 0.3), rgba(255, 0, 128, 0.3)) 1',
+        }}
       >
         <div className="flex flex-col h-full relative z-10">
           {/* Enhanced Header */}
