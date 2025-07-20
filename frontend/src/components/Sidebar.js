@@ -239,17 +239,23 @@ const Sidebar = ({ isOpen, onClose }) => {
               <div className="absolute inset-0 bg-gradient-to-r from-neon-blue/0 via-neon-blue/5 to-electric-purple/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               <MenuIcon icon={item.icon} isActive={isActive} />
-              <div className="flex-1 text-left relative z-10">
-                <p className="font-bold
-                  /* Mobile: smaller title */
-                  text-sm
+                <div className="flex-1 text-left relative z-10">
+                <p className="font-bold leading-tight
+                  /* Mobile: much smaller title for better fit */
+                  text-xs
+                  /* Small mobile: slightly larger */
+                  xs:text-sm
+                  /* Tablet: normal size */
+                  sm:text-sm
                   /* Desktop: larger title */
                   lg:text-base
                 ">{item.title}</p>
                 {item.description && (
-                  <p className="text-gray-400 mt-0.5
-                    /* Mobile: tiny description */
-                    text-2xs
+                  <p className="text-gray-400 mt-0.5 leading-tight
+                    /* Mobile: tiny description, hidden if too cramped */
+                    text-2xs hidden xs:block
+                    /* Small mobile: show with tiny text */
+                    xs:text-2xs
                     /* Desktop: small description */
                     lg:text-xs
                   ">{item.description}</p>
