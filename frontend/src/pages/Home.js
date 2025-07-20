@@ -354,50 +354,140 @@ const Home = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className="min-h-screen"
+      className="w-full"
     >
-      {/* Ultra-Premium Hero Section */}
+      {/* Full-Screen Hero Section */}
       <motion.section
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, type: "spring", stiffness: 60 }}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        className="relative min-h-screen w-full flex items-center justify-center overflow-hidden"
       >
-        {/* Hero background */}
-        <div className="absolute inset-0">
-          <motion.img
-            src={heroImages[0]}
-            alt="Free Fire Arena"
-            className="w-full h-full object-cover"
+        {/* Fixed full-screen background */}
+        <div className="absolute inset-0 w-full h-full">
+          <motion.div
+            className="w-full h-full bg-center bg-cover bg-no-repeat bg-fixed"
+            style={{
+              backgroundImage: `url('${heroImages[0]}')`
+            }}
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
             transition={{ duration: 8 }}
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-neon-red/10 via-transparent to-electric-blue/10"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-cosmic-black/85 via-cosmic-dark/70 to-cosmic-deep/85"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-neon-red/8 via-transparent to-electric-blue/8"></div>
         </div>
 
-        {/* Main content */}
-        <div className="relative z-10 text-center px-8 max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 1 }}
-            className="mb-8"
-          >
-            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-500/20 to-orange-600/20 backdrop-blur-sm border border-red-500/30 rounded-full px-8 py-3 mb-8">
-              <Flame className="h-6 w-6 text-red-400 animate-pulse" />
-              <span className="text-red-300 font-bold uppercase tracking-wide text-lg">Battle Royale Championship</span>
-              <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
-            </div>
-          </motion.div>
-
+        {/* Full-width main content */}
+        <div className="relative z-10 text-center w-full px-4 sm:px-6 lg:px-8">
+          {/* Main Title - No top banner */}
           <motion.h1 
-            className="text-5xl md:text-6xl lg:text-7xl font-black mb-8 font-gaming leading-none"
+            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-12 font-gaming leading-none"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 1 }}
+            transition={{ delay: 0.3, duration: 1 }}
           >
+            <span className="text-white drop-shadow-2xl block">FREE FIRE</span>
+            <motion.span 
+              className="text-gradient bg-gradient-to-r from-neon-red via-electric-purple to-neon-blue block"
+              animate={{ 
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+              }}
+              transition={{ 
+                duration: 4, 
+                repeat: Infinity, 
+                ease: "easeInOut"
+              }}
+              style={{ backgroundSize: '200% 200%' }}
+            >
+              ULTIMATE ARENA
+            </motion.span>
+          </motion.h1>
+          
+          <motion.p 
+            className="text-xl sm:text-2xl md:text-4xl text-gray-200 mb-16 leading-relaxed drop-shadow-lg max-w-7xl mx-auto font-medium"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 1 }}
+          >
+            Experience the most intense Free Fire tournaments with{' '}
+            <span className="text-neon-blue font-bold">AI-powered matchmaking</span>, 
+            real-time analytics, and massive prize pools!
+          </motion.p>
+          
+          {/* Enhanced Live battle stats - Full width grid */}
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-16 max-w-7xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 1 }}
+          >
+            {[
+              { icon: Activity, label: 'Live Battles', value: liveStats.liveMatches, color: 'text-neon-green', gradient: 'from-neon-green/20 to-emerald-500/20', border: 'border-neon-green/30' },
+              { icon: Users, label: 'Elite Warriors', value: `${Math.floor(liveStats.activePlayers/1000)}K+`, color: 'text-neon-purple', gradient: 'from-neon-purple/20 to-electric-purple/20', border: 'border-neon-purple/30' },
+              { icon: Crown, label: 'Prize Pool', value: `₹${Math.floor(liveStats.totalPrizePool/100000)/10}M`, color: 'text-yellow-400', gradient: 'from-yellow-400/20 to-orange-500/20', border: 'border-yellow-400/30' }
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                className={`glass rounded-3xl p-6 md:p-8 text-center bg-gradient-to-br ${stat.gradient} border ${stat.border} relative overflow-hidden backdrop-blur-2xl`}
+                whileHover={{ scale: 1.05, y: -10, rotateY: 5 }}
+                animate={{ y: [-3, 3, -3] }}
+                transition={{ 
+                  y: { duration: 4, repeat: Infinity, delay: index * 0.7 },
+                  scale: { duration: 0.3 }
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></div>
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear", delay: index * 3 }}
+                  className="relative z-10"
+                >
+                  <stat.icon className={`h-12 w-12 md:h-16 md:w-16 ${stat.color} mx-auto mb-4 drop-shadow-2xl`} />
+                </motion.div>
+                <div className="relative z-10">
+                  <motion.p 
+                    className={`text-3xl md:text-5xl font-black ${stat.color} mb-2 font-gaming drop-shadow-2xl`}
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
+                  >{stat.value}</motion.p>
+                  <p className="text-white font-semibold text-lg md:text-xl">{stat.label}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+          
+          <motion.div 
+            className="flex flex-col lg:flex-row gap-8 justify-center items-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 1 }}
+          >
+            <Link
+              to="/tournaments"
+              className="btn-premium text-xl md:text-2xl px-12 md:px-16 py-6 md:py-8 ripple mobile-friendly group relative overflow-hidden"
+            >
+              <motion.div 
+                className="flex items-center justify-center space-x-4"
+                whileHover={{ scale: 1.05 }}
+              >
+                <Crosshair className="h-8 w-8 md:h-10 md:w-10 group-hover:animate-spin" />
+                <span className="font-black tracking-wide">JOIN ELITE BATTLE</span>
+                <Flame className="h-8 w-8 md:h-10 md:w-10 group-hover:animate-bounce" />
+              </motion.div>
+            </Link>
+            
+            <Link
+              to="/leaderboards"
+              className="glass px-12 md:px-16 py-6 md:py-8 rounded-3xl font-bold text-xl md:text-2xl border-2 border-neon-blue/50 hover:border-neon-blue hover:shadow-glow-lg transition-all duration-300 inline-flex items-center justify-center space-x-4 mobile-friendly group backdrop-blur-xl"
+            >
+              <Trophy className="h-8 w-8 md:h-10 md:w-10 text-yellow-400 group-hover:animate-pulse" />
+              <span>VIEW CHAMPIONS</span>
+              <ArrowRight className="h-8 w-8 md:h-10 md:w-10 group-hover:translate-x-2 transition-transform" />
+            </Link>
+          </motion.div>
+        </div>
+      </motion.section>
             <span className="text-white drop-shadow-2xl block">FREE FIRE</span>
             <motion.span 
               className="text-gradient bg-gradient-to-r from-neon-red via-electric-purple to-neon-blue block"
