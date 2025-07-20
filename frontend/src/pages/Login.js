@@ -44,7 +44,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative overflow-hidden">
       {/* Advanced Particle Background */}
       <div className="absolute inset-0 opacity-30">
         <div className="kinetic-waves"></div>
@@ -55,12 +55,24 @@ const Login = () => {
       <div className="absolute top-40 right-32 w-1 h-1 bg-neon-purple rounded-full animate-particle" style={{animationDelay: '1s'}}></div>
       <div className="absolute bottom-32 left-1/4 w-1.5 h-1.5 bg-neon-red rounded-full animate-particle" style={{animationDelay: '2s'}}></div>
       
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 30 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
-        className="w-full max-w-md space-y-8 relative z-10"
-      >
+      {/* Horizontal Layout Container */}
+      <div className="min-h-screen flex items-center justify-center relative z-10 
+        /* Mobile: vertical layout with padding */
+        px-4 py-8
+        /* Desktop: horizontal layout */
+        lg:px-12
+      ">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+          className="
+            /* Mobile: standard vertical layout */
+            w-full max-w-md space-y-6
+            /* Desktop: horizontal card layout */
+            lg:max-w-6xl lg:grid lg:grid-cols-2 lg:gap-12 lg:space-y-0 lg:items-center
+          "
+        >
         {/* Enhanced Header with Logo on Left Side */}
         <div className="text-center">
           <motion.div 
