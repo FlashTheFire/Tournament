@@ -128,7 +128,7 @@ const TournamentDetails = () => {
 
       const tournamentData = mockTournaments[id];
       if (!tournamentData) {
-        toast.error('Tournament not found');
+        safeToast.error('Tournament not found');
         navigate('/tournaments');
         return;
       }
