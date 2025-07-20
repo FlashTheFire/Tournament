@@ -211,7 +211,12 @@ const AdvancedGaming = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="flex flex-wrap gap-2 glass rounded-2xl p-2 border border-white/10"
+        className="flex gap-2 glass rounded-2xl p-2 border border-white/10
+          /* Mobile: flex-wrap for small screens */
+          flex-wrap
+          /* Desktop: no wrap needed */
+          lg:flex-nowrap
+        "
       >
         {[
           { id: 'overview', label: 'Features Overview', icon: Gamepad2 },
