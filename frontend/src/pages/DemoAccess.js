@@ -157,11 +157,11 @@ const DemoAccess = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div className="glass rounded-xl p-4 border border-white/20">
                   <p className="text-gray-400 text-sm mb-2">Email Address</p>
-                  <div className="flex items-center space-x-3">
-                    <code className="text-lg md:text-xl font-mono text-white bg-black/30 px-3 py-2 rounded-lg flex-1 break-all">
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <code className="text-sm sm:text-lg md:text-xl font-mono text-white bg-black/30 px-2 sm:px-3 py-2 rounded-lg flex-1 break-words overflow-hidden">
                       {demoCredentials.email}
                     </code>
-                    <CheckCircle className="h-5 w-5 text-neon-green flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-neon-green flex-shrink-0" />
                   </div>
                 </div>
                 
