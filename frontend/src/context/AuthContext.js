@@ -39,20 +39,41 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await apiService.login(email, password);
-      const { access_token, user_id } = response;
+      console.log('🔵 Starting login with:', { email });
+      const response = await apiService.login({ email, password });
+      console.log('🔵 Login response received:', response);
       
-      localStorage.setItem('token', access_token);
-      setToken(access_token);
-      apiService.setAuthToken(access_token);
+      // Handle different response formats
+      let accessToken, userId;
+      
+      if (response.access_token) {
+        accessToken = response.access_token;
+        userId = response.user_id;
+      } else if (response.data?.access_token) {
+        accessToken = response.data.access_token;
+        userId = response.data.user_id;
+      } else {
+        throw new Error('Invalid response format');
+      }
+      
+      if (!accessToken) {
+        throw new Error('No access token received');
+      }
+      
+      console.log('🔵 Access token received:', accessToken);
+      
+      localStorage.setItem('token', accessToken);
+      setToken(accessToken);
+      apiService.setAuthToken(accessToken);
       
       // Load user data
       const userData = await apiService.getCurrentUser();
+      console.log('🔵 User data loaded:', userData);
       setUser(userData);
       
       return { success: true };
     } catch (error) {
-      console.error('Login error details:', error);
+      console.error('🔴 Login error details:', error);
       
       // Extract clean error message with multiple fallbacks
       let errorMessage = 'Login failed';
@@ -79,7 +100,7 @@ export const AuthProvider = ({ children }) => {
       
       // Additional safety check to ensure we only pass strings to toast
       if (typeof errorMessage !== 'string') {
-        console.error('Error message is not a string:', errorMessage);
+        console.error('🔴 Error message is not a string:', errorMessage);
         errorMessage = 'Login failed. Please try again.';
       }
       
