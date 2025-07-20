@@ -11,11 +11,18 @@ import {
   Shield, 
   X,
   ChevronRight,
-  GamepadIcon,
+  Gamepad2,
   Users,
   BarChart3,
-  PlusCircle,
-  User
+  User,
+  Target,
+  Crosshair,
+  Flame,
+  Skull,
+  Swords,
+  Star,
+  Activity,
+  Zap
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
