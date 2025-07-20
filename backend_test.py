@@ -885,7 +885,11 @@ class TournamentAPITester:
         print(f"Backend URL: {self.api_url}")
         print("=" * 60)
         
-        # Test sequence
+        # Initialize admin token storage
+        self.admin_token = None
+        self.admin_user_id = None
+        
+        # Test sequence - Basic functionality first
         self.test_health_check()
         self.test_user_registration()
         self.test_user_login()
@@ -901,6 +905,34 @@ class TournamentAPITester:
         self.test_protected_endpoints_without_auth()
         self.test_invalid_credentials()
         self.test_duplicate_registration()
+        
+        # AI-powered features testing
+        print("\n" + "=" * 60)
+        print("🤖 TESTING AI-POWERED FEATURES")
+        print("=" * 60)
+        
+        self.test_ai_matchmaking_analysis()
+        self.test_ai_tournament_prediction()
+        self.test_ai_player_insights()
+        self.test_ai_smart_matchmaking()
+        self.test_player_analytics()
+        
+        # Admin endpoints testing (should fail for regular user)
+        print("\n" + "=" * 60)
+        print("🔐 TESTING ADMIN ENDPOINTS (Non-Admin User)")
+        print("=" * 60)
+        
+        self.test_admin_analytics_overview()
+        self.test_admin_player_analytics()
+        self.test_admin_tournament_analytics()
+        
+        # Create admin user and test admin endpoints
+        print("\n" + "=" * 60)
+        print("👑 TESTING ADMIN FUNCTIONALITY")
+        print("=" * 60)
+        
+        self.test_admin_user_creation()
+        self.test_admin_endpoints_with_admin_user()
         
         # Print summary
         print("\n" + "=" * 60)
