@@ -406,7 +406,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Mobile Overlay */}
+      {/* Enhanced Mobile Overlay - Full Screen Coverage */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -414,7 +414,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80 backdrop-blur-md z-40"
           />
         )}
       </AnimatePresence>
