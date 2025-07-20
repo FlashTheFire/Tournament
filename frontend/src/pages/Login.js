@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, Gamepad2, Trophy, Zap, Shield, Star, Crown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
