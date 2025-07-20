@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 import { 
   Trophy, 
   Target, 
@@ -9,13 +10,32 @@ import {
   Zap,
   Eye,
   Lock,
-  CheckCircle
+  CheckCircle,
+  Rocket
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const DemoAccess = () => {
+  const { login } = useAuth();
+  
   const demoCredentials = {
     email: 'demo@tournament.com',
     password: 'demo123'
+  };
+
+  const handleDemoLogin = async () => {
+    try {
+      toast.success('🚀 Launching Demo Arena...');
+      const result = await login(demoCredentials.email, demoCredentials.password);
+      if (result.success) {
+        toast.success('🎉 Welcome to the Elite Arena!');
+      } else {
+        toast.error(result.error || 'Demo login failed');
+      }
+    } catch (error) {
+      console.error('Demo login error:', error);
+      toast.error('Failed to launch demo. Please try again.');
+    }
   };
 
   const features = [
