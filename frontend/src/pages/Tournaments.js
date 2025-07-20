@@ -296,24 +296,24 @@ const Tournaments = () => {
           </div>
           
           {/* Tournament Title */}
-          <div className="absolute bottom-6 left-6 right-6">
-            <h3 className="text-white font-bold text-2xl mb-4 drop-shadow-2xl leading-tight">
+          <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 left-3 sm:left-4 md:left-6 right-3 sm:right-4 md:right-6">
+            <h3 className="text-white font-bold text-base sm:text-lg md:text-xl lg:text-2xl mb-2 sm:mb-3 md:mb-4 drop-shadow-2xl leading-tight">
               {tournament.name}
             </h3>
-            <div className="flex items-center justify-between text-white/90 text-sm">
+            <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-2 xs:gap-0 text-white/90 text-xs sm:text-sm">
               <motion.div 
-                className="flex items-center space-x-2 bg-black/40 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/20"
+                className="flex items-center space-x-1 sm:space-x-2 bg-black/40 backdrop-blur-sm px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg sm:rounded-xl border border-white/20 flex-shrink-0"
                 whileHover={{ scale: 1.05, backgroundColor: 'rgba(0, 212, 255, 0.1)' }}
               >
-                <Users className="h-5 w-5 text-neon-blue" />
-                <span className="font-semibold">{tournament.current_participants}/{tournament.max_participants}</span>
+                <Users className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-neon-blue flex-shrink-0" />
+                <span className="font-semibold whitespace-nowrap">{tournament.current_participants}/{tournament.max_participants}</span>
               </motion.div>
               <motion.div 
-                className="flex items-center space-x-2 bg-black/40 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/20"
+                className="flex items-center space-x-1 sm:space-x-2 bg-black/40 backdrop-blur-sm px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg sm:rounded-xl border border-white/20 flex-shrink-0"
                 whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 0, 128, 0.1)' }}
               >
-                <BattleModeIcon className="h-5 w-5 text-neon-red" />
-                <span className="font-semibold capitalize">{tournament.game_type.replace('_', ' ')}</span>
+                <BattleModeIcon className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-neon-red flex-shrink-0" />
+                <span className="font-semibold capitalize whitespace-nowrap truncate">{tournament.game_type.replace('_', ' ')}</span>
               </motion.div>
             </div>
           </div>
