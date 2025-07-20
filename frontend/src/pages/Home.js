@@ -817,17 +817,17 @@ const Home = () => {
             </p>
           </motion.div>
           
-          {/* Professional Touch-Enabled AI Carousel */}
+          {/* Professional Touch-Enabled AI Carousel - Fixed Sizing */}
           <div className="max-w-7xl mx-auto">
             {/* Mobile: Professional Touch-Enabled Carousel */}
             <div className="lg:hidden">
               <div 
-                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl"
+                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl mx-4"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={() => handleTouchEnd('ai')}
               >
-                {/* Professional carousel container */}
+                {/* Professional carousel container - Full width cards */}
                 <motion.div
                   className="flex"
                   animate={{
@@ -841,9 +841,9 @@ const Home = () => {
                   style={{ width: `${aiPredictions.length * 100}%` }}
                 >
                   {aiPredictions.map((insight, index) => (
-                    <div key={insight.id} className="w-full flex-shrink-0 p-4">
+                    <div key={insight.id} className="w-full flex-shrink-0 p-6">
                       <motion.div
-                        className="relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl h-full backdrop-blur-xl rounded-2xl"
+                        className="relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl backdrop-blur-xl rounded-2xl min-h-[280px]"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ 
                           opacity: index === aiCurrentIndex ? 1 : 0.7,
@@ -868,10 +868,10 @@ const Home = () => {
                           />
                         </div>
                         
-                        <div className="relative z-10 p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${insight.gradient} flex items-center justify-center shadow-glow-lg border border-white/30`}>
-                              <insight.icon className="h-7 w-7 text-white drop-shadow-lg" />
+                        <div className="relative z-10 p-6 h-full flex flex-col">
+                          <div className="flex items-start justify-between mb-6">
+                            <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${insight.gradient} flex items-center justify-center shadow-glow-lg border border-white/30`}>
+                              <insight.icon className="h-8 w-8 text-white drop-shadow-lg" />
                             </div>
                             <motion.div 
                               className={`px-4 py-2 rounded-full bg-gradient-to-r ${insight.gradient} text-white font-bold text-sm shadow-glow-lg border border-white/30`}
@@ -882,13 +882,13 @@ const Home = () => {
                             </motion.div>
                           </div>
                           
-                          <h3 className="text-white font-bold text-lg mb-3 drop-shadow-lg">{insight.title}</h3>
-                          <p className="text-gray-300 mb-6 text-sm leading-relaxed">{insight.prediction}</p>
+                          <h3 className="text-white font-bold text-xl mb-4 drop-shadow-lg">{insight.title}</h3>
+                          <p className="text-gray-300 mb-6 text-base leading-relaxed flex-grow">{insight.prediction}</p>
                           
                           <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className={`w-full btn-premium bg-gradient-to-r ${insight.gradient} text-white font-bold py-4 rounded-xl text-sm transition-all duration-300 shadow-glow-lg border border-white/30`}
+                            className={`w-full btn-premium bg-gradient-to-r ${insight.gradient} text-white font-bold py-4 rounded-xl text-base transition-all duration-300 shadow-glow-lg border border-white/30`}
                           >
                             {insight.action}
                           </motion.button>
@@ -898,38 +898,15 @@ const Home = () => {
                   ))}
                 </motion.div>
 
-                {/* Professional Navigation Controls */}
-                <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-20">
-                  <motion.button
-                    whileHover={{ scale: 1.1, x: -2 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="w-12 h-12 rounded-full bg-gradient-to-r from-neon-blue to-electric-purple shadow-glow-lg border border-white/30 backdrop-blur-xl flex items-center justify-center text-white"
-                    onClick={prevAiSlide}
-                  >
-                    <ChevronLeft className="h-6 w-6" />
-                  </motion.button>
-                </div>
-                
-                <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-20">
-                  <motion.button
-                    whileHover={{ scale: 1.1, x: 2 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="w-12 h-12 rounded-full bg-gradient-to-r from-electric-purple to-neon-pink shadow-glow-lg border border-white/30 backdrop-blur-xl flex items-center justify-center text-white"
-                    onClick={nextAiSlide}
-                  >
-                    <ChevronRight className="h-6 w-6" />
-                  </motion.button>
-                </div>
-
-                {/* Professional Progress Bar */}
-                <div className="flex justify-center space-x-2 mt-6 pb-4">
+                {/* Fixed Progress Dots */}
+                <div className="flex justify-center space-x-3 py-6">
                   {aiPredictions.map((_, index) => (
                     <motion.button
                       key={index}
-                      className={`h-2 rounded-full transition-all duration-300 ${
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
                         index === aiCurrentIndex 
-                          ? 'w-8 bg-gradient-to-r from-neon-blue to-electric-purple' 
-                          : 'w-2 bg-white/30'
+                          ? 'bg-gradient-to-r from-neon-blue to-electric-purple scale-125' 
+                          : 'bg-white/30 hover:bg-white/50'
                       }`}
                       onClick={() => {
                         setIsAiAutoPlaying(false);
@@ -937,22 +914,23 @@ const Home = () => {
                         setTimeout(() => setIsAiAutoPlaying(true), 5000);
                       }}
                       whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
                     >
                       {index === aiCurrentIndex && (
                         <motion.div
-                          className="h-full bg-gradient-to-r from-white/40 to-transparent rounded-full"
-                          animate={{ x: ['-100%', '100%'] }}
-                          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                          className="absolute inset-0 w-3 h-3 rounded-full bg-white/40"
+                          animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
+                          transition={{ duration: 1, repeat: Infinity }}
                         />
                       )}
                     </motion.button>
                   ))}
                 </div>
 
-                {/* Auto-play indicator */}
-                <div className="absolute top-4 right-4 z-20">
+                {/* Auto-play indicator - repositioned */}
+                <div className="absolute top-6 right-6 z-20">
                   <motion.div
-                    className={`w-3 h-3 rounded-full ${isAiAutoPlaying ? 'bg-green-400' : 'bg-gray-400'}`}
+                    className={`w-2 h-2 rounded-full ${isAiAutoPlaying ? 'bg-green-400' : 'bg-gray-400'}`}
                     animate={{ opacity: [0.5, 1, 0.5] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   />
