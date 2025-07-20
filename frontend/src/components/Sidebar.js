@@ -550,13 +550,18 @@ const Sidebar = ({ isOpen, onClose }) => {
             </motion.div>
           )}
 
-          {/* Mobile-First Menu Items */}
-          <nav className="flex-1 overflow-y-auto
+          {/* Mobile-First Menu Items with Enhanced Scrolling */}
+          <nav className="flex-1 mobile-scroll touch-scroll
             /* Mobile: compact menu padding */
-            px-3 py-4 space-y-1
+            px-3 py-4 space-y-1 overflow-y-auto
             /* Desktop: spacious menu padding */
             lg:px-6 lg:py-6 lg:space-y-3
-          ">
+          " style={{ 
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'thin',
+            scrollbarColor: 'var(--neon-blue) var(--cosmic-dark)'
+          }}>
             {menuItems.map((item, index) => renderMenuItem(item, index))}
             
             {isAdmin && (
