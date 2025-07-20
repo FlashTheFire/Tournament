@@ -23,7 +23,8 @@ import {
   Star,
   Settings,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  X
 } from 'lucide-react';
 import { apiService } from '../services/api';
 import safeToast from '../utils/safeToast';
