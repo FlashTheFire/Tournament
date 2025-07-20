@@ -201,15 +201,20 @@ const Navbar = ({ onMenuClick }) => {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9, y: -20 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  className="absolute right-0 top-full mt-3 w-96 glass rounded-2xl border border-white/20 shadow-2xl z-50 overflow-hidden"
+                  className="absolute right-0 top-full mt-3 w-96 bg-gradient-to-br from-cosmic-black/95 to-cosmic-dark/95 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-2xl z-50 overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(18, 18, 18, 0.95), rgba(30, 30, 30, 0.95))',
+                    backdropFilter: 'blur(24px)',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 212, 255, 0.1)'
+                  }}
                 >
-                  <div className="p-6 border-b border-white/10 bg-gradient-to-r from-neon-blue/10 to-electric-purple/10">
+                  <div className="p-6 border-b border-white/10 bg-gradient-to-r from-cosmic-dark/50 to-cosmic-black/50">
                     <div className="flex items-center space-x-3">
                       <Bell className="h-6 w-6 text-neon-blue" />
                       <div>
-                        <h3 className="text-white font-bold text-lg">Notifications</h3>
+                        <h3 className="text-white font-bold text-lg font-gaming">Battle Alerts</h3>
                         <p className="text-gray-400 text-sm">
-                          {mockNotifications.filter(n => n.unread).length} new alerts
+                          {mockNotifications.filter(n => n.unread).length} new notifications
                         </p>
                       </div>
                     </div>
@@ -221,13 +226,13 @@ const Navbar = ({ onMenuClick }) => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
+                        whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
                         className={`p-4 border-b border-white/5 last:border-b-0 cursor-pointer transition-all duration-300 ${
-                          notification.unread ? 'bg-neon-blue/5 border-l-2 border-l-neon-blue' : ''
+                          notification.unread ? 'bg-neon-blue/3 border-l-2 border-l-neon-blue' : ''
                         }`}
                       >
                         <div className="flex items-start space-x-4">
-                          <div className="p-2 glass rounded-lg">
+                          <div className="p-2 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-lg border border-white/10">
                             <NotificationIcon type={notification.type} />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -245,14 +250,14 @@ const Navbar = ({ onMenuClick }) => {
                             <motion.div
                               animate={{ scale: [1, 1.2, 1] }}
                               transition={{ duration: 2, repeat: Infinity }}
-                              className="h-3 w-3 bg-neon-blue rounded-full"
+                              className="h-3 w-3 bg-neon-blue rounded-full shadow-glow"
                             />
                           )}
                         </div>
                       </motion.div>
                     ))}
                   </div>
-                  <div className="p-4 border-t border-white/10">
+                  <div className="p-4 border-t border-white/10 bg-gradient-to-r from-cosmic-dark/30 to-cosmic-black/30">
                     <motion.button 
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
