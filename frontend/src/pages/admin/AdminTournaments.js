@@ -87,13 +87,13 @@ const AdminTournaments = () => {
   const handleUpdateTournament = async (tournamentId, updateData) => {
     try {
       await apiService.updateTournament(tournamentId, updateData);
-      toast.success('Tournament updated successfully');
+      safeToast.success('Tournament updated successfully');
       await loadTournaments();
       setShowEditModal(false);
       setEditingTournament(null);
     } catch (error) {
       console.error('Failed to update tournament:', error);
-      toast.error('Failed to update tournament');
+      safeToast.error('Failed to update tournament');
     }
   };
 
