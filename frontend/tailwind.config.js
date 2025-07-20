@@ -56,10 +56,44 @@ module.exports = {
         'display': ['Exo 2', 'sans-serif'],
       },
       fontSize: {
-        '2xs': '0.625rem',
-        '7xl': '4.5rem',
-        '8xl': '6rem',
-        '9xl': '8rem',
+        '2xs': '0.625rem',    // 10px - Mobile micro text
+        'xs': '0.75rem',      // 12px - Mobile small text
+        'sm': '0.875rem',     // 14px - Mobile body text
+        'base': '1rem',       // 16px - Desktop body text
+        'lg': '1.125rem',     // 18px - Desktop large text
+        'xl': '1.25rem',      // 20px - Small headings
+        '2xl': '1.5rem',      // 24px - Medium headings
+        '3xl': '1.875rem',    // 30px - Large headings
+        '4xl': '2.25rem',     // 36px - Extra large headings
+        '5xl': '3rem',        // 48px - Display text
+        '6xl': '3.75rem',     // 60px - Large display
+        '7xl': '4.5rem',      // 72px - Hero text
+        '8xl': '6rem',        // 96px - Desktop hero
+        '9xl': '8rem',        // 128px - Ultra hero
+        // Mobile-specific font sizes
+        'mobile-xs': '0.6875rem',  // 11px
+        'mobile-sm': '0.8125rem',  // 13px
+        'mobile-base': '0.9375rem', // 15px
+        'mobile-lg': '1.0625rem',   // 17px
+        'mobile-xl': '1.1875rem',   // 19px
+        'mobile-2xl': '1.375rem',   // 22px
+        'mobile-3xl': '1.625rem',   // 26px
+        'mobile-4xl': '2rem',       // 32px
+        'mobile-5xl': '2.5rem',     // 40px
+        'mobile-6xl': '3rem',       // 48px
+        // Desktop-specific font sizes
+        'desktop-xs': '0.8125rem',  // 13px
+        'desktop-sm': '0.9375rem',  // 15px
+        'desktop-base': '1.0625rem', // 17px
+        'desktop-lg': '1.1875rem',   // 19px
+        'desktop-xl': '1.375rem',    // 22px
+        'desktop-2xl': '1.75rem',    // 28px
+        'desktop-3xl': '2.25rem',    // 36px
+        'desktop-4xl': '3rem',       // 48px
+        'desktop-5xl': '4rem',       // 64px
+        'desktop-6xl': '5rem',       // 80px
+        'desktop-7xl': '6rem',       // 96px
+        'desktop-8xl': '8rem',       // 128px
       },
       spacing: {
         '18': '4.5rem',
