@@ -30,7 +30,7 @@ api.interceptors.response.use(
     return response.data;
   },
   (error) => {
-    console.error('API Error:', error);
+    console.error('🔴 API Interceptor Error:', error);
     
     if (error.response?.status === 401) {
       // Unauthorized - clear auth and redirect to login
@@ -43,12 +43,18 @@ api.interceptors.response.use(
     // Handle different types of error structures
     let errorMessage = 'An error occurred';
     
+    console.log('🔵 Processing error response:', error.response?.data);
+    
     if (error.response?.data?.detail) {
       const detail = error.response.data.detail;
+      console.log('🔵 Error detail:', detail);
+      console.log('🔵 Detail type:', typeof detail);
       
       // Handle FastAPI validation errors (array of error objects)
       if (Array.isArray(detail)) {
+        console.log('🔵 Processing array of validation errors');
         errorMessage = detail.map(err => {
+          console.log('🔵 Individual error:', err);
           if (typeof err === 'object' && err.msg) {
             return err.msg;
           }
@@ -57,17 +63,21 @@ api.interceptors.response.use(
       } 
       // Handle simple string errors
       else if (typeof detail === 'string') {
+        console.log('🔵 Processing string error');
         errorMessage = detail;
       }
       // Handle error objects with message/msg
       else if (typeof detail === 'object') {
+        console.log('🔵 Processing object error');
         errorMessage = detail.message || detail.msg || 'Invalid request';
       }
     } else if (error.message) {
+      console.log('🔵 Using error message');
       errorMessage = error.message;
     }
     
-    console.error('Processed Error Message:', errorMessage);
+    console.log('🔵 Final processed error message:', errorMessage);
+    console.log('🔵 Error message type:', typeof errorMessage);
     
     // Store clean error message for components to use
     error.cleanMessage = errorMessage;
