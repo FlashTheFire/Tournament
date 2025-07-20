@@ -199,8 +199,10 @@ const Navbar = ({ onMenuClick }) => {
 
         {/* Right Section - Mobile-First */}
         <div className="flex items-center
-          /* Mobile: compact spacing */
-          space-x-2
+          /* Mobile: very compact spacing */
+          space-x-1
+          /* Small mobile: slightly more spacing */
+          xs:space-x-2
           /* Tablet: medium spacing */
           sm:space-x-3
           /* Desktop: spacious spacing */
