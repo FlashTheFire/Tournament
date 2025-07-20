@@ -44,22 +44,25 @@ api.interceptors.response.use(
     let errorMessage = 'An error occurred';
     
     console.log('🔵 Processing error response:', error.response?.data);
+    console.log('🔵 Response status:', error.response?.status);
     
     if (error.response?.data?.detail) {
       const detail = error.response.data.detail;
       console.log('🔵 Error detail:', detail);
       console.log('🔵 Detail type:', typeof detail);
+      console.log('🔵 Detail is array:', Array.isArray(detail));
       
       // Handle FastAPI validation errors (array of error objects)
       if (Array.isArray(detail)) {
         console.log('🔵 Processing array of validation errors');
-        errorMessage = detail.map(err => {
-          console.log('🔵 Individual error:', err);
-          if (typeof err === 'object' && err.msg) {
-            return err.msg;
+        const errorMessages = detail.map(err => {
+          console.log('🔵 Individual error:', err, 'Type:', typeof err);
+          if (err && typeof err === 'object' && err.msg) {
+            return String(err.msg);
           }
           return typeof err === 'string' ? err : 'Validation error';
-        }).join(', ');
+        });
+        errorMessage = errorMessages.join(', ');
       } 
       // Handle simple string errors
       else if (typeof detail === 'string') {
@@ -67,13 +70,26 @@ api.interceptors.response.use(
         errorMessage = detail;
       }
       // Handle error objects with message/msg
-      else if (typeof detail === 'object') {
+      else if (detail && typeof detail === 'object') {
         console.log('🔵 Processing object error');
-        errorMessage = detail.message || detail.msg || 'Invalid request';
+        errorMessage = String(detail.message || detail.msg || 'Invalid request');
+      }
+      // Fallback for any other detail type
+      else {
+        console.log('🔵 Unknown detail type, converting to string');
+        errorMessage = String(detail || 'Unknown error');
+      }
+    } else if (error.response?.data) {
+      console.log('🔵 No detail, using data directly');
+      const data = error.response.data;
+      if (typeof data === 'string') {
+        errorMessage = data;
+      } else if (data && typeof data === 'object') {
+        errorMessage = data.message || data.error || JSON.stringify(data);
       }
     } else if (error.message) {
       console.log('🔵 Using error message');
-      errorMessage = error.message;
+      errorMessage = String(error.message);
     }
     
     console.log('🔵 Final processed error message:', errorMessage);
