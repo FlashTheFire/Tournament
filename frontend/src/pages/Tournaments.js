@@ -286,10 +286,10 @@ const Tournaments = () => {
           </motion.div>
 
           {/* Battle Map Info */}
-          <div className="absolute bottom-6 left-6">
-            <div className="flex items-center space-x-2 text-white/90 mb-2">
-              <MapPin className="h-4 w-4 text-neon-green" />
-              <span className="text-sm font-medium bg-black/40 backdrop-blur-sm px-2 py-1 rounded">
+          <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 left-3 sm:left-4 md:left-6">
+            <div className="flex items-center space-x-1 sm:space-x-2 text-white/90 mb-1 sm:mb-2">
+              <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-neon-green flex-shrink-0" />
+              <span className="text-xs sm:text-sm font-medium bg-black/40 backdrop-blur-sm px-1.5 sm:px-2 py-0.5 sm:py-1 rounded truncate">
                 {tournament.battle_map || battleMaps[index % battleMaps.length]}
               </span>
             </div>
