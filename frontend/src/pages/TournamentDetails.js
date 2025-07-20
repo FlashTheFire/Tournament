@@ -155,7 +155,7 @@ const TournamentDetails = () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       setIsRegistered(true);
-      toast.success('Successfully registered for the tournament! 🎉');
+      safeToast.success('Successfully registered for the tournament! 🎉');
     } catch (error) {
       console.error('Registration failed:', error);
       toast.error('Registration failed. Please try again.');
