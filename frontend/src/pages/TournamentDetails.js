@@ -158,7 +158,7 @@ const TournamentDetails = () => {
       safeToast.success('Successfully registered for the tournament! 🎉');
     } catch (error) {
       console.error('Registration failed:', error);
-      toast.error('Registration failed. Please try again.');
+      safeToast.error('Registration failed. Please try again.');
     } finally {
       setRegistering(false);
     }
