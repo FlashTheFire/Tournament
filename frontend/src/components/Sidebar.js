@@ -298,16 +298,22 @@ const Sidebar = ({ isOpen, onClose }) => {
                 
                 <MenuIcon icon={item.icon} isActive={isActive} />
                 <div className="flex-1 relative z-10">
-                  <p className="font-bold
-                    /* Mobile: smaller title */
-                    text-sm
+                  <p className="font-bold leading-tight
+                    /* Mobile: much smaller title for better fit */
+                    text-xs
+                    /* Small mobile: slightly larger */
+                    xs:text-sm
+                    /* Tablet: normal size */
+                    sm:text-sm
                     /* Desktop: larger title */
                     lg:text-base
                   ">{item.title}</p>
                   {item.description && (
-                    <p className="text-gray-400 mt-0.5
-                      /* Mobile: tiny description */
-                      text-2xs
+                    <p className="text-gray-400 mt-0.5 leading-tight
+                      /* Mobile: tiny description, hidden if too cramped */
+                      text-2xs hidden xs:block
+                      /* Small mobile: show with tiny text */
+                      xs:text-2xs
                       /* Desktop: small description */
                       lg:text-xs
                     ">{item.description}</p>
