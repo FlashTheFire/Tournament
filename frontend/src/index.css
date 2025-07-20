@@ -444,22 +444,45 @@ body {
   /* Force scrollbars to be visible on mobile */
   ::-webkit-scrollbar {
     -webkit-appearance: none;
-    width: 6px;
-    height: 6px;
+    width: 8px; /* Increased from 6px for better visibility */
+    height: 8px;
   }
   
   ::-webkit-scrollbar-thumb {
     background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-    border-radius: 3px;
+    border-radius: 4px; /* Increased from 3px */
     border: 1px solid var(--cosmic-dark);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); /* Added glow */
+  }
+  
+  ::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(135deg, var(--electric-blue), var(--electric-purple));
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
   }
   
   /* Enhanced mobile scroll indicators */
   .mobile-scroll {
-    overflow-y: auto;
+    overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: var(--neon-blue) var(--cosmic-dark);
+    
+    /* Ensure scroll is always enabled */
+    height: 100%;
+    min-height: 0;
+  }
+  
+  /* Force scroll indicators on iOS Safari */
+  .mobile-scroll::-webkit-scrollbar {
+    width: 8px !important;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .mobile-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple)) !important;
+    border-radius: 4px;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
   }
 }
 
