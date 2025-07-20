@@ -28,19 +28,15 @@ const Login = () => {
       console.log('🔵 Login result received:', result);
       
       if (result.success) {
-        toast.success('Welcome back! 🎮');
+        safeToast.success('Welcome back! 🎮');
         navigate('/');
       } else {
         console.log('🔴 Login failed with error:', result.error);
         console.log('🔴 Error type:', typeof result.error);
         
-        // Ensure we only pass string messages to toast
-        const errorMessage = typeof result.error === 'string' 
-          ? result.error 
-          : 'Login failed. Please try again.';
-          
-        console.log('🔵 Processed error message:', errorMessage);
-        toast.error(errorMessage);
+        // Use safe toast for error messages
+        console.log('🔵 Processed error message:', result.error);
+        safeToast.error(result.error);
       }
     } catch (error) {
       console.error('🔴 Login catch block error:', error);
