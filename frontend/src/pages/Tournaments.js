@@ -65,10 +65,10 @@ const Tournaments = () => {
   ];
 
   const statuses = [
-    { value: '', label: 'All Status' },
-    { value: 'upcoming', label: 'Upcoming' },
-    { value: 'live', label: 'Live' },
-    { value: 'completed', label: 'Completed' }
+    { value: '', label: 'All Status', icon: Activity },
+    { value: 'upcoming', label: '⏰ Starting Soon', icon: Timer },
+    { value: 'live', label: '🔴 Live Battle', icon: Activity },
+    { value: 'completed', label: '🏆 Finished', icon: Trophy }
   ];
 
   const gameImages = {
