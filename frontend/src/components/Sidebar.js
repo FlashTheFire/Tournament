@@ -442,13 +442,29 @@ const Sidebar = ({ isOpen, onClose }) => {
         }}
       >
         <div className={`flex flex-col h-full relative z-10 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-          {/* Mobile-First Header - No Logo, just close button */}
-          <div className="flex items-center justify-end border-b border-white/10
+          {/* Mobile-First Header - Close button only, no duplicate logo */}
+          <div className="flex items-center justify-between border-b border-white/10
             /* Mobile: compact header */
             p-4
             /* Desktop: spacious header */
-            lg:p-8
+            lg:p-6
           ">
+            {/* Simple brand text instead of logo */}
+            <div>
+              <h2 className="text-white font-gaming font-bold
+                /* Mobile: compact title */
+                text-lg
+                /* Desktop: larger title */
+                lg:text-xl
+              ">Navigation</h2>
+              <p className="text-gray-400
+                /* Mobile: small subtitle */
+                text-xs
+                /* Desktop: normal subtitle */
+                lg:text-sm
+              ">Battle Arena Menu</p>
+            </div>
+
             <motion.button
               onClick={onClose}
               whileHover={{ scale: 1.1, rotate: 90 }}
