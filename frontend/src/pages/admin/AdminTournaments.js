@@ -104,11 +104,11 @@ const AdminTournaments = () => {
 
     try {
       await apiService.deleteTournament(tournamentId);
-      toast.success('Tournament deleted successfully');
+      safeToast.success('Tournament deleted successfully');
       await loadTournaments();
     } catch (error) {
       console.error('Failed to delete tournament:', error);
-      toast.error('Failed to delete tournament');
+      safeToast.error('Failed to delete tournament');
     }
   };
 
