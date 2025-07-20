@@ -147,19 +147,24 @@ const AppContent = () => {
     <div className="flex h-screen overflow-hidden relative z-10">
       {user && (
         <>
-          {/* Full-screen main content - no sidebar layout changes */}
-          <div className="w-full flex flex-col min-w-0">
+          {/* Full-screen main content - always full width */}
+          <div className="w-full flex flex-col min-w-0 relative">
             <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-            <main className="flex-1 overflow-auto relative
-              /* Mobile: full-screen padding */
-              px-2 py-3
+            <main className="flex-1 relative
+              /* Mobile: full-screen padding with scroll */
+              px-2 py-3 overflow-y-auto
               /* Small mobile: slightly more padding */
               xs:px-4 xs:py-4
               /* Tablet: normal padding */
               sm:px-6 sm:py-6 
               lg:px-8 lg:py-8
               xl:px-12 xl:py-10
-            ">
+            " style={{ 
+              /* Ensure mobile scroll */
+              overflowY: 'auto',
+              height: 'calc(100vh - 64px)', /* Account for navbar height */
+              WebkitOverflowScrolling: 'touch' /* iOS smooth scrolling */
+            }}>
               {/* Page Transition Overlay */}
               <AnimatePresence>
                 {pageTransition && (
@@ -306,8 +311,24 @@ const AppContent = () => {
             </main>
           </div>
           
-          {/* Overlay Sidebar - Always on top */}
-          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          {/* Glassy Overlay Sidebar - Always overlays content */}
+          <AnimatePresence>
+            {sidebarOpen && (
+              <>
+                {/* Backdrop blur overlay */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
+                  onClick={() => setSidebarOpen(false)}
+                />
+                {/* Sidebar */}
+                <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+              </>
+            )}
+          </AnimatePresence>
         </>
       )}
       
