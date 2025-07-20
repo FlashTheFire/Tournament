@@ -148,9 +148,14 @@ const AppContent = () => {
       {user && (
         <>
           <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col min-w-0">
             <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-            <main className="flex-1 overflow-auto p-4 md:p-8 relative">
+            <main className="flex-1 overflow-auto relative
+              px-4 py-4 
+              sm:px-6 sm:py-6 
+              lg:px-8 lg:py-8
+              xl:px-12 xl:py-10
+            ">
               {/* Page Transition Overlay */}
               <AnimatePresence>
                 {pageTransition && (
@@ -164,9 +169,9 @@ const AppContent = () => {
                       <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        className="w-12 h-12 border-4 border-neon-blue border-t-transparent rounded-full mx-auto mb-4"
+                        className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 border-2 sm:border-3 lg:border-4 border-neon-blue border-t-transparent rounded-full mx-auto mb-3 sm:mb-4"
                       />
-                      <p className="text-white font-medium">Transitioning...</p>
+                      <p className="text-white font-medium text-sm sm:text-base">Transitioning...</p>
                     </div>
                   </motion.div>
                 )}
