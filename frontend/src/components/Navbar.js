@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import PremiumHamburgerMenu from './PremiumHamburgerMenu';
 
 const Navbar = ({ onMenuClick }) => {
   const { user, logout } = useAuth();
