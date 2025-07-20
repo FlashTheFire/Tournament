@@ -29,14 +29,14 @@ load_dotenv()
 # Initialize FastAPI app
 app = FastAPI(title="Tournament Platform API", version="1.0.0")
 
-# CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# CORS middleware - temporarily disabled for debugging
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 # MongoDB connection
 MONGO_URL = os.getenv("MONGO_URL")
