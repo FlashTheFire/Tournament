@@ -61,6 +61,14 @@ const Sidebar = ({ isOpen, onClose }) => {
       ]
     },
     {
+      key: 'advanced-gaming',
+      title: 'Advanced Gaming',
+      icon: Zap,
+      path: '/advanced-gaming',
+      badge: 'AI',
+      description: 'Premium features'
+    },
+    {
       key: 'leaderboards',
       title: 'Hall of Fame',
       icon: Crown,
