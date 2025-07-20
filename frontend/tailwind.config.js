@@ -99,6 +99,25 @@ module.exports = {
         '18': '4.5rem',
         '88': '22rem',
         '128': '32rem',
+        // Mobile-specific spacing
+        'mobile-xs': '0.125rem',   // 2px
+        'mobile-sm': '0.375rem',   // 6px
+        'mobile-md': '0.75rem',    // 12px
+        'mobile-lg': '1.25rem',    // 20px
+        'mobile-xl': '2rem',       // 32px
+        'mobile-2xl': '3rem',      // 48px
+        // Desktop-specific spacing
+        'desktop-xs': '0.25rem',   // 4px
+        'desktop-sm': '0.625rem',  // 10px
+        'desktop-md': '1rem',      // 16px
+        'desktop-lg': '1.75rem',   // 28px
+        'desktop-xl': '3rem',      // 48px
+        'desktop-2xl': '4rem',     // 64px
+        'desktop-3xl': '6rem',     // 96px
+        // Touch-friendly sizes
+        'touch-sm': '2.75rem',     // 44px - Minimum touch target
+        'touch-md': '3rem',        // 48px - Comfortable touch target
+        'touch-lg': '3.5rem',      // 56px - Large touch target
       },
       borderRadius: {
         'xl': '1rem',
