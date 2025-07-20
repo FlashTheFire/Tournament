@@ -319,7 +319,7 @@ const Tournaments = () => {
           </div>
         </div>
 
-        <div className="p-8 space-y-6">
+        <div className="p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
           {/* Battle Details Grid */}
           <div className="grid grid-cols-2 gap-6 text-sm">
             <div className="space-y-1">
