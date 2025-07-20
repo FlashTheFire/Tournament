@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Filter, 
   Search, 
@@ -10,7 +10,19 @@ import {
   DollarSign,
   Calendar,
   MapPin,
-  Gamepad2
+  Gamepad2,
+  Target,
+  Crosshair,
+  Scope,
+  Flame,
+  Activity,
+  Timer,
+  Skull,
+  Shield,
+  Swords,
+  Crown,
+  Zap,
+  Star
 } from 'lucide-react';
 import { apiService } from '../services/api';
 import toast from 'react-hot-toast';
