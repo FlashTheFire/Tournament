@@ -261,6 +261,17 @@ const AppContent = () => {
                       <Dashboard />
                     </motion.div>
                   } />
+                  <Route path="/advanced-gaming" element={
+                    <motion.div
+                      key="advanced-gaming"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <AdvancedGaming />
+                    </motion.div>
+                  } />
                   {user.is_admin && (
                     <>
                       <Route path="/admin" element={
