@@ -22,6 +22,7 @@ import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AIAnalytics from './pages/AIAnalytics';
 
 // Admin Pages
 import AdminPanel from './pages/admin/AdminPanel';
