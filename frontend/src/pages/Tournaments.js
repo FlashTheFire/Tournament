@@ -416,27 +416,27 @@ const Tournaments = () => {
     >
       {/* Compact Modern Header */}
       <motion.div 
-        className="flex items-center justify-between"
+        className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0"
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 font-gaming">
+        <div className="flex-1">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 font-gaming">
             <span className="text-gradient bg-gradient-to-r from-neon-red via-electric-purple to-neon-blue">
               FREE FIRE
             </span>
           </h1>
-          <h2 className="text-xl font-bold text-white mb-2">BATTLE TOURNAMENTS</h2>
-          <p className="text-gray-400 text-sm">Join epic battles and claim victory in the ultimate arena</p>
+          <h2 className="text-lg sm:text-xl font-bold text-white mb-2">BATTLE TOURNAMENTS</h2>
+          <p className="text-gray-400 text-xs sm:text-sm">Join epic battles and claim victory in the ultimate arena</p>
         </div>
         
         <motion.div 
-          className="text-right"
+          className="text-center sm:text-right flex-shrink-0"
           whileHover={{ scale: 1.05 }}
         >
-          <div className="glass rounded-xl p-4 border border-neon-blue/30">
-            <p className="text-neon-blue font-bold text-2xl">{tournaments.length}</p>
+          <div className="glass rounded-xl p-3 sm:p-4 border border-neon-blue/30">
+            <p className="text-neon-blue font-bold text-xl sm:text-2xl">{tournaments.length}</p>
             <p className="text-gray-400 text-xs uppercase tracking-wide">Live Battles</p>
           </div>
         </motion.div>
