@@ -82,214 +82,333 @@ const Navbar = ({ onMenuClick }) => {
 
   return (
     <motion.nav
-      initial={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, y: -30 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-slate-900/95 backdrop-blur-xl border-b border-white/10 px-4 py-3"
+      transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+      className="glass border-b border-white/10 px-6 py-4 relative z-40"
     >
-      <div className="flex items-center justify-between">
+      {/* Kinetic background effect */}
+      <div className="kinetic-waves absolute inset-0 opacity-30"></div>
+      
+      <div className="flex items-center justify-between relative z-10">
         {/* Left Section */}
-        <div className="flex items-center space-x-4">
-          <button
+        <div className="flex items-center space-x-6">
+          <motion.button
             onClick={onMenuClick}
-            className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors mobile-friendly"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="p-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 mobile-friendly group"
           >
-            <Menu className="h-5 w-5" />
-          </button>
+            <Menu className="h-6 w-6 group-hover:rotate-180 transition-transform duration-300" />
+          </motion.button>
 
-          {/* Search Bar */}
+          {/* Brand Logo */}
+          <Link to="/" className="hidden sm:flex items-center space-x-3 group">
+            <motion.div 
+              className="w-10 h-10 bg-gradient-to-br from-neon-blue to-electric-purple rounded-xl flex items-center justify-center"
+              whileHover={{ rotate: 5, scale: 1.1 }}
+            >
+              <Gamepad2 className="h-6 w-6 text-white" />
+            </motion.div>
+            <div className="hidden lg:block">
+              <h1 className="text-white font-bold text-lg font-gaming">FREE FIRE</h1>
+              <p className="text-gray-400 text-xs">ULTIMATE ARENA</p>
+            </div>
+          </Link>
+
+          {/* Enhanced Search Bar */}
           <div className="hidden md:block relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search tournaments, players..."
-              className="w-64 lg:w-80 pl-9 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
-            />
+            <motion.div
+              animate={{
+                scale: searchFocused ? 1.02 : 1,
+                boxShadow: searchFocused 
+                  ? '0 0 20px rgba(0, 212, 255, 0.3)' 
+                  : '0 0 0px rgba(0, 212, 255, 0)'
+              }}
+              className="relative"
+            >
+              <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors duration-300 ${
+                searchFocused ? 'text-neon-blue' : 'text-gray-400'
+              }`} />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                placeholder="Search tournaments, players, battles..."
+                className="w-72 lg:w-96 pl-12 pr-6 py-3 glass rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-blue/50 focus:border-neon-blue/50 transition-all duration-300"
+              />
+              {searchQuery && (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                >
+                  ×
+                </motion.button>
+              )}
+            </motion.div>
           </div>
         </div>
 
         {/* Right Section */}
-        <div className="flex items-center space-x-3">
-          {/* Wallet Balance */}
-          <div className="hidden sm:flex items-center space-x-2 px-3 py-2 bg-white/10 rounded-lg border border-white/20">
-            <Wallet className="h-4 w-4 text-green-400" />
-            <span className="text-white font-medium text-sm">
+        <div className="flex items-center space-x-4">
+          {/* Enhanced Wallet Balance */}
+          <motion.div 
+            className="hidden sm:flex items-center space-x-3 px-4 py-2 glass rounded-xl border border-neon-green/30 hover:border-neon-green/50 transition-all duration-300"
+            whileHover={{ scale: 1.05 }}
+          >
+            <motion.div
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <Wallet className="h-5 w-5 text-neon-green" />
+            </motion.div>
+            <span className="text-white font-semibold">
               ₹{user?.wallet_balance?.toLocaleString() || '0'}
             </span>
-          </div>
+          </motion.div>
 
-          {/* Notifications */}
+          {/* Enhanced Notifications */}
           <div className="relative">
-            <button
+            <motion.button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="relative p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors mobile-friendly"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative p-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 mobile-friendly"
             >
-              <Bell className="h-5 w-5" />
+              <Bell className="h-6 w-6" />
               {mockNotifications.some(n => n.unread) && (
-                <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
+                <motion.span
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="absolute -top-1 -right-1 h-4 w-4 bg-gradient-to-r from-neon-red to-pink-500 rounded-full flex items-center justify-center"
+                >
+                  <span className="text-white text-xs font-bold">
+                    {mockNotifications.filter(n => n.unread).length}
+                  </span>
+                </motion.span>
               )}
-            </button>
+            </motion.button>
 
-            {/* Notifications Dropdown */}
-            {showNotifications && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                className="absolute right-0 top-full mt-2 w-80 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-xl z-50"
-              >
-                <div className="p-4 border-b border-white/10">
-                  <h3 className="text-white font-semibold">Notifications</h3>
-                  <p className="text-gray-400 text-sm">
-                    {mockNotifications.filter(n => n.unread).length} new notifications
-                  </p>
-                </div>
-                <div className="max-h-80 overflow-y-auto">
-                  {mockNotifications.map((notification) => (
-                    <motion.div
-                      key={notification.id}
-                      whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
-                      className={`p-4 border-b border-white/5 last:border-b-0 ${
-                        notification.unread ? 'bg-primary-500/5' : ''
-                      }`}
-                    >
-                      <div className="flex items-start space-x-3">
-                        <div className="p-2 bg-white/10 rounded-lg">
-                          <NotificationIcon type={notification.type} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-white font-medium text-sm">
-                            {notification.title}
-                          </p>
-                          <p className="text-gray-400 text-xs mt-1">
-                            {notification.message}
-                          </p>
-                          <p className="text-gray-500 text-xs mt-1">
-                            {notification.time}
-                          </p>
-                        </div>
-                        {notification.unread && (
-                          <div className="h-2 w-2 bg-primary-500 rounded-full"></div>
-                        )}
+            {/* Enhanced Notifications Dropdown */}
+            <AnimatePresence>
+              {showNotifications && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, y: -20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  className="absolute right-0 top-full mt-3 w-96 glass rounded-2xl border border-white/20 shadow-2xl z-50 overflow-hidden"
+                >
+                  <div className="p-6 border-b border-white/10 bg-gradient-to-r from-neon-blue/10 to-electric-purple/10">
+                    <div className="flex items-center space-x-3">
+                      <Bell className="h-6 w-6 text-neon-blue" />
+                      <div>
+                        <h3 className="text-white font-bold text-lg">Notifications</h3>
+                        <p className="text-gray-400 text-sm">
+                          {mockNotifications.filter(n => n.unread).length} new alerts
+                        </p>
                       </div>
-                    </motion.div>
-                  ))}
-                </div>
-                <div className="p-3 border-t border-white/10">
-                  <button className="w-full text-center text-primary-400 text-sm font-medium hover:text-primary-300 transition-colors">
-                    View All Notifications
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </div>
-
-          {/* Profile Menu */}
-          <div className="relative">
-            <button
-              onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-white/10 transition-colors mobile-friendly"
-            >
-              <div className="h-8 w-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-semibold text-sm">
-                  {user?.full_name?.charAt(0) || user?.username?.charAt(0) || 'U'}
-                </span>
-              </div>
-              <div className="hidden sm:block text-left">
-                <p className="text-white text-sm font-medium">
-                  {user?.full_name || user?.username}
-                </p>
-                <p className="text-gray-400 text-xs">
-                  {user?.is_admin ? 'Admin' : 'Player'}
-                </p>
-              </div>
-            </button>
-
-            {/* Profile Dropdown */}
-            {showProfileMenu && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                className="absolute right-0 top-full mt-2 w-64 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-xl z-50"
-              >
-                <div className="p-4 border-b border-white/10">
-                  <div className="flex items-center space-x-3">
-                    <div className="h-12 w-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                      <span className="text-white font-semibold">
-                        {user?.full_name?.charAt(0) || user?.username?.charAt(0) || 'U'}
-                      </span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-white font-medium truncate">
-                        {user?.full_name || user?.username}
-                      </p>
-                      <p className="text-gray-400 text-sm truncate">
-                        @{user?.username}
-                      </p>
-                      <p className="text-primary-400 text-xs font-medium">
-                        {user?.is_admin ? 'Administrator' : 'Player'}
-                      </p>
                     </div>
                   </div>
-                </div>
+                  <div className="max-h-80 overflow-y-auto">
+                    {mockNotifications.map((notification, index) => (
+                      <motion.div
+                        key={notification.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
+                        className={`p-4 border-b border-white/5 last:border-b-0 cursor-pointer transition-all duration-300 ${
+                          notification.unread ? 'bg-neon-blue/5 border-l-2 border-l-neon-blue' : ''
+                        }`}
+                      >
+                        <div className="flex items-start space-x-4">
+                          <div className="p-2 glass rounded-lg">
+                            <NotificationIcon type={notification.type} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-white font-semibold text-sm mb-1">
+                              {notification.title}
+                            </p>
+                            <p className="text-gray-300 text-sm mb-2 leading-relaxed">
+                              {notification.message}
+                            </p>
+                            <p className="text-gray-500 text-xs">
+                              {notification.time}
+                            </p>
+                          </div>
+                          {notification.unread && (
+                            <motion.div
+                              animate={{ scale: [1, 1.2, 1] }}
+                              transition={{ duration: 2, repeat: Infinity }}
+                              className="h-3 w-3 bg-neon-blue rounded-full"
+                            />
+                          )}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                  <div className="p-4 border-t border-white/10">
+                    <motion.button 
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full text-center text-neon-blue text-sm font-semibold hover:text-white hover:bg-neon-blue/10 py-2 rounded-lg transition-all duration-300"
+                    >
+                      Mark All as Read
+                    </motion.button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-                <div className="py-2">
-                  <Link
-                    to="/dashboard"
-                    onClick={() => setShowProfileMenu(false)}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-                  >
-                    <User className="h-4 w-4" />
-                    <span className="text-sm">My Profile</span>
-                  </Link>
-                  <Link
-                    to="/wallet"
-                    onClick={() => setShowProfileMenu(false)}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-                  >
-                    <Wallet className="h-4 w-4" />
-                    <span className="text-sm">Wallet</span>
-                  </Link>
-                  <Link
-                    to="/settings"
-                    onClick={() => setShowProfileMenu(false)}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-                  >
-                    <Settings className="h-4 w-4" />
-                    <span className="text-sm">Settings</span>
-                  </Link>
+          {/* Enhanced Profile Menu */}
+          <div className="relative">
+            <motion.button
+              onClick={() => setShowProfileMenu(!showProfileMenu)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center space-x-3 p-2 rounded-xl hover:bg-white/10 transition-all duration-300 mobile-friendly group"
+            >
+              <motion.div 
+                className="relative"
+                whileHover={{ rotate: 5 }}
+              >
+                <div className="h-10 w-10 bg-gradient-to-br from-neon-purple to-electric-blue rounded-xl flex items-center justify-center border-2 border-white/20 group-hover:border-neon-blue/50 transition-all duration-300">
+                  <span className="text-white font-bold text-sm">
+                    {user?.full_name?.charAt(0) || user?.username?.charAt(0) || 'U'}
+                  </span>
                 </div>
-
-                <div className="border-t border-white/10 py-2">
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors w-full text-left"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span className="text-sm">Sign Out</span>
-                  </button>
-                </div>
+                {user?.is_admin && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                    <Crown className="h-2.5 w-2.5 text-white" />
+                  </div>
+                )}
               </motion.div>
-            )}
+              <div className="hidden lg:block text-left">
+                <p className="text-white text-sm font-semibold group-hover:text-neon-blue transition-colors">
+                  {user?.full_name || user?.username}
+                </p>
+                <p className="text-gray-400 text-xs flex items-center space-x-1">
+                  <Shield className="h-3 w-3" />
+                  <span>{user?.is_admin ? 'Administrator' : 'Elite Player'}</span>
+                </p>
+              </div>
+            </motion.button>
+
+            {/* Enhanced Profile Dropdown */}
+            <AnimatePresence>
+              {showProfileMenu && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, y: -20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  className="absolute right-0 top-full mt-3 w-80 glass rounded-2xl border border-white/20 shadow-2xl z-50 overflow-hidden"
+                >
+                  <div className="p-6 border-b border-white/10 bg-gradient-to-br from-neon-purple/10 to-electric-blue/10">
+                    <div className="flex items-center space-x-4">
+                      <div className="relative">
+                        <div className="h-16 w-16 bg-gradient-to-br from-neon-purple to-electric-blue rounded-2xl flex items-center justify-center border-2 border-white/20">
+                          <span className="text-white font-bold text-xl">
+                            {user?.full_name?.charAt(0) || user?.username?.charAt(0) || 'U'}
+                          </span>
+                        </div>
+                        {user?.is_admin && (
+                          <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                            <Crown className="h-4 w-4 text-white" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white font-bold text-lg truncate">
+                          {user?.full_name || user?.username}
+                        </p>
+                        <p className="text-gray-300 text-sm truncate">
+                          @{user?.username}
+                        </p>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <Shield className="h-4 w-4 text-neon-blue" />
+                          <span className="text-neon-blue text-sm font-semibold">
+                            {user?.is_admin ? 'Administrator' : 'Elite Player'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="py-2">
+                    {[
+                      { to: '/dashboard', icon: User, label: 'My Profile', color: 'text-neon-blue' },
+                      { to: '/wallet', icon: Wallet, label: 'Wallet & Earnings', color: 'text-neon-green' },
+                      { to: '/settings', icon: Settings, label: 'Settings', color: 'text-neon-purple' },
+                    ].map((item, index) => (
+                      <motion.div
+                        key={item.to}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <Link
+                          to={item.to}
+                          onClick={() => setShowProfileMenu(false)}
+                          className="flex items-center space-x-4 px-6 py-4 text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300 group"
+                        >
+                          <item.icon className={`h-5 w-5 ${item.color} group-hover:scale-110 transition-transform`} />
+                          <span className="text-sm font-medium">{item.label}</span>
+                          <Zap className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity ml-auto" />
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <div className="border-t border-white/10 p-2">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleLogout}
+                      className="flex items-center space-x-4 px-6 py-4 text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-300 w-full text-left rounded-lg group"
+                    >
+                      <LogOut className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                      <span className="text-sm font-medium">Sign Out</span>
+                      <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+                        →
+                      </div>
+                    </motion.button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
 
-      {/* Mobile Search Bar */}
-      <div className="md:hidden mt-3">
+      {/* Enhanced Mobile Search Bar */}
+      <motion.div 
+        className="md:hidden mt-4"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors duration-300 ${
+            searchFocused ? 'text-neon-blue' : 'text-gray-400'
+          }`} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search tournaments..."
-            className="w-full pl-9 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+            placeholder="Search battles, tournaments..."
+            className="w-full pl-12 pr-6 py-3 glass rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-blue/50 transition-all duration-300"
           />
         </div>
-      </div>
+      </motion.div>
 
       {/* Click outside handlers */}
       {(showProfileMenu || showNotifications) && (
