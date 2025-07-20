@@ -373,10 +373,10 @@ def generate_player_analytics(user_data: Dict) -> Dict[str, Any]:
             'estimated_rank': get_estimated_ff_rank(skill_score)
         },
         'combat_stats': {
-            'kill_efficiency': calculate_kill_efficiency(ff_data),
-            'survival_mastery': calculate_survival_mastery(ff_data),
+            'kill_efficiency': get_kill_efficiency_rating(ff_data),
+            'survival_mastery': get_survival_mastery_rating(ff_data),
             'accuracy_grade': get_accuracy_grade(ff_data.get('headshot_rate', '0%')),
-            'damage_consistency': calculate_damage_consistency(ff_data)
+            'damage_consistency': get_damage_consistency_rating(ff_data)
         },
         'improvement_insights': generate_improvement_suggestions(ff_data, skill_score),
         'performance_trends': {
