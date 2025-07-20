@@ -10,7 +10,7 @@ from typing import Dict, Any
 
 class DemoAuthTester:
     def __init__(self):
-        self.base_url = "https://71e94a83-7059-4df9-9765-b23c7d13de09.preview.emergentagent.com"
+        self.base_url = "https://c3f91062-4c6e-4003-bc89-6a0b66292f56.preview.emergentagent.com"
         self.api_url = f"{self.base_url}/api"
         
         print(f"Testing demo authentication at: {self.api_url}")
