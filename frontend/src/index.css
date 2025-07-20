@@ -407,10 +407,17 @@ body {
   animation: shimmer 3s infinite reverse;
 }
 
-/* Advanced Scrollbar Styling */
+/* Advanced Scrollbar Styling - Enhanced for Mobile */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 8px; /* Mobile: thinner scrollbar */
+  height: 8px;
+}
+
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 12px; /* Desktop: thicker scrollbar */
+    height: 12px;
+  }
 }
 
 ::-webkit-scrollbar-track {
@@ -430,6 +437,38 @@ body {
 
 ::-webkit-scrollbar-corner {
   background: var(--cosmic-dark);
+}
+
+/* Mobile-specific scrollbar enhancements */
+@media (max-width: 767px) {
+  /* Force scrollbars to be visible on mobile */
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    border-radius: 3px;
+    border: 1px solid var(--cosmic-dark);
+  }
+  
+  /* Enhanced mobile scroll indicators */
+  .mobile-scroll {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-blue) var(--cosmic-dark);
+  }
+}
+
+/* Enhanced scroll behavior for all touch devices */
+.touch-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--neon-blue) var(--cosmic-dark);
 }
 
 /* Text Gradient Utility */
