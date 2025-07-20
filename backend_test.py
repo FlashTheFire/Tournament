@@ -112,11 +112,13 @@ class TournamentAPITester:
         """Test user registration"""
         print("\n=== Testing User Registration ===")
         
-        # Test data
+        # Test data with unique email to avoid conflicts
+        import time
+        unique_id = str(int(time.time()))
         user_data = {
-            "email": "testgamer@example.com",
+            "email": f"testgamer{unique_id}@example.com",
             "password": "SecurePass123!",
-            "username": "ProGamer2024",
+            "username": f"ProGamer{unique_id}",
             "full_name": "Test Gamer",
             "free_fire_uid": "123456789"
         }
