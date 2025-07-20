@@ -121,6 +121,478 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
+# AI-Powered Analytics Functions
+def calculate_player_skill_score(player_stats: Dict[str, Any]) -> float:
+    """Calculate a comprehensive skill score for matchmaking"""
+    try:
+        wins = player_stats.get('wins', 0)
+        total_matches = player_stats.get('total_matches', 1)
+        kills = player_stats.get('kills', 0)
+        avg_damage = player_stats.get('avg_damage', 0)
+        headshot_rate = float(player_stats.get('headshot_rate', '0%').replace('%', '')) / 100
+        survival_rate = float(player_stats.get('survival_rate', '0%').replace('%', '')) / 100
+        
+        # Weighted skill calculation
+        win_rate = wins / max(total_matches, 1)
+        kd_ratio = kills / max(total_matches, 1)
+        
+        skill_score = (
+            win_rate * 0.3 +
+            survival_rate * 0.25 +
+            (kd_ratio / 10) * 0.2 +  # Normalize kills per match
+            (avg_damage / 2000) * 0.15 +  # Normalize average damage
+            headshot_rate * 0.1
+        ) * 100
+        
+        return min(skill_score, 100.0)  # Cap at 100
+    except:
+        return 50.0  # Default average skill
+
+def predict_tournament_winner(tournament_participants: List[Dict]) -> Dict[str, Any]:
+    """AI prediction for tournament winner based on player stats"""
+    if not tournament_participants:
+        return {"error": "No participants"}
+    
+    predictions = []
+    total_skill = 0
+    
+    for participant in tournament_participants:
+        player_stats = participant.get('free_fire_data', {})
+        skill_score = calculate_player_skill_score(player_stats)
+        total_skill += skill_score
+        
+        predictions.append({
+            'user_id': participant['user_id'],
+            'username': participant.get('username', 'Unknown'),
+            'skill_score': skill_score,
+            'recent_form': calculate_recent_form(participant),
+            'prediction_factors': {
+                'consistency': min(skill_score * 0.8, 95),
+                'recent_performance': calculate_recent_form(participant),
+                'tournament_experience': min(participant.get('tournaments_played', 0) * 2, 50)
+            }
+        })
+    
+    # Calculate win probabilities
+    for prediction in predictions:
+        if total_skill > 0:
+            base_probability = (prediction['skill_score'] / total_skill) * 100
+            # Add randomness and recent form influence
+            recent_form_boost = prediction['recent_form'] * 0.15
+            prediction['win_probability'] = min(base_probability + recent_form_boost, 85.0)
+        else:
+            prediction['win_probability'] = 100.0 / len(predictions)
+    
+    # Sort by win probability
+    predictions.sort(key=lambda x: x['win_probability'], reverse=True)
+    
+    return {
+        'top_contender': predictions[0] if predictions else None,
+        'all_predictions': predictions,
+        'confidence_level': calculate_prediction_confidence(predictions)
+    }
+
+def calculate_recent_form(participant: Dict) -> float:
+    """Calculate recent performance form (0-100)"""
+    # Mock recent form calculation - in production, this would analyze recent match history
+    base_skill = calculate_player_skill_score(participant.get('free_fire_data', {}))
+    # Add some realistic variation
+    import random
+    form_variation = random.uniform(-15, 15)
+    return max(0, min(100, base_skill + form_variation))
+
+def calculate_prediction_confidence(predictions: List[Dict]) -> float:
+    """Calculate confidence level of predictions"""
+    if len(predictions) < 2:
+        return 50.0
+    
+    # Higher confidence when there's a clear skill gap
+    top_prob = predictions[0]['win_probability']
+    second_prob = predictions[1]['win_probability']
+    skill_gap = top_prob - second_prob
+    
+    # More participants = lower confidence
+    participant_factor = max(0, 100 - len(predictions) * 5)
+    
+    confidence = min(95.0, 50.0 + skill_gap + participant_factor)
+    return confidence
+
+def generate_matchmaking_recommendations(user_stats: Dict, available_tournaments: List[Dict]) -> List[Dict]:
+    """Generate AI-powered tournament recommendations for a user"""
+    user_skill = calculate_player_skill_score(user_stats.get('free_fire_data', {}))
+    recommendations = []
+    
+    for tournament in available_tournaments:
+        if tournament.get('status') != 'upcoming':
+            continue
+            
+        # Get tournament participants for skill analysis
+        participants = list(registrations_collection.find({"tournament_id": tournament.get('tournament_id', '')}))
+        
+        if not participants:
+            # New tournament - recommend based on entry fee and user skill
+            match_score = calculate_tournament_match_score(tournament, user_skill, [])
+        else:
+            # Calculate average skill of current participants
+            avg_tournament_skill = 0
+            participant_skills = []
+            
+            for reg in participants:
+                participant = users_collection.find_one({"user_id": reg["user_id"]})
+                if participant:
+                    skill = calculate_player_skill_score(participant.get('free_fire_data', {}))
+                    participant_skills.append(skill)
+            
+            if participant_skills:
+                avg_tournament_skill = sum(participant_skills) / len(participant_skills)
+            
+            match_score = calculate_tournament_match_score(tournament, user_skill, participant_skills)
+        
+        if match_score > 30:  # Only recommend tournaments with decent match score
+            recommendation = {
+                'tournament': tournament,
+                'match_score': match_score,
+                'recommended_reason': get_recommendation_reason(match_score, user_skill, tournament),
+                'win_probability': calculate_user_win_probability(user_skill, participant_skills if 'participant_skills' in locals() else []),
+                'skill_level_match': get_skill_level_description(match_score)
+            }
+            recommendations.append(recommendation)
+    
+    # Sort by match score
+    recommendations.sort(key=lambda x: x['match_score'], reverse=True)
+    return recommendations[:5]  # Return top 5 recommendations
+
+def calculate_tournament_match_score(tournament: Dict, user_skill: float, participant_skills: List[float]) -> float:
+    """Calculate how well a tournament matches a user's skill level"""
+    base_score = 50.0
+    
+    # Entry fee vs skill alignment
+    entry_fee = tournament.get('entry_fee', 0)
+    if entry_fee == 0:
+        fee_score = 20  # Free tournaments are always somewhat suitable
+    elif user_skill > 70 and entry_fee > 200:
+        fee_score = 30  # High skill players in premium tournaments
+    elif user_skill < 50 and entry_fee < 100:
+        fee_score = 30  # Beginners in low-stakes tournaments
+    elif 50 <= user_skill <= 70 and 100 <= entry_fee <= 200:
+        fee_score = 30  # Medium skill in medium stakes
+    else:
+        fee_score = 10  # Mismatched skill and stakes
+    
+    # Skill level compared to current participants
+    if participant_skills:
+        avg_participant_skill = sum(participant_skills) / len(participant_skills)
+        skill_difference = abs(user_skill - avg_participant_skill)
+        
+        if skill_difference <= 10:
+            skill_score = 30  # Very close skill match
+        elif skill_difference <= 20:
+            skill_score = 20  # Good skill match
+        else:
+            skill_score = 5   # Poor skill match
+    else:
+        skill_score = 15  # No participants yet
+    
+    # Tournament size factor
+    current_participants = tournament.get('current_participants', 0)
+    max_participants = tournament.get('max_participants', 100)
+    
+    if current_participants < max_participants * 0.7:
+        size_score = 10  # Good chance to get in
+    else:
+        size_score = 5   # Tournament filling up
+    
+    return base_score + fee_score + skill_score + size_score
+
+def get_recommendation_reason(match_score: float, user_skill: float, tournament: Dict) -> str:
+    """Generate human-readable recommendation reason"""
+    if match_score > 80:
+        return "Perfect skill match! This tournament is ideal for your current level."
+    elif match_score > 65:
+        return "Great match! Your skills align well with this tournament's competition level."
+    elif match_score > 50:
+        return "Good opportunity to test your skills against similar-level players."
+    elif user_skill > 70:
+        return "Challenge yourself in this competitive tournament!"
+    else:
+        return "Good learning opportunity to improve your gameplay."
+
+def calculate_user_win_probability(user_skill: float, participant_skills: List[float]) -> float:
+    """Calculate user's probability of winning in a tournament"""
+    if not participant_skills:
+        # Base probability for empty tournament
+        return min(85.0, user_skill * 0.8 + 15)
+    
+    # Count how many participants the user is better than
+    better_than = sum(1 for skill in participant_skills if user_skill > skill)
+    total_participants = len(participant_skills) + 1  # +1 for the user
+    
+    base_probability = (better_than + 1) / total_participants * 100
+    
+    # Adjust based on skill level
+    if user_skill > 80:
+        base_probability *= 1.2  # Boost for highly skilled players
+    elif user_skill < 40:
+        base_probability *= 0.8  # Reduce for low-skilled players
+    
+    return min(85.0, base_probability)
+
+def get_skill_level_description(match_score: float) -> str:
+    """Get human-readable skill level match description"""
+    if match_score > 80:
+        return "Perfect Match"
+    elif match_score > 65:
+        return "Great Match"
+    elif match_score > 50:
+        return "Good Match"
+    elif match_score > 35:
+        return "Challenging"
+    else:
+        return "High Risk"
+
+def generate_player_analytics(user_data: Dict) -> Dict[str, Any]:
+    """Generate comprehensive analytics for a player"""
+    ff_data = user_data.get('free_fire_data', {})
+    skill_score = calculate_player_skill_score(ff_data)
+    
+    # Get user's tournament history
+    user_tournaments = list(registrations_collection.find({"user_id": user_data["user_id"]}))
+    tournaments_played = len(user_tournaments)
+    
+    analytics = {
+        'overall_performance': {
+            'skill_score': round(skill_score, 1),
+            'skill_tier': get_skill_tier(skill_score),
+            'rank_position': calculate_rank_position(skill_score),
+            'tournaments_played': tournaments_played,
+            'estimated_rank': get_estimated_ff_rank(skill_score)
+        },
+        'combat_stats': {
+            'kill_efficiency': calculate_kill_efficiency(ff_data),
+            'survival_mastery': calculate_survival_mastery(ff_data),
+            'accuracy_grade': get_accuracy_grade(ff_data.get('headshot_rate', '0%')),
+            'damage_consistency': calculate_damage_consistency(ff_data)
+        },
+        'improvement_insights': generate_improvement_suggestions(ff_data, skill_score),
+        'performance_trends': {
+            'recent_form': calculate_recent_form(user_data),
+            'skill_progression': 'Improving' if skill_score > 60 else 'Developing',
+            'consistency_rating': get_consistency_rating(ff_data)
+        },
+        'competitive_analysis': {
+            'vs_similar_players': compare_with_similar_players(skill_score),
+            'tournament_readiness': assess_tournament_readiness(skill_score, tournaments_played),
+            'recommended_focus_areas': get_focus_areas(ff_data, skill_score)
+        }
+    }
+    
+    return analytics
+
+def get_skill_tier(skill_score: float) -> str:
+    """Get skill tier based on score"""
+    if skill_score >= 85:
+        return "Grandmaster"
+    elif skill_score >= 75:
+        return "Master"
+    elif skill_score >= 65:
+        return "Diamond"
+    elif skill_score >= 55:
+        return "Platinum"
+    elif skill_score >= 45:
+        return "Gold"
+    elif skill_score >= 35:
+        return "Silver"
+    else:
+        return "Bronze"
+
+def calculate_rank_position(skill_score: float) -> str:
+    """Calculate approximate rank position"""
+    if skill_score >= 85:
+        return "Top 5%"
+    elif skill_score >= 75:
+        return "Top 15%"
+    elif skill_score >= 65:
+        return "Top 30%"
+    elif skill_score >= 55:
+        return "Top 50%"
+    else:
+        return "Bottom 50%"
+
+def get_estimated_ff_rank(skill_score: float) -> str:
+    """Get estimated Free Fire rank"""
+    if skill_score >= 85:
+        return "Grandmaster"
+    elif skill_score >= 75:
+        return "Heroic"
+    elif skill_score >= 65:
+        return "Elite"
+    elif skill_score >= 55:
+        return "Master"
+    elif skill_score >= 45:
+        return "Expert"
+    else:
+        return "Gold"
+
+# Helper functions for analytics
+def calculate_kill_efficiency(ff_data: Dict) -> str:
+    """Calculate kill efficiency rating"""
+    kills = ff_data.get('kills', 0)
+    total_matches = ff_data.get('total_matches', 1)
+    kd_ratio = kills / max(total_matches, 1)
+    
+    if kd_ratio >= 8:
+        return "Exceptional"
+    elif kd_ratio >= 6:
+        return "Excellent"
+    elif kd_ratio >= 4:
+        return "Good"
+    elif kd_ratio >= 2:
+        return "Average"
+    else:
+        return "Needs Improvement"
+
+def calculate_survival_mastery(ff_data: Dict) -> str:
+    """Calculate survival mastery rating"""
+    survival_rate = float(ff_data.get('survival_rate', '0%').replace('%', ''))
+    
+    if survival_rate >= 35:
+        return "Master Survivor"
+    elif survival_rate >= 25:
+        return "Skilled Survivor"
+    elif survival_rate >= 20:
+        return "Good Survivor"
+    elif survival_rate >= 15:
+        return "Average Survivor"
+    else:
+        return "Needs Practice"
+
+def get_accuracy_grade(headshot_rate: str) -> str:
+    """Get accuracy grade based on headshot rate"""
+    rate = float(headshot_rate.replace('%', ''))
+    
+    if rate >= 25:
+        return "S+"
+    elif rate >= 20:
+        return "S"
+    elif rate >= 15:
+        return "A"
+    elif rate >= 10:
+        return "B"
+    elif rate >= 5:
+        return "C"
+    else:
+        return "D"
+
+def calculate_damage_consistency(ff_data: Dict) -> str:
+    """Calculate damage consistency rating"""
+    avg_damage = ff_data.get('avg_damage', 0)
+    
+    if avg_damage >= 2000:
+        return "Highly Consistent"
+    elif avg_damage >= 1500:
+        return "Consistent"
+    elif avg_damage >= 1000:
+        return "Moderately Consistent"
+    elif avg_damage >= 500:
+        return "Inconsistent"
+    else:
+        return "Very Inconsistent"
+
+def generate_improvement_suggestions(ff_data: Dict, skill_score: float) -> List[str]:
+    """Generate improvement suggestions based on player stats"""
+    suggestions = []
+    
+    # Analyze headshot rate
+    headshot_rate = float(ff_data.get('headshot_rate', '0%').replace('%', ''))
+    if headshot_rate < 15:
+        suggestions.append("Practice aim training to improve headshot accuracy")
+    
+    # Analyze survival rate
+    survival_rate = float(ff_data.get('survival_rate', '0%').replace('%', ''))
+    if survival_rate < 20:
+        suggestions.append("Focus on positioning and map awareness to survive longer")
+    
+    # Analyze damage
+    avg_damage = ff_data.get('avg_damage', 0)
+    if avg_damage < 1200:
+        suggestions.append("Work on weapon mastery and engagement tactics")
+    
+    # Analyze win rate
+    wins = ff_data.get('wins', 0)
+    total_matches = ff_data.get('total_matches', 1)
+    win_rate = (wins / max(total_matches, 1)) * 100
+    if win_rate < 25:
+        suggestions.append("Focus on end-game strategies and clutch situations")
+    
+    # General suggestions based on skill score
+    if skill_score < 40:
+        suggestions.append("Consider watching pro player streams and tutorials")
+    elif skill_score < 60:
+        suggestions.append("Practice in training mode daily to refine mechanics")
+    
+    return suggestions[:3]  # Return top 3 suggestions
+
+def get_consistency_rating(ff_data: Dict) -> str:
+    """Get overall consistency rating"""
+    # Simple consistency calculation based on multiple factors
+    headshot_rate = float(ff_data.get('headshot_rate', '0%').replace('%', ''))
+    survival_rate = float(ff_data.get('survival_rate', '0%').replace('%', ''))
+    avg_damage = ff_data.get('avg_damage', 0)
+    
+    consistency_score = (headshot_rate * 2 + survival_rate + avg_damage / 50) / 4
+    
+    if consistency_score >= 20:
+        return "Very Consistent"
+    elif consistency_score >= 15:
+        return "Consistent"
+    elif consistency_score >= 10:
+        return "Moderately Consistent"
+    else:
+        return "Inconsistent"
+
+def compare_with_similar_players(skill_score: float) -> str:
+    """Compare player with similar skill level players"""
+    if skill_score >= 80:
+        return "Top tier - competing with the best players"
+    elif skill_score >= 65:
+        return "Above average - better than most players"
+    elif skill_score >= 50:
+        return "Average - typical skill level"
+    elif skill_score >= 35:
+        return "Below average - room for improvement"
+    else:
+        return "Beginner level - focus on fundamentals"
+
+def assess_tournament_readiness(skill_score: float, tournaments_played: int) -> str:
+    """Assess if player is ready for tournaments"""
+    if skill_score >= 70 and tournaments_played >= 5:
+        return "Tournament Ready - compete in high-stakes events"
+    elif skill_score >= 55 and tournaments_played >= 2:
+        return "Moderately Ready - try medium-stakes tournaments"
+    elif skill_score >= 40:
+        return "Beginner Ready - start with free tournaments"
+    else:
+        return "Not Ready - practice more before competing"
+
+def get_focus_areas(ff_data: Dict, skill_score: float) -> List[str]:
+    """Get recommended focus areas for improvement"""
+    focus_areas = []
+    
+    headshot_rate = float(ff_data.get('headshot_rate', '0%').replace('%', ''))
+    survival_rate = float(ff_data.get('survival_rate', '0%').replace('%', ''))
+    avg_damage = ff_data.get('avg_damage', 0)
+    
+    if headshot_rate < 15:
+        focus_areas.append("Aim Training")
+    if survival_rate < 20:
+        focus_areas.append("Positioning")
+    if avg_damage < 1200:
+        focus_areas.append("Combat Tactics")
+    if skill_score < 50:
+        focus_areas.append("Game Fundamentals")
+    
+    return focus_areas[:3]  # Return top 3 focus areas
+
 # Demo API Functions
 async def get_free_fire_user_info(uid: str) -> Dict[str, Any]:
     """Demo Free Fire API - returns mock user data"""
