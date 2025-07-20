@@ -25,7 +25,11 @@ const Login = () => {
         toast.success('Welcome back! 🎮');
         navigate('/');
       } else {
-        toast.error(result.error || 'Login failed. Please try again.');
+        // Ensure we only pass string messages to toast
+        const errorMessage = typeof result.error === 'string' 
+          ? result.error 
+          : 'Login failed. Please try again.';
+        toast.error(errorMessage);
       }
     } catch (error) {
       console.error('Login error:', error);
