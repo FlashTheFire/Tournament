@@ -67,6 +67,90 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Professional Auto-Advance for AI Carousel
+  useEffect(() => {
+    if (!isAiAutoPlaying || aiPredictions.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setAiCurrentIndex((prev) => (prev + 1) % aiPredictions.length);
+    }, 3000); // 3 seconds per slide
+
+    return () => clearInterval(interval);
+  }, [isAiAutoPlaying, aiPredictions.length]);
+
+  // Professional Auto-Advance for Tournament Carousel
+  useEffect(() => {
+    if (!isTournamentAutoPlaying || tournaments.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setTournamentCurrentIndex((prev) => (prev + 1) % Math.min(tournaments.length, 3));
+    }, 4000); // 4 seconds per slide
+
+    return () => clearInterval(interval);
+  }, [isTournamentAutoPlaying, tournaments.length]);
+
+  // Professional Touch Handlers
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (type) => {
+    if (!touchStartX || !touchEndX) return;
+    
+    const distance = touchStartX - touchEndX;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (type === 'ai') {
+      setIsAiAutoPlaying(false);
+      if (isLeftSwipe) {
+        setAiCurrentIndex((prev) => (prev + 1) % aiPredictions.length);
+      } else if (isRightSwipe) {
+        setAiCurrentIndex((prev) => (prev - 1 + aiPredictions.length) % aiPredictions.length);
+      }
+      // Resume auto-play after 5 seconds
+      setTimeout(() => setIsAiAutoPlaying(true), 5000);
+    } else if (type === 'tournament') {
+      setIsTournamentAutoPlaying(false);
+      if (isLeftSwipe) {
+        setTournamentCurrentIndex((prev) => (prev + 1) % Math.min(tournaments.length, 3));
+      } else if (isRightSwipe) {
+        setTournamentCurrentIndex((prev) => (prev - 1 + Math.min(tournaments.length, 3)) % Math.min(tournaments.length, 3));
+      }
+      // Resume auto-play after 5 seconds
+      setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
+    }
+  };
+
+  // Manual Navigation Functions
+  const nextAiSlide = () => {
+    setIsAiAutoPlaying(false);
+    setAiCurrentIndex((prev) => (prev + 1) % aiPredictions.length);
+    setTimeout(() => setIsAiAutoPlaying(true), 5000);
+  };
+
+  const prevAiSlide = () => {
+    setIsAiAutoPlaying(false);
+    setAiCurrentIndex((prev) => (prev - 1 + aiPredictions.length) % aiPredictions.length);
+    setTimeout(() => setIsAiAutoPlaying(true), 5000);
+  };
+
+  const nextTournamentSlide = () => {
+    setIsTournamentAutoPlaying(false);
+    setTournamentCurrentIndex((prev) => (prev + 1) % Math.min(tournaments.length, 3));
+    setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
+  };
+
+  const prevTournamentSlide = () => {
+    setIsTournamentAutoPlaying(false);
+    setTournamentCurrentIndex((prev) => (prev - 1 + Math.min(tournaments.length, 3)) % Math.min(tournaments.length, 3));
+    setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
+  };
+
   const loadData = async () => {
     try {
       setLoading(true);
