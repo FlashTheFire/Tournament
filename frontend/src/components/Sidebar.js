@@ -419,29 +419,29 @@ const Sidebar = ({ isOpen, onClose }) => {
         )}
       </AnimatePresence>
 
-      {/* Mobile-First Sidebar */}
+      {/* Mobile-First Sidebar - Full Overlay */}
       <motion.aside
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
         className={`fixed left-0 top-0 h-full glass-mobile border-r border-white/10 z-50 kinetic-waves
-          /* Mobile: much more compact sidebar width - 80% of screen */
-          w-[85vw] max-w-72
-          /* Small mobile: even more compact */
-          xs:w-64
+          /* Mobile: full overlay with glassmorphic background */
+          w-full
+          /* Small mobile: slightly narrower */
+          xs:w-80
           /* Tablet: medium sidebar width */  
           sm:w-80
-          /* Desktop: spacious sidebar - show/hide based on isOpen */
-          lg:relative lg:translate-x-0 lg:z-0
-          ${isOpen ? 'lg:w-80' : 'lg:w-0 lg:border-r-0'}
+          /* Desktop: spacious sidebar - always overlay, never changes layout */
+          lg:w-80
         `}
         style={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
-          backdropFilter: 'blur(24px)',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))',
+          backdropFilter: 'blur(32px)',
           borderImage: 'linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(139, 92, 246, 0.3), rgba(255, 0, 128, 0.3)) 1',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
         }}
       >
-        <div className={`flex flex-col h-full relative z-10 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'lg:opacity-0'}`}>
+        <div className={`flex flex-col h-full relative z-10 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
           {/* Mobile-First Header - No Logo, just close button */}
           <div className="flex items-center justify-end border-b border-white/10
             /* Mobile: compact header */
