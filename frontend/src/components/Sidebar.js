@@ -421,12 +421,12 @@ const Sidebar = ({ isOpen, onClose }) => {
         )}
       </AnimatePresence>
 
-      {/* LEFT SIDE Sidebar - Ensuring it opens from LEFT */}
+      {/* LEFT SIDE Sidebar - Forces opening from LEFT */}
       <motion.aside
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
-        className={`fixed left-0 top-0 h-full glass-mobile border-r border-white/10 z-50 kinetic-waves
+        className={`fixed top-0 h-full glass-mobile border-r border-white/10 z-50 kinetic-waves
           /* Mobile: full width for maximum accessibility */
           w-full
           /* Small mobile: most of screen width */
@@ -441,9 +441,12 @@ const Sidebar = ({ isOpen, onClose }) => {
           backdropFilter: 'blur(32px)',
           borderImage: 'linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(139, 92, 246, 0.3), rgba(255, 0, 128, 0.3)) 1',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-          // Explicitly ensure left positioning
+          // Force LEFT positioning
+          position: 'fixed',
           left: '0px',
           right: 'auto',
+          top: '0px',
+          transformOrigin: 'left center',
         }}
       >
         <div className={`flex flex-col h-full relative z-10 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
