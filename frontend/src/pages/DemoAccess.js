@@ -257,24 +257,24 @@ const DemoAccess = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
-            className="text-center glass rounded-3xl p-12 border border-neon-blue/30 bg-gradient-to-r from-neon-blue/10 to-electric-purple/10"
+            className="text-center glass rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-12 border border-neon-blue/30 bg-gradient-to-r from-neon-blue/10 to-electric-purple/10"
           >
-            <h2 className="text-4xl font-bold text-white mb-6 font-gaming">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 md:mb-6 font-gaming">
               READY TO ENTER THE BATTLEFIELD? ⚔️
             </h2>
-            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Experience the most advanced Free Fire tournament platform with premium features,<br/>
+            <p className="text-base md:text-lg lg:text-xl text-gray-300 mb-6 md:mb-8 leading-relaxed px-2">
+              Experience the most advanced Free Fire tournament platform with premium features,<br className="hidden md:block"/>
               AI-powered matchmaking, and ultra-responsive design across all devices
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center">
               <motion.a
                 href="/login"
                 whileHover={{ scale: 1.05, rotate: 1 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-3 px-12 py-4 bg-gradient-to-r from-neon-blue to-electric-purple rounded-xl text-white font-bold text-xl shadow-glow"
+                className="flex items-center space-x-3 px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-neon-blue to-electric-purple rounded-xl text-white font-bold text-lg md:text-xl shadow-glow w-full sm:w-auto justify-center"
               >
-                <Trophy className="h-6 w-6" />
+                <Trophy className="h-5 w-5 md:h-6 md:w-6" />
                 <span>Start Gaming</span>
               </motion.a>
               
@@ -282,9 +282,9 @@ const DemoAccess = () => {
                 href="/hamburger-demo"
                 whileHover={{ scale: 1.05, rotate: -1 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-3 px-12 py-4 glass border border-white/20 rounded-xl text-white font-bold text-xl hover:border-neon-purple/50"
+                className="flex items-center space-x-3 px-8 md:px-12 py-3 md:py-4 glass border border-white/20 rounded-xl text-white font-bold text-lg md:text-xl hover:border-neon-purple/50 w-full sm:w-auto justify-center"
               >
-                <Eye className="h-6 w-6" />
+                <Eye className="h-5 w-5 md:h-6 md:w-6" />
                 <span>View Demo</span>
               </motion.a>
             </div>
