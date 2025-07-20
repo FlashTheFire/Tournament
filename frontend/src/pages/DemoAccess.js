@@ -34,7 +34,7 @@ const DemoAccess = () => {
       }
     } catch (error) {
       console.error('Demo login error:', error);
-      toast.error('Failed to launch demo. Please try again.');
+      safeToast.error('Failed to launch demo. Please try again.');
     }
   };
 
