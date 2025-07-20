@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Filter, 
-  Search, 
   Trophy, 
   Users, 
   Clock, 
@@ -35,7 +34,6 @@ const Tournaments = () => {
     mode: '',
     status: ''
   });
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Free Fire specific game modes and features
   const gameTypes = [
@@ -191,11 +189,6 @@ const Tournaments = () => {
       [key]: value
     }));
   };
-
-  const filteredTournaments = tournaments.filter(tournament => {
-    const matchesSearch = tournament.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
-  });
 
   const getStatusBadge = (status) => {
     const badges = {
@@ -419,9 +412,9 @@ const Tournaments = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="space-y-12"
+      className="space-y-8"
     >
-      {/* Enhanced Header */}
+      {/* Compact Modern Header */}
       <motion.div 
         className="flex items-center justify-between"
         initial={{ opacity: 0, y: -30 }}
@@ -429,140 +422,95 @@ const Tournaments = () => {
         transition={{ delay: 0.2 }}
       >
         <div>
-          <h1 className="text-6xl font-bold text-white mb-4 font-gaming">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 font-gaming">
             <span className="text-gradient bg-gradient-to-r from-neon-red via-electric-purple to-neon-blue">
               FREE FIRE
             </span>
           </h1>
-          <h2 className="text-3xl font-bold text-white mb-4">BATTLE TOURNAMENTS</h2>
-          <p className="text-gray-400 text-lg">Join epic battles and claim victory in the ultimate arena</p>
+          <h2 className="text-xl font-bold text-white mb-2">BATTLE TOURNAMENTS</h2>
+          <p className="text-gray-400 text-sm">Join epic battles and claim victory in the ultimate arena</p>
         </div>
         
         <motion.div 
-          className="text-right space-y-2"
+          className="text-right"
           whileHover={{ scale: 1.05 }}
         >
-          <div className="glass rounded-2xl p-6 border border-neon-blue/30">
-            <p className="text-neon-blue font-bold text-3xl">{filteredTournaments.length}</p>
-            <p className="text-gray-400 text-sm uppercase tracking-wide">Live Battles</p>
+          <div className="glass rounded-xl p-4 border border-neon-blue/30">
+            <p className="text-neon-blue font-bold text-2xl">{tournaments.length}</p>
+            <p className="text-gray-400 text-xs uppercase tracking-wide">Live Battles</p>
           </div>
         </motion.div>
       </motion.div>
 
-      {/* Enhanced Search and Filters */}
+      {/* Compact Modern Battle Filters */}
       <motion.div 
-        className="glass rounded-3xl p-8 space-y-8 kinetic-waves border border-white/10"
+        className="glass rounded-2xl p-4 space-y-4 kinetic-waves border border-white/10"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="w-12 h-12 bg-gradient-to-r from-neon-blue to-electric-purple rounded-2xl flex items-center justify-center">
-            <Filter className="h-6 w-6 text-white" />
+        <div className="flex items-center space-x-3 mb-3">
+          <div className="w-8 h-8 bg-gradient-to-r from-neon-blue to-electric-purple rounded-xl flex items-center justify-center">
+            <Filter className="h-4 w-4 text-white" />
           </div>
           <div>
-            <h3 className="text-white font-bold text-xl">Battle Filters</h3>
-            <p className="text-gray-400">Find your perfect tournament</p>
+            <h3 className="text-white font-bold text-lg">Battle Filters</h3>
           </div>
         </div>
 
-        {/* Enhanced Search Bar */}
-        <div className="relative">
-          <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search battle tournaments, modes, or maps..."
-            className="w-full pl-16 pr-6 py-5 glass rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-blue focus:border-neon-blue transition-all duration-300 text-lg"
-          />
-          <motion.div
-            className="absolute right-4 top-1/2 transform -translate-y-1/2"
-            whileHover={{ scale: 1.1 }}
-          >
-            <Crosshair className="h-6 w-6 text-neon-red" />
-          </motion.div>
-        </div>
-
-        {/* Enhanced Filter Dropdowns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Compact Filter Dropdowns */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { key: 'game_type', options: gameTypes, label: 'Battle Type' },
-            { key: 'country', options: countries, label: 'Region' },
-            { key: 'mode', options: modes, label: 'Squad Mode' },
-            { key: 'status', options: statuses, label: 'Battle Status' }
-          ].map((filter, index) => (
-            <motion.div
-              key={filter.key}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 + index * 0.1 }}
-              className="space-y-2"
-            >
-              <label className="block text-white font-medium text-sm uppercase tracking-wide">
-                {filter.label}
-              </label>
-              <select
-                value={filters[filter.key]}
-                onChange={(e) => handleFilterChange(filter.key, e.target.value)}
-                className="w-full glass border border-white/20 rounded-xl px-4 py-4 text-white focus:outline-none focus:ring-2 focus:ring-neon-purple focus:border-neon-purple hover:border-neon-purple/50 transition-all duration-300"
+            { key: 'game_type', options: gameTypes, icon: gameTypes[0].icon },
+            { key: 'country', options: countries, icon: Shield },
+            { key: 'mode', options: modes, icon: Users },
+            { key: 'status', options: statuses, icon: Activity }
+          ].map((filter, index) => {
+            const FilterIcon = filter.icon;
+            return (
+              <motion.div
+                key={filter.key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 + index * 0.1 }}
+                className="relative"
               >
-                {filter.options.map(option => (
-                  <option key={option.value} value={option.value} className="bg-cosmic-dark text-white">
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </motion.div>
-          ))}
+                <FilterIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neon-blue z-10" />
+                <select
+                  value={filters[filter.key]}
+                  onChange={(e) => handleFilterChange(filter.key, e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 glass border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-neon-purple focus:border-neon-purple hover:border-neon-purple/50 transition-all duration-300 appearance-none bg-transparent"
+                >
+                  {filter.options.map(option => (
+                    <option key={option.value} value={option.value} className="bg-cosmic-dark text-white">
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </motion.div>
+            );
+          })}
         </div>
-      </motion.div>
-
-      {/* Battle Statistics */}
-      <motion.div 
-        className="grid grid-cols-2 lg:grid-cols-4 gap-6"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8 }}
-      >
-        {[
-          { icon: Activity, label: 'Live Battles', value: '67', color: 'from-red-500 to-pink-600' },
-          { icon: Users, label: 'Warriors', value: '28.9K', color: 'from-blue-500 to-cyan-600' },
-          { icon: Trophy, label: 'Prize Pool', value: '₹2.8M', color: 'from-yellow-500 to-orange-600' },
-          { icon: Crown, label: 'Champions', value: '1.2K', color: 'from-purple-500 to-indigo-600' }
-        ].map((stat, index) => (
-          <motion.div
-            key={stat.label}
-            whileHover={{ scale: 1.05, rotateY: 5 }}
-            className="glass rounded-2xl p-6 text-center group hover:border-neon-blue/50 transition-all duration-300"
-          >
-            <div className={`w-16 h-16 bg-gradient-to-r ${stat.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:shadow-glow transition-shadow duration-300`}>
-              <stat.icon className="h-8 w-8 text-white" />
-            </div>
-            <h3 className="text-white font-bold text-2xl mb-1">{stat.value}</h3>
-            <p className="text-gray-400 text-sm">{stat.label}</p>
-          </motion.div>
-        ))}
       </motion.div>
 
       {/* Tournament Grid */}
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.0 }}
+        transition={{ delay: 0.8 }}
       >
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-2 font-gaming">ACTIVE BATTLES</h2>
-            <p className="text-gray-400 text-lg">Choose your battlefield and dominate</p>
+            <h2 className="text-2xl font-bold text-white mb-1 font-gaming">ACTIVE BATTLES</h2>
+            <p className="text-gray-400">Choose your battlefield and dominate</p>
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="w-3 h-3 bg-neon-green rounded-full"
+              className="w-2 h-2 bg-neon-green rounded-full"
             />
-            <span className="text-neon-green font-semibold">Live Updates</span>
+            <span className="text-neon-green font-semibold text-sm">Live Updates</span>
           </div>
         </div>
 
@@ -575,8 +523,8 @@ const Tournaments = () => {
         ) : (
           <AnimatePresence>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-              {filteredTournaments.length > 0 ? (
-                filteredTournaments.map((tournament, index) => (
+              {tournaments.length > 0 ? (
+                tournaments.map((tournament, index) => (
                   <TournamentCard key={tournament.tournament_id} tournament={tournament} index={index} />
                 ))
               ) : (
@@ -593,11 +541,10 @@ const Tournaments = () => {
                       <Target className="h-16 w-16 text-gray-400 mx-auto mb-6" />
                     </motion.div>
                     <h3 className="text-2xl font-bold text-white mb-4">No battles found</h3>
-                    <p className="text-gray-400 mb-6">Try adjusting your search or battle filters</p>
+                    <p className="text-gray-400 mb-6">Try adjusting your battle filters</p>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       onClick={() => {
-                        setSearchQuery('');
                         setFilters({ game_type: '', country: '', mode: '', status: '' });
                       }}
                       className="btn-premium px-6 py-3"
