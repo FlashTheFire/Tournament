@@ -2092,6 +2092,366 @@ async def get_admin_tournament_analytics(current_user: dict = Depends(get_curren
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Tournament analytics failed: {str(e)}")
 
+# ================================
+# ADMIN API ENDPOINTS 
+# ================================
+
+@app.get("/api/admin/stats")
+async def get_admin_stats(current_user: dict = Depends(get_current_user)):
+    """Get admin dashboard statistics"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Calculate statistics
+        today = datetime.utcnow().date()
+        start_of_day = datetime.combine(today, datetime.min.time())
+        
+        total_users = users_collection.count_documents({})
+        total_tournaments = tournaments_collection.count_documents({})
+        active_tournaments = tournaments_collection.count_documents({"status": {"$in": ["upcoming", "live"]}})
+        
+        # Calculate total revenue from payments
+        total_revenue = 0
+        successful_payments = payments_collection.find({"status": "success"})
+        for payment in successful_payments:
+            total_revenue += payment.get("amount", 0)
+        
+        pending_payments = payments_collection.count_documents({"status": "pending"})
+        new_users_today = users_collection.count_documents({"created_at": {"$gte": start_of_day}})
+        tournaments_today = tournaments_collection.count_documents({"created_at": {"$gte": start_of_day}})
+        
+        return {
+            "total_users": total_users,
+            "total_tournaments": total_tournaments,
+            "total_revenue": round(total_revenue, 2),
+            "active_tournaments": active_tournaments,
+            "pending_payments": pending_payments,
+            "new_users_today": new_users_today,
+            "tournaments_today": tournaments_today
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get admin stats: {str(e)}")
+
+@app.get("/api/admin/users")
+async def get_admin_users(
+    skip: int = 0,
+    limit: int = 20,
+    search: Optional[str] = None,
+    is_verified: Optional[bool] = None,
+    is_admin: Optional[bool] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get all users for admin management"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Build filter query
+        filter_query = {}
+        if search:
+            filter_query["$or"] = [
+                {"username": {"$regex": search, "$options": "i"}},
+                {"full_name": {"$regex": search, "$options": "i"}},
+                {"email": {"$regex": search, "$options": "i"}}
+            ]
+        if is_verified is not None:
+            filter_query["is_verified"] = is_verified
+        if is_admin is not None:
+            filter_query["is_admin"] = is_admin
+        
+        # Get users with pagination
+        users = list(users_collection.find(filter_query).skip(skip).limit(limit).sort("created_at", -1))
+        total_count = users_collection.count_documents(filter_query)
+        
+        # Format users data
+        formatted_users = []
+        for user in users:
+            # Get user's tournament stats
+            registrations = list(registrations_collection.find({"user_id": user["user_id"]}))
+            tournaments_played = len(registrations)
+            
+            # Calculate earnings from matches
+            matches = list(matches_collection.find({"user_id": user["user_id"]}))
+            total_earnings = sum(match.get("earnings", 0) for match in matches)
+            
+            formatted_user = {
+                "user_id": user["user_id"],
+                "username": user["username"],
+                "full_name": user["full_name"],
+                "email": user["email"],
+                "free_fire_uid": user.get("free_fire_uid"),
+                "wallet_balance": user.get("wallet_balance", 0),
+                "is_verified": user.get("is_verified", False),
+                "is_admin": user.get("is_admin", False),
+                "tournaments_played": tournaments_played,
+                "total_earnings": total_earnings,
+                "skill_rating": user.get("tournament_stats", {}).get("skill_rating", 0),
+                "created_at": user["created_at"].isoformat() if isinstance(user.get("created_at"), datetime) else str(user.get("created_at", "")),
+                "last_login": user.get("last_login", "Never")
+            }
+            formatted_users.append(formatted_user)
+        
+        return {
+            "users": formatted_users,
+            "total_count": total_count,
+            "page": {
+                "skip": skip,
+                "limit": limit,
+                "has_more": (skip + limit) < total_count
+            }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get users: {str(e)}")
+
+@app.put("/api/admin/users/{user_id}")
+async def update_user(user_id: str, user_update: UserUpdate, current_user: dict = Depends(get_current_user)):
+    """Update user information (admin only)"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Check if user exists
+        existing_user = users_collection.find_one({"user_id": user_id})
+        if not existing_user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Build update data
+        update_data = {}
+        if user_update.email is not None:
+            update_data["email"] = user_update.email
+        if user_update.username is not None:
+            update_data["username"] = user_update.username
+        if user_update.full_name is not None:
+            update_data["full_name"] = user_update.full_name
+        if user_update.wallet_balance is not None:
+            update_data["wallet_balance"] = user_update.wallet_balance
+        if user_update.is_verified is not None:
+            update_data["is_verified"] = user_update.is_verified
+        if user_update.is_admin is not None:
+            update_data["is_admin"] = user_update.is_admin
+        
+        if update_data:
+            update_data["updated_at"] = datetime.utcnow()
+            users_collection.update_one({"user_id": user_id}, {"$set": update_data})
+        
+        return {"message": "User updated successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update user: {str(e)}")
+
+@app.delete("/api/admin/users/{user_id}")
+async def delete_user(user_id: str, current_user: dict = Depends(get_current_user)):
+    """Delete user (admin only)"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Check if user exists
+        existing_user = users_collection.find_one({"user_id": user_id})
+        if not existing_user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Prevent deleting admin users
+        if existing_user.get("is_admin", False):
+            raise HTTPException(status_code=400, detail="Cannot delete admin users")
+        
+        # Delete user and related data
+        users_collection.delete_one({"user_id": user_id})
+        registrations_collection.delete_many({"user_id": user_id})
+        matches_collection.delete_many({"user_id": user_id})
+        payments_collection.delete_many({"user_id": user_id})
+        leaderboards_collection.delete_many({"user_id": user_id})
+        
+        return {"message": "User deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete user: {str(e)}")
+
+@app.get("/api/admin/tournaments")
+async def get_admin_tournaments(
+    skip: int = 0,
+    limit: int = 20,
+    status: Optional[str] = None,
+    search: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get all tournaments for admin management"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Build filter query
+        filter_query = {}
+        if status:
+            filter_query["status"] = status
+        if search:
+            filter_query["name"] = {"$regex": search, "$options": "i"}
+        
+        # Get tournaments with pagination
+        tournaments = list(tournaments_collection.find(filter_query).skip(skip).limit(limit).sort("created_at", -1))
+        total_count = tournaments_collection.count_documents(filter_query)
+        
+        # Format tournament data
+        formatted_tournaments = []
+        for tournament in tournaments:
+            # Get registration count
+            registration_count = registrations_collection.count_documents({"tournament_id": tournament["tournament_id"]})
+            
+            # Get revenue for this tournament
+            tournament_payments = list(payments_collection.find({
+                "tournament_id": tournament["tournament_id"],
+                "status": "success"
+            }))
+            revenue = sum(payment.get("amount", 0) for payment in tournament_payments)
+            
+            formatted_tournament = {
+                "tournament_id": tournament["tournament_id"],
+                "name": tournament["name"],
+                "game_type": tournament.get("game_type", "free_fire"),
+                "tournament_type": tournament.get("tournament_type"),
+                "entry_fee": tournament.get("entry_fee", 0),
+                "prize_pool": tournament.get("prize_pool", 0),
+                "max_participants": tournament.get("max_participants", 0),
+                "current_participants": registration_count,
+                "status": tournament.get("status", "upcoming"),
+                "revenue": revenue,
+                "start_time": tournament["start_time"].isoformat() if isinstance(tournament.get("start_time"), datetime) else str(tournament.get("start_time", "")),
+                "registration_deadline": tournament["registration_deadline"].isoformat() if isinstance(tournament.get("registration_deadline"), datetime) else str(tournament.get("registration_deadline", "")),
+                "created_at": tournament["created_at"].isoformat() if isinstance(tournament.get("created_at"), datetime) else str(tournament.get("created_at", "")),
+                "created_by": tournament.get("created_by")
+            }
+            formatted_tournaments.append(formatted_tournament)
+        
+        return {
+            "tournaments": formatted_tournaments,
+            "total_count": total_count,
+            "page": {
+                "skip": skip,
+                "limit": limit,
+                "has_more": (skip + limit) < total_count
+            }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get tournaments: {str(e)}")
+
+@app.put("/api/admin/tournaments/{tournament_id}")
+async def update_tournament(tournament_id: str, tournament_update: TournamentUpdate, current_user: dict = Depends(get_current_user)):
+    """Update tournament information (admin only)"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Check if tournament exists
+        existing_tournament = tournaments_collection.find_one({"tournament_id": tournament_id})
+        if not existing_tournament:
+            raise HTTPException(status_code=404, detail="Tournament not found")
+        
+        # Build update data
+        update_data = {}
+        if tournament_update.name is not None:
+            update_data["name"] = tournament_update.name
+        if tournament_update.entry_fee is not None:
+            update_data["entry_fee"] = tournament_update.entry_fee
+        if tournament_update.prize_pool is not None:
+            update_data["prize_pool"] = tournament_update.prize_pool
+        if tournament_update.max_participants is not None:
+            update_data["max_participants"] = tournament_update.max_participants
+        if tournament_update.start_time is not None:
+            update_data["start_time"] = tournament_update.start_time
+        if tournament_update.registration_deadline is not None:
+            update_data["registration_deadline"] = tournament_update.registration_deadline
+        if tournament_update.status is not None:
+            update_data["status"] = tournament_update.status
+        if tournament_update.description is not None:
+            update_data["description"] = tournament_update.description
+        
+        if update_data:
+            update_data["updated_at"] = datetime.utcnow()
+            tournaments_collection.update_one({"tournament_id": tournament_id}, {"$set": update_data})
+        
+        return {"message": "Tournament updated successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update tournament: {str(e)}")
+
+@app.delete("/api/admin/tournaments/{tournament_id}")
+async def delete_tournament(tournament_id: str, current_user: dict = Depends(get_current_user)):
+    """Delete tournament (admin only)"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Check if tournament exists
+        existing_tournament = tournaments_collection.find_one({"tournament_id": tournament_id})
+        if not existing_tournament:
+            raise HTTPException(status_code=404, detail="Tournament not found")
+        
+        # Check if tournament has started
+        if existing_tournament.get("status") in ["live", "completed"]:
+            raise HTTPException(status_code=400, detail="Cannot delete tournament that has started or completed")
+        
+        # Delete tournament and related data
+        tournaments_collection.delete_one({"tournament_id": tournament_id})
+        registrations_collection.delete_many({"tournament_id": tournament_id})
+        matches_collection.delete_many({"tournament_id": tournament_id})
+        payments_collection.delete_many({"tournament_id": tournament_id})
+        
+        return {"message": "Tournament deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete tournament: {str(e)}")
+
+@app.get("/api/admin/payments")
+async def get_admin_payments(
+    skip: int = 0,
+    limit: int = 20,
+    status: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get all payments for admin management"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Build filter query
+        filter_query = {}
+        if status:
+            filter_query["status"] = status
+        
+        # Get payments with pagination
+        payments = list(payments_collection.find(filter_query).skip(skip).limit(limit).sort("created_at", -1))
+        total_count = payments_collection.count_documents(filter_query)
+        
+        # Format payment data
+        formatted_payments = []
+        for payment in payments:
+            # Get user and tournament info
+            user = users_collection.find_one({"user_id": payment["user_id"]})
+            tournament = tournaments_collection.find_one({"tournament_id": payment["tournament_id"]})
+            
+            formatted_payment = {
+                "order_id": payment["order_id"],
+                "user_id": payment["user_id"],
+                "username": user["username"] if user else "Unknown",
+                "tournament_id": payment["tournament_id"],
+                "tournament_name": tournament["name"] if tournament else "Unknown",
+                "amount": payment.get("amount", 0),
+                "status": payment.get("status", "pending"),
+                "transaction_id": payment.get("transaction_id"),
+                "created_at": payment["created_at"].isoformat() if isinstance(payment.get("created_at"), datetime) else str(payment.get("created_at", "")),
+                "updated_at": payment.get("updated_at", payment["created_at"]).isoformat() if isinstance(payment.get("updated_at"), datetime) else str(payment.get("updated_at", ""))
+            }
+            formatted_payments.append(formatted_payment)
+        
+        return {
+            "payments": formatted_payments,
+            "total_count": total_count,
+            "page": {
+                "skip": skip,
+                "limit": limit,
+                "has_more": (skip + limit) < total_count
+            }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get payments: {str(e)}")
+
 @app.get("/api/leaderboards")
 async def get_leaderboards(
     game_type: Optional[str] = "free_fire",
