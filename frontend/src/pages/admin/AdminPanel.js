@@ -68,10 +68,10 @@ const AdminPanel = () => {
       setRecentTournaments(tournamentsData.tournaments || []);
       setRecentPayments(paymentsData.payments || []);
 
-      toast.success('Admin data loaded successfully');
+      safeToast.success('Admin data loaded successfully');
     } catch (error) {
       console.error('Failed to load admin data:', error);
-      toast.error('Failed to load admin data');
+      safeToast.error('Failed to load admin data');
     } finally {
       setLoading(false);
     }
