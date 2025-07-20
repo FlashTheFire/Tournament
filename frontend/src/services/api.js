@@ -34,14 +34,43 @@ api.interceptors.response.use(
     
     if (error.response?.status === 401) {
       // Unauthorized - clear auth and redirect to login
-      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
       return Promise.reject(error);
     }
     
-    const errorMessage = error.response?.data?.detail || error.message || 'An error occurred';
-    console.error('API Error Message:', errorMessage);
+    // Handle different types of error structures
+    let errorMessage = 'An error occurred';
+    
+    if (error.response?.data?.detail) {
+      const detail = error.response.data.detail;
+      
+      // Handle FastAPI validation errors (array of error objects)
+      if (Array.isArray(detail)) {
+        errorMessage = detail.map(err => {
+          if (typeof err === 'object' && err.msg) {
+            return err.msg;
+          }
+          return typeof err === 'string' ? err : 'Validation error';
+        }).join(', ');
+      } 
+      // Handle simple string errors
+      else if (typeof detail === 'string') {
+        errorMessage = detail;
+      }
+      // Handle error objects with message/msg
+      else if (typeof detail === 'object') {
+        errorMessage = detail.message || detail.msg || 'Invalid request';
+      }
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
+    console.error('Processed Error Message:', errorMessage);
+    
+    // Store clean error message for components to use
+    error.cleanMessage = errorMessage;
     
     return Promise.reject(error);
   }
