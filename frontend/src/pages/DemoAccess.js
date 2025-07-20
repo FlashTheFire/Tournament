@@ -229,7 +229,7 @@ const DemoAccess = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 + index * 0.1 }}
                   whileHover={{ scale: 1.02, y: -5 }}
-                  className="glass rounded-xl md:rounded-2xl p-4 md:p-6 border border-white/10 hover:border-white/20 transition-all duration-300 group"
+                  className="glass rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 border border-white/10 hover:border-white/20 transition-all duration-300 group"
                 >
                   <div className="flex items-start justify-between mb-3 md:mb-4">
                     <div className={`h-12 w-12 md:h-14 md:w-14 rounded-xl md:rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center text-lg md:text-2xl group-hover:scale-110 transition-transform`}>
