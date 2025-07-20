@@ -79,6 +79,14 @@ api.interceptors.response.use(
     console.log('🔵 Final processed error message:', errorMessage);
     console.log('🔵 Error message type:', typeof errorMessage);
     
+    // Ensure errorMessage is always a string
+    if (typeof errorMessage !== 'string') {
+      console.error('🔴 ERROR: errorMessage is not a string:', errorMessage);
+      errorMessage = 'An error occurred';
+    }
+    
+    console.log('🔵 Final error message (guaranteed string):', errorMessage);
+    
     // Store clean error message for components to use
     error.cleanMessage = errorMessage;
     
