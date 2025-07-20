@@ -194,7 +194,7 @@ const Login = () => {
                 <div>
                   <label htmlFor="email" className="block text-sm font-semibold text-white mb-3 flex items-center space-x-2">
                     <Mail className="h-4 w-4 text-neon-blue" />
-                    <span>Email Address</span>
+                    <span>Email or Username</span>
                   </label>
                   <motion.div 
                     className="relative"
@@ -204,12 +204,12 @@ const Login = () => {
                     <input
                       id="email"
                       name="email"
-                      type="email"
+                      type="text"
                       required
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full pl-12 pr-4 py-4 glass rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-blue focus:border-neon-blue transition-all duration-300 text-lg"
-                      placeholder="Enter your email"
+                      placeholder="Enter email or username"
                     />
                   </motion.div>
                 </div>
