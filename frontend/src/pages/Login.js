@@ -48,7 +48,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative overflow-hidden">
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative overflow-hidden">
       {/* Advanced Particle Background */}
       <div className="absolute inset-0 opacity-30">
         <div className="kinetic-waves"></div>
