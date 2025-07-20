@@ -49,15 +49,15 @@ const Register = () => {
 
       const result = await register(userData);
       if (result.success) {
-        toast.success('Welcome to the Arena! Account created successfully! 🎉🔥');
+        safeToast.success('Welcome to the Arena! Account created successfully! 🎉🔥');
         // Navigate to home page after successful registration
         navigate('/');
       } else {
-        toast.error(result.error || 'Registration failed. Please try again.');
+        safeToast.error(result.error || 'Registration failed. Please try again.');
       }
     } catch (error) {
       console.error('Registration error:', error);
-      toast.error('Registration failed. Please try again.');
+      safeToast.error('Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
