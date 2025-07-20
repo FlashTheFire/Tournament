@@ -255,7 +255,7 @@ const Tournaments = () => {
           <div className="absolute top-3 sm:top-4 md:top-6 left-3 sm:left-4 md:left-6 flex flex-wrap gap-1 sm:gap-2">
             <motion.div 
               whileHover={{ scale: 1.1 }}
-              className={`px-4 py-2 rounded-full text-sm font-bold text-white shadow-glow ${statusBadge.color}`}
+              className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full text-xs sm:text-sm font-bold text-white shadow-glow ${statusBadge.color}`}
             >
               <div className="flex items-center space-x-2">
                 <statusBadge.icon className="h-4 w-4" />
