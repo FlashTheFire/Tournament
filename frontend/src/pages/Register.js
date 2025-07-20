@@ -26,14 +26,14 @@ const Register = () => {
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match');
+      safeToast.error('Passwords do not match');
       setLoading(false);
       return;
     }
 
     // Validate password strength
     if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+      safeToast.error('Password must be at least 6 characters');
       setLoading(false);
       return;
     }
