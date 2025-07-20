@@ -331,8 +331,8 @@ const Tournaments = () => {
             </div>
             <div className="space-y-1">
               <p className="text-gray-400 text-xs uppercase tracking-wide">Battle Mode</p>
-              <p className="text-white font-bold text-lg flex items-center capitalize">
-                <Target className="h-5 w-5 mr-2 text-neon-purple" />
+              <p className="text-white font-bold text-sm sm:text-base md:text-lg flex items-center capitalize">
+                <Target className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-1 sm:mr-2 text-neon-purple flex-shrink-0" />
                 {tournament.mode}
               </p>
             </div>
