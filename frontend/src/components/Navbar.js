@@ -29,25 +29,33 @@ const Navbar = ({ onMenuClick }) => {
     {
       id: 1,
       type: 'tournament',
-      title: 'Tournament Starting Soon',
-      message: 'Free Fire Battle Royale starts in 30 minutes',
+      title: 'Free Fire Tournament Starting',
+      message: 'Battle Royale Championship starts in 15 minutes',
       time: '2 min ago',
       unread: true
     },
     {
       id: 2,
       type: 'payment',
-      title: 'Payment Successful',
-      message: 'Your registration for PUBG Squad Tournament is confirmed',
-      time: '1 hour ago',
+      title: 'Registration Confirmed',
+      message: 'Your entry to Free Fire Squad Battle is confirmed - ₹250 paid',
+      time: '30 min ago',
       unread: true
     },
     {
       id: 3,
       type: 'achievement',
-      title: 'New Achievement',
-      message: 'You reached Elite rank in Free Fire!',
-      time: '3 hours ago',
+      title: 'Rank Upgrade!',
+      message: 'Congratulations! You reached Heroic rank in Free Fire Arena',
+      time: '2 hours ago',
+      unread: false
+    },
+    {
+      id: 4,
+      type: 'reward',
+      title: 'Prize Money Received',
+      message: 'You won ₹1,500 from yesterday\'s tournament!',
+      time: '1 day ago',
       unread: false
     }
   ];
