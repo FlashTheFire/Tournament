@@ -1080,7 +1080,10 @@ def get_recommended_tournament_format(player_count: int, avg_skill: float) -> st
 
 def assess_competitiveness(skill_levels: List[float]) -> str:
     """Assess tournament competitiveness level"""
-    avg_skill = sum(skill_levels) / len(skill_levels) if skill_levels else 50
+    if not skill_levels:
+        return "No participants yet"
+        
+    avg_skill = sum(skill_levels) / len(skill_levels)
     skill_range = max(skill_levels) - min(skill_levels) if len(skill_levels) > 1 else 0
     
     if avg_skill > 75 and skill_range < 20:
