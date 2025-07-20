@@ -71,7 +71,7 @@ const AdminTournaments = () => {
       setTotalTournaments(data.total_count || 0);
     } catch (error) {
       console.error('Failed to load tournaments:', error);
-      toast.error('Failed to load tournaments');
+      safeToast.error('Failed to load tournaments');
     } finally {
       setLoading(false);
     }
