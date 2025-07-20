@@ -1057,12 +1057,15 @@ def calculate_match_balance(skill_levels: List[float]) -> float:
     if len(skill_levels) < 2:
         return 5.0
     
-    skill_variance = np.var(skill_levels) if len(skill_levels) > 1 else 0
-    skill_range = max(skill_levels) - min(skill_levels) if len(skill_levels) > 1 else 0
-    
-    # Lower variance and range = better balance
-    balance_score = 10 - min(10, (skill_variance / 100 + skill_range / 20))
-    return max(0, balance_score)
+    try:
+        skill_variance = np.var(skill_levels) if len(skill_levels) > 1 else 0
+        skill_range = max(skill_levels) - min(skill_levels) if len(skill_levels) > 1 else 0
+        
+        # Lower variance and range = better balance
+        balance_score = 10 - min(10, (skill_variance / 100 + skill_range / 20))
+        return max(0, balance_score)
+    except Exception:
+        return 5.0  # Default balance score if calculation fails
 
 def get_recommended_tournament_format(player_count: int, avg_skill: float) -> str:
     """Get recommended tournament format based on participants"""
