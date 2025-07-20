@@ -102,17 +102,22 @@ const Navbar = ({ onMenuClick }) => {
             <Menu className="h-6 w-6 group-hover:rotate-180 transition-transform duration-300" />
           </motion.button>
 
-          {/* Brand Logo */}
-          <Link to="/" className="hidden sm:flex items-center space-x-3 group">
+          {/* Enhanced Brand Logo */}
+          <Link to="/" className="hidden sm:flex items-center space-x-4 group">
             <motion.div 
-              className="w-10 h-10 bg-gradient-to-br from-neon-blue to-electric-purple rounded-xl flex items-center justify-center"
+              className="relative w-12 h-12 bg-gradient-to-br from-neon-blue via-electric-purple to-neon-red rounded-2xl flex items-center justify-center shadow-glow"
               whileHover={{ rotate: 5, scale: 1.1 }}
             >
-              <Gamepad2 className="h-6 w-6 text-white" />
+              <Gamepad2 className="h-7 w-7 text-white drop-shadow-lg" />
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 border border-dashed border-white/30 rounded-2xl"
+              />
             </motion.div>
             <div className="hidden lg:block">
-              <h1 className="text-white font-bold text-lg font-gaming">FREE FIRE</h1>
-              <p className="text-gray-400 text-xs">ULTIMATE ARENA</p>
+              <h1 className="text-white font-black text-xl font-gaming tracking-wide">FREE FIRE</h1>
+              <p className="text-neon-blue text-xs font-bold uppercase tracking-wider">ULTIMATE ARENA</p>
             </div>
           </Link>
 
