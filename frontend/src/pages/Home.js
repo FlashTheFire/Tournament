@@ -716,14 +716,14 @@ const Home = () => {
         </div>
       </motion.section>
 
-      {/* Mobile-first content sections */}
+      {/* Compact content sections */}
       <div className="
         /* Mobile: compact spacing and padding */
-        space-y-12 px-4 py-12
+        space-y-8 px-4 py-8
         /* Tablet: medium spacing */
-        sm:space-y-16 sm:px-6 sm:py-16
-        /* Desktop: spacious layout */
-        lg:space-y-20 lg:px-8 lg:py-20
+        sm:space-y-12 sm:px-6 sm:py-12
+        /* Desktop: reduced spacing for horizontal layout */
+        lg:space-y-16 lg:px-8 lg:py-16
       ">
         {/* AI-Powered Features Section - Mobile-First */}
         <section>
