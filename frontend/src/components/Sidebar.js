@@ -442,58 +442,18 @@ const Sidebar = ({ isOpen, onClose }) => {
         }}
       >
         <div className={`flex flex-col h-full relative z-10 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'lg:opacity-0'}`}>
-          {/* Mobile-First Header */}
-          <div className="flex items-center justify-between border-b border-white/10
+          {/* Mobile-First Header - No Logo, just close button */}
+          <div className="flex items-center justify-end border-b border-white/10
             /* Mobile: compact header */
             p-4
             /* Desktop: spacious header */
             lg:p-8
           ">
-            <motion.div 
-              className="flex items-center space-x-3 lg:space-x-4"
-              whileHover={{ scale: 1.02 }}
-            >
-              <motion.div 
-                className="relative bg-gradient-to-br from-neon-blue via-electric-purple to-neon-red rounded-3xl flex items-center justify-center shadow-glow
-                  /* Mobile: smaller logo */
-                  h-10 w-10
-                  /* Desktop: larger logo */
-                  lg:h-14 lg:w-14
-                "
-                whileHover={{ rotate: 5 }}
-              >
-                <Gamepad2 className="text-white
-                  /* Mobile: smaller logo icon */
-                  h-6 w-6
-                  /* Desktop: larger logo icon */
-                  lg:h-8 lg:w-8
-                " />
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 border-2 border-dashed border-white/30 rounded-3xl"
-                />
-              </motion.div>
-              <div className="hidden sm:block">
-                <h1 className="text-white font-gaming font-bold
-                  /* Mobile: smaller brand text */
-                  text-lg
-                  /* Desktop: larger brand text */
-                  lg:text-2xl
-                ">FREE FIRE</h1>
-                <p className="text-neon-blue font-semibold
-                  /* Mobile: smaller tagline */
-                  text-xs
-                  /* Desktop: larger tagline */
-                  lg:text-sm
-                ">ULTIMATE ARENA</p>
-              </div>
-            </motion.div>
             <motion.button
               onClick={onClose}
               whileHover={{ scale: 1.1, rotate: 90 }}
               whileTap={{ scale: 0.9 }}
-              className="glass-mobile border border-white/20 text-gray-400 hover:text-white hover:border-neon-red/50 transition-all duration-300 lg:hidden
+              className="glass-mobile border border-white/20 text-gray-400 hover:text-white hover:border-neon-red/50 transition-all duration-300
                 /* Mobile: smaller close button */
                 p-2 rounded-lg
                 /* Tablet: larger close button */
