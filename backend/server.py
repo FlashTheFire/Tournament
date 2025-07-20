@@ -433,6 +433,242 @@ def get_estimated_ff_rank(skill_score: float) -> str:
     else:
         return "Gold"
 
+def calculate_kill_efficiency(ff_data: Dict) -> float:
+    """Calculate kill efficiency score"""
+    kills = ff_data.get('kills', 0)
+    matches = ff_data.get('total_matches', 1)
+    avg_kills_per_match = kills / max(matches, 1)
+    # Normalize to 0-100 scale (assuming 5+ kills per match is excellent)
+    return min(100, (avg_kills_per_match / 5.0) * 100)
+
+def calculate_survival_mastery(ff_data: Dict) -> float:
+    """Calculate survival mastery score"""
+    survival_rate = float(ff_data.get('survival_rate', '0%').replace('%', ''))
+    # Survival rate is already a percentage, adjust for Free Fire standards
+    if survival_rate >= 30:
+        return 95
+    elif survival_rate >= 25:
+        return 80
+    elif survival_rate >= 20:
+        return 65
+    elif survival_rate >= 15:
+        return 50
+    else:
+        return max(20, survival_rate * 2)
+
+def get_accuracy_grade(headshot_rate: str) -> str:
+    """Get accuracy grade based on headshot rate"""
+    rate = float(headshot_rate.replace('%', ''))
+    if rate >= 25:
+        return "S+"
+    elif rate >= 20:
+        return "S"
+    elif rate >= 18:
+        return "A+"
+    elif rate >= 15:
+        return "A"
+    elif rate >= 12:
+        return "B+"
+    elif rate >= 10:
+        return "B"
+    else:
+        return "C"
+
+def calculate_damage_consistency(ff_data: Dict) -> float:
+    """Calculate damage consistency score"""
+    avg_damage = ff_data.get('avg_damage', 0)
+    # Free Fire damage consistency (assuming 1500+ avg damage is excellent)
+    consistency_score = min(100, (avg_damage / 1500) * 100)
+    return max(10, consistency_score)
+
+def generate_improvement_suggestions(ff_data: Dict, skill_score: float) -> List[Dict]:
+    """Generate personalized improvement suggestions"""
+    suggestions = []
+    
+    # Analyze different aspects and provide targeted advice
+    kill_efficiency = calculate_kill_efficiency(ff_data)
+    survival_rate = float(ff_data.get('survival_rate', '0%').replace('%', ''))
+    headshot_rate = float(ff_data.get('headshot_rate', '0%').replace('%', ''))
+    avg_damage = ff_data.get('avg_damage', 0)
+    
+    if kill_efficiency < 50:
+        suggestions.append({
+            'category': 'Combat Skills',
+            'priority': 'High',
+            'suggestion': 'Focus on aggressive early-game positioning to secure more eliminations',
+            'specific_tip': 'Practice hot-dropping in popular locations like Clock Tower or Peak'
+        })
+    
+    if survival_rate < 20:
+        suggestions.append({
+            'category': 'Survival Strategy',
+            'priority': 'Critical',
+            'suggestion': 'Improve positioning and zone management to increase survival rate',
+            'specific_tip': 'Stay near zone edges and avoid open areas during rotations'
+        })
+    
+    if headshot_rate < 15:
+        suggestions.append({
+            'category': 'Aim Training',
+            'priority': 'Medium',
+            'suggestion': 'Enhance accuracy through headshot-focused training',
+            'specific_tip': 'Use training mode with AK47 and M4A1 for 15 minutes daily'
+        })
+    
+    if avg_damage < 1200:
+        suggestions.append({
+            'category': 'Engagement',
+            'priority': 'Medium', 
+            'suggestion': 'Increase damage output through better weapon selection and positioning',
+            'specific_tip': 'Prefer AR weapons and engage from mid-range when possible'
+        })
+    
+    # Skill-level specific suggestions
+    if skill_score < 40:
+        suggestions.append({
+            'category': 'Foundation',
+            'priority': 'High',
+            'suggestion': 'Master basic movement mechanics and weapon handling',
+            'specific_tip': 'Practice slide-shooting and jump-shooting techniques'
+        })
+    elif skill_score < 70:
+        suggestions.append({
+            'category': 'Tactical Awareness',
+            'priority': 'Medium',
+            'suggestion': 'Develop better game sense and team coordination',
+            'specific_tip': 'Study minimap more frequently and communicate enemy positions'
+        })
+    
+    return suggestions
+
+def get_consistency_rating(ff_data: Dict) -> str:
+    """Get consistency rating based on performance variance"""
+    # Mock consistency calculation - in production would analyze match history variance
+    skill_score = calculate_player_skill_score(ff_data)
+    
+    if skill_score >= 75:
+        return "Very Consistent"
+    elif skill_score >= 60:
+        return "Consistent"
+    elif skill_score >= 45:
+        return "Somewhat Consistent"
+    else:
+        return "Inconsistent"
+
+def compare_with_similar_players(skill_score: float) -> Dict:
+    """Compare player with others in similar skill bracket"""
+    # Mock comparison - in production would query database for similar players
+    skill_tier = get_skill_tier(skill_score)
+    
+    return {
+        'skill_tier': skill_tier,
+        'percentile_rank': f"Top {100 - skill_score:.0f}%",
+        'tier_average': {
+            'kills_per_match': 3.2 + (skill_score / 100) * 2,
+            'survival_rate': 15 + (skill_score / 100) * 15,
+            'avg_damage': 1000 + (skill_score / 100) * 800
+        },
+        'comparison_summary': get_comparison_summary(skill_score)
+    }
+
+def get_comparison_summary(skill_score: float) -> str:
+    """Get comparison summary text"""
+    if skill_score >= 80:
+        return "You're among the elite players! Your skills are exceptional."
+    elif skill_score >= 65:
+        return "You're performing better than most players in your tier."
+    elif skill_score >= 50:
+        return "You're around average for your skill level with room for improvement."
+    else:
+        return "Focus on fundamental skills to climb up the rankings."
+
+def assess_tournament_readiness(skill_score: float, tournaments_played: int) -> Dict:
+    """Assess if player is ready for competitive tournaments"""
+    readiness_score = 0
+    
+    # Base skill assessment
+    if skill_score >= 70:
+        readiness_score += 40
+    elif skill_score >= 55:
+        readiness_score += 25
+    else:
+        readiness_score += 10
+    
+    # Experience factor
+    if tournaments_played >= 10:
+        readiness_score += 30
+    elif tournaments_played >= 5:
+        readiness_score += 20
+    elif tournaments_played >= 1:
+        readiness_score += 10
+    
+    # Consistency factor
+    readiness_score += min(30, skill_score * 0.4)
+    
+    readiness_level = "Not Ready"
+    if readiness_score >= 80:
+        readiness_level = "Highly Ready"
+    elif readiness_score >= 65:
+        readiness_level = "Ready"
+    elif readiness_score >= 45:
+        readiness_level = "Somewhat Ready"
+    
+    return {
+        'readiness_score': readiness_score,
+        'readiness_level': readiness_level,
+        'recommended_entry_fee': get_recommended_entry_fee(skill_score),
+        'suitable_tournament_types': get_suitable_tournament_types(skill_score)
+    }
+
+def get_recommended_entry_fee(skill_score: float) -> str:
+    """Get recommended tournament entry fee range"""
+    if skill_score >= 80:
+        return "₹200-500 (Premium tournaments)"
+    elif skill_score >= 65:
+        return "₹100-250 (Competitive tournaments)"
+    elif skill_score >= 50:
+        return "₹50-150 (Intermediate tournaments)"
+    else:
+        return "₹0-75 (Practice tournaments)"
+
+def get_suitable_tournament_types(skill_score: float) -> List[str]:
+    """Get suitable tournament types for player skill level"""
+    if skill_score >= 75:
+        return ["Battle Royale Championship", "Clash Squad Pro", "Elite Tournaments"]
+    elif skill_score >= 60:
+        return ["Standard Battle Royale", "Clash Squad", "Weekly Competitions"]
+    elif skill_score >= 45:
+        return ["Practice Tournaments", "Beginner Battle Royale", "Casual Clash Squad"]
+    else:
+        return ["Training Tournaments", "Skill Development", "Free Entry Events"]
+
+def get_focus_areas(ff_data: Dict, skill_score: float) -> List[str]:
+    """Get recommended focus areas for improvement"""
+    focus_areas = []
+    
+    kill_efficiency = calculate_kill_efficiency(ff_data)
+    survival_mastery = calculate_survival_mastery(ff_data)
+    accuracy = float(ff_data.get('headshot_rate', '0%').replace('%', ''))
+    damage_consistency = calculate_damage_consistency(ff_data)
+    
+    # Identify weakest areas
+    areas_scores = [
+        ("Combat Skills", kill_efficiency),
+        ("Survival Strategy", survival_mastery),
+        ("Aim & Accuracy", accuracy * 4),  # Scale to 0-100
+        ("Damage Output", damage_consistency)
+    ]
+    
+    # Sort by lowest scores first
+    areas_scores.sort(key=lambda x: x[1])
+    
+    # Add top 3 weakest areas
+    for area, score in areas_scores[:3]:
+        if score < 70:  # Only suggest areas that need improvement
+            focus_areas.append(area)
+    
+    return focus_areas if focus_areas else ["Overall Game Sense"]
+
 # Helper functions for analytics
 def calculate_kill_efficiency(ff_data: Dict) -> str:
     """Calculate kill efficiency rating"""
