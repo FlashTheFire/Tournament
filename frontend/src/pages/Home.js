@@ -287,7 +287,7 @@ const Home = () => {
 
   const StatCard = ({ icon: Icon, label, value, description, color, trend }) => (
     <motion.div
-      className={`glass rounded-2xl lg:rounded-3xl p-6 lg:p-8 text-center relative overflow-hidden border border-white/10 ${color} shadow-2xl`}
+      className={`relative overflow-hidden rounded-2xl lg:rounded-3xl p-6 lg:p-8 text-center border border-white/10 ${color} shadow-2xl backdrop-blur-xl`}
       whileHover={{ scale: 1.05, y: -10 }}
       animate={{ y: [-2, 2, -2] }}
       transition={{ 
@@ -296,17 +296,35 @@ const Home = () => {
         hover: { duration: 0.3 }
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></div>
+      {/* Professional Shine Animation Effect */}
+      <div className="absolute inset-0 overflow-hidden rounded-2xl lg:rounded-3xl">
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12"
+          animate={{
+            x: ['-200%', '200%'],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            repeatDelay: 5,
+            ease: "easeInOut",
+          }}
+          style={{ width: '150%' }}
+        />
+      </div>
       
-      <motion.div
-        animate={{ rotate: [0, 360] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        className="relative z-10 mb-4 lg:mb-6"
-      >
-        <Icon className="h-12 w-12 lg:h-16 lg:w-16 text-white mx-auto drop-shadow-2xl" />
-      </motion.div>
+      {/* Professional branded glow border */}
+      <div className="absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-r from-neon-blue/20 via-transparent to-electric-purple/20 animate-pulse"></div>
       
       <div className="relative z-10">
+        <motion.div
+          animate={{ rotateY: [0, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="mb-4 lg:mb-6"
+        >
+          <Icon className="h-12 w-12 lg:h-16 lg:w-16 text-white mx-auto drop-shadow-2xl" />
+        </motion.div>
+        
         <motion.p 
           className="text-white font-gaming font-black text-2xl lg:text-4xl xl:text-5xl mb-2 lg:mb-4 drop-shadow-2xl"
           animate={{ scale: [1, 1.05, 1] }}
@@ -333,6 +351,32 @@ const Home = () => {
             </span>
           </motion.div>
         )}
+      </div>
+
+      {/* Additional premium floating shine particles */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full opacity-60"
+            animate={{
+              x: [0, Math.random() * 100 - 50],
+              y: [0, Math.random() * 100 - 50],
+              opacity: [0, 0.8, 0],
+              scale: [0, 1.5, 0],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 2,
+              repeat: Infinity,
+              delay: i * 0.8,
+              ease: "easeInOut",
+            }}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+          />
+        ))}
       </div>
     </motion.div>
   );
