@@ -50,9 +50,10 @@ const Register = () => {
       if (result.success) {
         toast.success('Welcome to the Arena! Account created successfully! 🎉🔥');
       } else {
-        toast.error(result.error);
+        toast.error(result.error || 'Registration failed. Please try again.');
       }
     } catch (error) {
+      console.error('Registration error:', error);
       toast.error('Registration failed. Please try again.');
     } finally {
       setLoading(false);
@@ -84,47 +85,58 @@ const Register = () => {
         transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
         className="w-full max-w-lg space-y-8 relative z-10"
       >
-        {/* Enhanced Header */}
+        {/* Enhanced Header with Logo on Left Side */}
         <div className="text-center">
-          <motion.div
-            initial={{ scale: 0, rotateY: 180 }}
-            animate={{ scale: 1, rotateY: 0 }}
-            transition={{ delay: 0.3, type: "spring", stiffness: 150 }}
-            className="mx-auto h-20 w-20 bg-gradient-to-br from-neon-blue via-electric-purple to-neon-red rounded-3xl flex items-center justify-center mb-6 shadow-glow-lg relative"
+          <motion.div 
+            className="flex items-center justify-center space-x-4 mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
           >
-            <Crown className="h-10 w-10 text-white drop-shadow-lg" />
+            {/* Logo moved to left side */}
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-0 border-2 border-dashed border-white/20 rounded-3xl"
-            />
+              initial={{ scale: 0, rotateY: 180 }}
+              animate={{ scale: 1, rotateY: 0 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 150 }}
+              className="h-16 w-16 bg-gradient-to-br from-neon-blue via-electric-purple to-neon-red rounded-3xl flex items-center justify-center shadow-glow-lg relative flex-shrink-0"
+            >
+              <Crown className="h-8 w-8 text-white drop-shadow-lg" />
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 border-2 border-dashed border-white/20 rounded-3xl"
+              />
+            </motion.div>
+            
+            {/* Title alongside logo */}
+            <div className="text-left">
+              <motion.h1 
+                className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-gaming leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <span className="text-gradient bg-gradient-to-r from-neon-blue to-electric-purple">
+                  JOIN THE ARENA
+                </span>
+              </motion.h1>
+              
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="text-sm sm:text-base lg:text-xl font-bold text-white"
+              >
+                BECOME AN ELITE WARRIOR
+              </motion.h2>
+            </div>
           </motion.div>
-          
-          <motion.h1 
-            className="text-4xl font-bold text-white mb-2 font-gaming"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <span className="text-gradient bg-gradient-to-r from-neon-blue to-electric-purple">
-              JOIN THE ARENA
-            </span>
-          </motion.h1>
-          
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="text-xl font-bold text-white mb-2"
-          >
-            BECOME AN ELITE WARRIOR
-          </motion.h2>
           
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
-            className="text-gray-300"
+            className="text-gray-300 text-sm sm:text-base"
           >
             Enter your details to join the ultimate Free Fire battles
           </motion.p>
@@ -135,7 +147,7 @@ const Register = () => {
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ delay: 0.4, type: "spring", stiffness: 100 }}
-          className="glass rounded-3xl p-8 space-y-8 kinetic-waves relative"
+          className="glass rounded-3xl p-6 sm:p-8 space-y-6 sm:space-y-8 kinetic-waves relative"
         >
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Grid Layout for Name and Username */}
@@ -417,21 +429,24 @@ const Register = () => {
               <Star className="h-5 w-5 text-neon-green" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-300 text-xs">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 justify-center md:justify-start">
                 <Trophy className="h-4 w-4 text-yellow-400" />
                 <span>Exclusive Tournaments</span>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 justify-center md:justify-start">
                 <Zap className="h-4 w-4 text-neon-blue" />
                 <span>AI Matchmaking</span>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 justify-center md:justify-start">
                 <Crown className="h-4 w-4 text-neon-purple" />
                 <span>Premium Features</span>
               </div>
             </div>
           </div>
         </motion.div>
+
+        {/* Added bottom spacing to prevent glitching */}
+        <div className="h-16 sm:h-20"></div>
       </motion.div>
     </div>
   );
