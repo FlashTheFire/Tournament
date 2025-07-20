@@ -23,6 +23,8 @@ const Login = () => {
       const result = await login(formData.email, formData.password);
       if (result.success) {
         toast.success('Welcome back! 🎮');
+        // Navigate to home page after successful login
+        navigate('/');
       } else {
         toast.error(result.error || 'Login failed. Please try again.');
       }
