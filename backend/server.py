@@ -18,6 +18,10 @@ import qrcode
 from io import BytesIO
 import asyncio
 
+# Perplexity AI Configuration
+PERPLEXITY_API_KEY = "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"
+PERPLEXITY_API_URL = "https://api.perplexity.ai/chat/completions"
+
 # Load environment variables
 load_dotenv()
 
