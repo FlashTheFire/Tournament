@@ -255,55 +255,58 @@ const Register = () => {
                   />
                 </div>
 
-                <div>
-                  <label htmlFor="password" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
-                    <Lock className="h-3 w-3 text-neon-red" />
-                    <span>Password</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="password"
-                      name="password"
-                      type={showPassword ? 'text' : 'password'}
-                      required
-                      value={formData.password}
-                      onChange={handleChange}
-                      className="w-full px-4 pr-12 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-red transition-all duration-300 text-sm lg:text-base"
-                      placeholder="Create a strong password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
+                {/* Password and Confirm Password - Side by Side */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
+                  <div>
+                    <label htmlFor="password" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
+                      <Lock className="h-3 w-3 text-neon-red" />
+                      <span>Password</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        id="password"
+                        name="password"
+                        type={showPassword ? 'text' : 'password'}
+                        required
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="w-full px-4 pr-12 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-red transition-all duration-300 text-sm lg:text-base"
+                        placeholder="Create password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <label htmlFor="confirmPassword" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
-                    <Lock className="h-3 w-3 text-neon-red" />
-                    <span>Confirm Password</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      required
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      className="w-full px-4 pr-12 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-red transition-all duration-300 text-sm lg:text-base"
-                      placeholder="Confirm your password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                    >
-                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
+                  <div>
+                    <label htmlFor="confirmPassword" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
+                      <Lock className="h-3 w-3 text-neon-red" />
+                      <span>Confirm Password</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        required
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        className="w-full px-4 pr-12 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-red transition-all duration-300 text-sm lg:text-base"
+                        placeholder="Confirm password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                      >
+                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
