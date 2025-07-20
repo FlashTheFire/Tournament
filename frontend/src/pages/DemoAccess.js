@@ -179,7 +179,7 @@ const DemoAccess = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
           >
             {quickStats.map((stat, index) => (
               <motion.div
@@ -188,11 +188,11 @@ const DemoAccess = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4 + index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className="text-center glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300"
+                className="text-center glass rounded-xl md:rounded-2xl p-4 md:p-6 border border-white/10 hover:border-white/20 transition-all duration-300"
               >
-                <stat.icon className="h-8 w-8 text-neon-blue mx-auto mb-3" />
-                <p className="text-3xl font-bold text-white mb-1">{stat.value}</p>
-                <p className="text-gray-400 text-sm">{stat.label}</p>
+                <stat.icon className="h-6 w-6 md:h-8 md:w-8 text-neon-blue mx-auto mb-2 md:mb-3" />
+                <p className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1">{stat.value}</p>
+                <p className="text-gray-400 text-xs md:text-sm">{stat.label}</p>
               </motion.div>
             ))}
           </motion.div>
