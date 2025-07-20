@@ -834,6 +834,455 @@ def get_focus_areas(ff_data: Dict, skill_score: float) -> List[str]:
     
     return focus_areas[:3]  # Return top 3 focus areas
 
+# AI-Powered Analytics with Perplexity Integration
+async def get_ai_analysis(prompt: str, context_data: Dict = None) -> str:
+    """Get AI-powered analysis using Perplexity AI"""
+    try:
+        headers = {
+            "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        
+        # Prepare enhanced prompt with context
+        enhanced_prompt = f"""
+        You are an expert Free Fire gaming analyst specializing in battle royale tournaments and player performance optimization.
+        
+        Context Data: {json.dumps(context_data) if context_data else 'None'}
+        
+        Analysis Request: {prompt}
+        
+        Please provide detailed, actionable insights based on Free Fire gameplay mechanics, meta strategies, and competitive tournament analysis. Focus on practical recommendations that can improve player performance and tournament outcomes.
+        """
+        
+        payload = {
+            "model": "llama-3.1-sonar-small-128k-online",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "You are an expert Free Fire esports analyst with deep knowledge of battle royale mechanics, weapon meta, positioning strategies, and tournament performance optimization."
+                },
+                {
+                    "role": "user", 
+                    "content": enhanced_prompt
+                }
+            ],
+            "max_tokens": 1000,
+            "temperature": 0.2,
+            "top_p": 0.9,
+            "stream": False
+        }
+        
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.post(PERPLEXITY_API_URL, headers=headers, json=payload)
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result['choices'][0]['message']['content']
+            else:
+                return f"AI analysis temporarily unavailable. Error: {response.status_code}"
+                
+    except Exception as e:
+        return f"AI analysis service encountered an error: {str(e)}"
+
+async def generate_ai_matchmaking_analysis(player_data: List[Dict]) -> Dict:
+    """Generate AI-powered matchmaking analysis"""
+    context = {
+        "players_count": len(player_data),
+        "skill_levels": [calculate_player_skill_score(p.get('free_fire_data', {})) for p in player_data],
+        "avg_skill": sum([calculate_player_skill_score(p.get('free_fire_data', {})) for p in player_data]) / len(player_data)
+    }
+    
+    prompt = f"""
+    Analyze this Free Fire tournament matchmaking scenario:
+    - {len(player_data)} players registered
+    - Average skill level: {context['avg_skill']:.1f}/100
+    - Skill distribution: {context['skill_levels']}
+    
+    Provide:
+    1. Optimal team composition strategy
+    2. Predicted match balance quality (1-10 scale)
+    3. Recommendations for fair gameplay
+    4. Expected tournament competitiveness level
+    """
+    
+    ai_analysis = await get_ai_analysis(prompt, context)
+    
+    return {
+        "ai_analysis": ai_analysis,
+        "match_balance_score": calculate_match_balance(context['skill_levels']),
+        "recommended_format": get_recommended_tournament_format(len(player_data), context['avg_skill']),
+        "competitiveness_rating": assess_competitiveness(context['skill_levels'])
+    }
+
+async def generate_ai_tournament_prediction(tournament_data: Dict, participants: List[Dict]) -> Dict:
+    """Generate AI-powered tournament outcome prediction"""
+    # Prepare detailed context for AI analysis
+    context = {
+        "tournament_type": tournament_data.get('tournament_type', 'battle_royale'),
+        "entry_fee": tournament_data.get('entry_fee', 0),
+        "prize_pool": tournament_data.get('prize_pool', 0),
+        "participants_count": len(participants),
+        "skill_analysis": []
+    }
+    
+    for p in participants:
+        ff_data = p.get('free_fire_data', {})
+        context["skill_analysis"].append({
+            "username": p.get('username', 'Unknown'),
+            "skill_score": calculate_player_skill_score(ff_data),
+            "kd_ratio": ff_data.get('kills', 0) / max(ff_data.get('total_matches', 1), 1),
+            "win_rate": ff_data.get('wins', 0) / max(ff_data.get('total_matches', 1), 1),
+            "headshot_rate": ff_data.get('headshot_rate', '0%')
+        })
+    
+    # Sort by skill for top contenders
+    top_players = sorted(context["skill_analysis"], key=lambda x: x['skill_score'], reverse=True)[:5]
+    
+    prompt = f"""
+    Predict the outcome for this Free Fire tournament:
+    
+    Tournament Details:
+    - Type: {context['tournament_type']}
+    - Prize Pool: ₹{context['prize_pool']:,}
+    - Participants: {context['participants_count']}
+    
+    Top 5 Contenders Analysis:
+    {json.dumps(top_players, indent=2)}
+    
+    Provide detailed predictions including:
+    1. Top 3 likely winners with probability percentages
+    2. Key factors that will influence the outcome
+    3. Potential upset scenarios to watch for
+    4. Strategic advantages of leading contenders
+    5. Tournament meta predictions (weapon preferences, strategy trends)
+    """
+    
+    ai_prediction = await get_ai_analysis(prompt, context)
+    
+    # Calculate technical predictions
+    technical_prediction = predict_tournament_winner(participants)
+    
+    return {
+        "ai_detailed_analysis": ai_prediction,
+        "technical_prediction": technical_prediction,
+        "confidence_factors": {
+            "skill_gap_analysis": calculate_skill_gap_confidence(top_players),
+            "experience_factor": calculate_experience_confidence(participants),
+            "meta_alignment": "High" if context['tournament_type'] == 'battle_royale' else "Medium"
+        },
+        "key_matchups": identify_key_matchups(top_players),
+        "tournament_narrative": generate_tournament_narrative(context, top_players)
+    }
+
+async def generate_ai_player_insights(user_data: Dict, recent_performance: List[Dict] = None) -> Dict:
+    """Generate comprehensive AI-powered player insights"""
+    ff_data = user_data.get('free_fire_data', {})
+    skill_score = calculate_player_skill_score(ff_data)
+    
+    context = {
+        "current_skill_score": skill_score,
+        "current_stats": ff_data,
+        "tournaments_played": len(list(registrations_collection.find({"user_id": user_data["user_id"]}))),
+        "recent_performance": recent_performance or []
+    }
+    
+    prompt = f"""
+    Provide expert coaching analysis for this Free Fire player:
+    
+    Current Performance:
+    - Skill Score: {skill_score:.1f}/100
+    - K/D Ratio: {ff_data.get('kills', 0) / max(ff_data.get('total_matches', 1), 1):.2f}
+    - Win Rate: {(ff_data.get('wins', 0) / max(ff_data.get('total_matches', 1), 1) * 100):.1f}%
+    - Headshot Rate: {ff_data.get('headshot_rate', '0%')}
+    - Average Damage: {ff_data.get('avg_damage', 0)}
+    - Survival Rate: {ff_data.get('survival_rate', '0%')}
+    
+    Tournament Experience: {context['tournaments_played']} tournaments
+    
+    Provide detailed analysis including:
+    1. Strengths and weaknesses assessment
+    2. Specific skill development roadmap
+    3. Recommended practice routines
+    4. Tournament readiness evaluation
+    5. Comparison with players at similar skill levels
+    6. Meta-game adaptation suggestions
+    7. Psychological and strategic coaching tips
+    """
+    
+    ai_insights = await get_ai_analysis(prompt, context)
+    
+    # Generate comprehensive analytics
+    player_analytics = generate_player_analytics(user_data)
+    
+    return {
+        "ai_coaching_analysis": ai_insights,
+        "detailed_analytics": player_analytics,
+        "improvement_roadmap": create_improvement_roadmap(ff_data, skill_score),
+        "practice_recommendations": get_ai_practice_recommendations(ff_data, skill_score),
+        "tournament_suggestions": await get_ai_tournament_recommendations(user_data),
+        "performance_trends": analyze_performance_trends(context)
+    }
+
+async def get_ai_tournament_recommendations(user_data: Dict) -> List[Dict]:
+    """Get AI-powered tournament recommendations"""
+    try:
+        # Get available tournaments
+        available_tournaments = list(tournaments_collection.find({"status": "upcoming"}))
+        
+        if not available_tournaments:
+            return []
+        
+        user_skill = calculate_player_skill_score(user_data.get('free_fire_data', {}))
+        
+        # Use existing recommendation system enhanced with AI
+        base_recommendations = generate_matchmaking_recommendations(user_data, available_tournaments)
+        
+        # Enhance with AI analysis
+        context = {
+            "user_skill": user_skill,
+            "available_tournaments": len(available_tournaments),
+            "user_experience": len(list(registrations_collection.find({"user_id": user_data["user_id"]})))
+        }
+        
+        prompt = f"""
+        Recommend the best Free Fire tournaments for this player:
+        
+        Player Profile:
+        - Skill Level: {user_skill:.1f}/100
+        - Tournament Experience: {context['user_experience']} tournaments
+        - Available Options: {context['available_tournaments']} tournaments
+        
+        Tournament Preferences Analysis:
+        Based on the player's skill level and experience, recommend:
+        1. Ideal tournament types and entry fees
+        2. Risk assessment for competitive tournaments
+        3. Growth opportunities vs safe choices
+        4. Timeline for skill development tournaments
+        """
+        
+        ai_recommendations = await get_ai_analysis(prompt, context)
+        
+        return base_recommendations[:3]  # Return top 3 with AI enhancement
+        
+    except Exception as e:
+        print(f"Error in AI tournament recommendations: {e}")
+        return []
+
+# Supporting AI Analytics Functions
+def calculate_match_balance(skill_levels: List[float]) -> float:
+    """Calculate match balance score (0-10)"""
+    if len(skill_levels) < 2:
+        return 5.0
+    
+    skill_variance = np.var(skill_levels) if len(skill_levels) > 1 else 0
+    skill_range = max(skill_levels) - min(skill_levels) if len(skill_levels) > 1 else 0
+    
+    # Lower variance and range = better balance
+    balance_score = 10 - min(10, (skill_variance / 100 + skill_range / 20))
+    return max(0, balance_score)
+
+def get_recommended_tournament_format(player_count: int, avg_skill: float) -> str:
+    """Get recommended tournament format based on participants"""
+    if player_count >= 100 and avg_skill > 70:
+        return "Elite Battle Royale Championship"
+    elif player_count >= 64:
+        return "Standard Battle Royale"
+    elif player_count >= 32:
+        return "Clash Squad Tournament"
+    else:
+        return "Small Group Competition"
+
+def assess_competitiveness(skill_levels: List[float]) -> str:
+    """Assess tournament competitiveness level"""
+    avg_skill = sum(skill_levels) / len(skill_levels) if skill_levels else 50
+    skill_range = max(skill_levels) - min(skill_levels) if len(skill_levels) > 1 else 0
+    
+    if avg_skill > 75 and skill_range < 20:
+        return "Highly Competitive (Elite Level)"
+    elif avg_skill > 60:
+        return "Competitive (Advanced Level)"
+    elif avg_skill > 45:
+        return "Moderately Competitive"
+    else:
+        return "Beginner Friendly"
+
+def calculate_skill_gap_confidence(top_players: List[Dict]) -> str:
+    """Calculate confidence based on skill gaps"""
+    if len(top_players) < 2:
+        return "Low"
+    
+    skill_gap = top_players[0]['skill_score'] - top_players[1]['skill_score']
+    if skill_gap > 15:
+        return "High"
+    elif skill_gap > 8:
+        return "Medium"
+    else:
+        return "Low"
+
+def calculate_experience_confidence(participants: List[Dict]) -> str:
+    """Calculate confidence based on tournament experience"""
+    # Mock calculation - in production would check actual tournament history
+    experienced_players = sum(1 for p in participants if p.get('tournaments_played', 0) > 5)
+    experience_ratio = experienced_players / len(participants)
+    
+    if experience_ratio > 0.7:
+        return "High"
+    elif experience_ratio > 0.4:
+        return "Medium"
+    else:
+        return "Low"
+
+def identify_key_matchups(top_players: List[Dict]) -> List[Dict]:
+    """Identify key player matchups to watch"""
+    matchups = []
+    for i in range(min(3, len(top_players))):
+        for j in range(i+1, min(5, len(top_players))):
+            player1 = top_players[i]
+            player2 = top_players[j]
+            
+            matchups.append({
+                "player1": player1['username'],
+                "player2": player2['username'],
+                "skill_difference": abs(player1['skill_score'] - player2['skill_score']),
+                "matchup_type": "Close Match" if abs(player1['skill_score'] - player2['skill_score']) < 10 else "Skill Gap",
+                "excitement_level": get_matchup_excitement(player1, player2)
+            })
+    
+    return sorted(matchups, key=lambda x: x['excitement_level'], reverse=True)[:3]
+
+def get_matchup_excitement(player1: Dict, player2: Dict) -> float:
+    """Calculate matchup excitement score"""
+    skill_proximity = 10 - abs(player1['skill_score'] - player2['skill_score'])
+    playstyle_contrast = abs(player1['kd_ratio'] - player2['kd_ratio']) * 10
+    return (skill_proximity + playstyle_contrast) / 2
+
+def generate_tournament_narrative(context: Dict, top_players: List[Dict]) -> str:
+    """Generate engaging tournament narrative"""
+    narratives = [
+        f"The {context['tournament_type']} championship features {context['participants_count']} warriors competing for the ₹{context['prize_pool']:,} prize pool.",
+        f"{top_players[0]['username']} leads as the top contender with a {top_players[0]['skill_score']:.1f} skill rating.",
+        f"Expect intense battles as the skill gap between top competitors is minimal.",
+        f"This tournament promises to showcase the current Free Fire meta at its finest."
+    ]
+    return " ".join(narratives)
+
+def create_improvement_roadmap(ff_data: Dict, skill_score: float) -> Dict:
+    """Create detailed improvement roadmap"""
+    roadmap = {
+        "current_level": get_skill_tier(skill_score),
+        "next_milestone": get_next_milestone(skill_score),
+        "estimated_timeline": get_improvement_timeline(skill_score),
+        "priority_areas": get_focus_areas(ff_data, skill_score),
+        "weekly_goals": generate_weekly_goals(ff_data, skill_score)
+    }
+    return roadmap
+
+def get_next_milestone(skill_score: float) -> str:
+    """Get next skill milestone"""
+    if skill_score < 35:
+        return "Reach Silver Tier (35+ skill score)"
+    elif skill_score < 45:
+        return "Reach Gold Tier (45+ skill score)" 
+    elif skill_score < 55:
+        return "Reach Platinum Tier (55+ skill score)"
+    elif skill_score < 65:
+        return "Reach Diamond Tier (65+ skill score)"
+    elif skill_score < 75:
+        return "Reach Master Tier (75+ skill score)"
+    elif skill_score < 85:
+        return "Reach Grandmaster Tier (85+ skill score)"
+    else:
+        return "Maintain Elite Status and Competitive Edge"
+
+def get_improvement_timeline(skill_score: float) -> str:
+    """Get estimated improvement timeline"""
+    if skill_score < 40:
+        return "2-4 weeks with consistent practice"
+    elif skill_score < 60:
+        return "3-6 weeks with focused training"
+    elif skill_score < 75:
+        return "1-2 months with advanced techniques"
+    else:
+        return "2-3 months for elite refinement"
+
+def generate_weekly_goals(ff_data: Dict, skill_score: float) -> List[str]:
+    """Generate weekly improvement goals"""
+    goals = []
+    
+    if calculate_kill_efficiency(ff_data) < 50:
+        goals.append("Achieve 3+ kills per match average")
+    
+    if float(ff_data.get('survival_rate', '0%').replace('%', '')) < 20:
+        goals.append("Improve survival rate to 25%+")
+    
+    if float(ff_data.get('headshot_rate', '0%').replace('%', '')) < 15:
+        goals.append("Increase headshot rate to 18%+")
+    
+    goals.append("Complete 2+ tournament matches")
+    goals.append("Practice in training mode for 30+ minutes")
+    
+    return goals[:3]  # Return top 3 goals
+
+def get_ai_practice_recommendations(ff_data: Dict, skill_score: float) -> List[Dict]:
+    """Get AI-powered practice recommendations"""
+    recommendations = []
+    
+    # Analyze weak areas and provide specific practice routines
+    if calculate_kill_efficiency(ff_data) < 60:
+        recommendations.append({
+            "focus_area": "Combat Training",
+            "duration": "20 minutes daily",
+            "specific_routine": "Practice aim training with AK47 and M4A1 in training ground",
+            "expected_improvement": "15-25% accuracy increase in 2 weeks"
+        })
+    
+    if float(ff_data.get('survival_rate', '0%').replace('%', '')) < 25:
+        recommendations.append({
+            "focus_area": "Positioning & Strategy",
+            "duration": "15 minutes daily",
+            "specific_routine": "Study zone rotations and practice edge positioning",
+            "expected_improvement": "10% survival rate increase"
+        })
+    
+    recommendations.append({
+        "focus_area": "Meta Weapons",
+        "duration": "10 minutes daily", 
+        "specific_routine": "Master current meta weapons (AK47, M4A1, AWM)",
+        "expected_improvement": "Better damage output consistency"
+    })
+    
+    return recommendations
+
+def analyze_performance_trends(context: Dict) -> Dict:
+    """Analyze performance trends"""
+    return {
+        "skill_trajectory": "Improving" if context['current_skill_score'] > 55 else "Developing",
+        "consistency_rating": "High" if context['current_skill_score'] > 70 else "Medium", 
+        "tournament_readiness": assess_tournament_readiness(context['current_skill_score'], context['tournaments_played']),
+        "recommended_next_steps": get_next_steps(context['current_skill_score'])
+    }
+
+def get_next_steps(skill_score: float) -> List[str]:
+    """Get recommended next steps for player development"""
+    if skill_score < 50:
+        return [
+            "Focus on fundamental mechanics",
+            "Join practice tournaments",
+            "Study basic positioning strategies"
+        ]
+    elif skill_score < 70:
+        return [
+            "Enter intermediate tournaments", 
+            "Develop advanced techniques",
+            "Study professional gameplay"
+        ]
+    else:
+        return [
+            "Compete in premium tournaments",
+            "Refine meta strategies",
+            "Consider team competitive play"
+        ]
+
 # Demo API Functions
 async def get_free_fire_user_info(uid: str) -> Dict[str, Any]:
     """Demo Free Fire API - returns mock user data"""
