@@ -8,8 +8,8 @@ import safeToast from '../utils/safeToast';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: 'demo@tournament.com',
+    password: 'demo123'
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -58,131 +58,32 @@ const Login = () => {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative overflow-hidden">
-      {/* Advanced Particle Background */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="kinetic-waves"></div>
-      </div>
-      
-      {/* Floating Elements */}
-      <div className="absolute top-20 left-20 w-2 h-2 bg-neon-blue rounded-full animate-particle"></div>
-      <div className="absolute top-40 right-32 w-1 h-1 bg-neon-purple rounded-full animate-particle" style={{animationDelay: '1s'}}></div>
-      <div className="absolute bottom-32 left-1/4 w-1.5 h-1.5 bg-neon-red rounded-full animate-particle" style={{animationDelay: '2s'}}></div>
-      
-      {/* Horizontal Layout Container */}
-      <div className="min-h-screen flex items-center justify-center relative z-10 px-4 py-8 lg:px-12">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 30 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
-          className="w-full max-w-md space-y-6 lg:max-w-6xl lg:grid lg:grid-cols-2 lg:gap-16 lg:space-y-0 lg:items-center"
-        >
-          {/* Left Section - Brand/Hero */}
+        {/* Advanced Particle Background */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="kinetic-waves"></div>
+        </div>
+        
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-20 w-2 h-2 bg-neon-blue rounded-full animate-particle"></div>
+        <div className="absolute top-40 right-32 w-1 h-1 bg-neon-purple rounded-full animate-particle" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-32 left-1/4 w-1.5 h-1.5 bg-neon-red rounded-full animate-particle" style={{animationDelay: '2s'}}></div>
+        
+        {/* Left-aligned Login Form Container */}
+        <div className="min-h-screen flex items-center justify-start relative z-10 px-4 py-8 lg:px-12">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="text-center lg:text-left space-y-8"
+            initial={{ opacity: 0, scale: 0.9, x: -50 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+            className="w-full max-w-md lg:max-w-lg"
           >
-            {/* Enhanced Brand Logo */}
-            <div className="flex items-center justify-center lg:justify-start space-x-4 mb-8">
-              <motion.div
-                initial={{ scale: 0, rotateY: 180 }}
-                animate={{ scale: 1, rotateY: 0 }}
-                transition={{ delay: 0.3, type: "spring", stiffness: 150 }}
-                className="h-20 w-20 lg:h-24 lg:w-24 bg-gradient-to-br from-neon-blue via-electric-purple to-neon-red rounded-3xl flex items-center justify-center shadow-glow-lg relative"
-              >
-                <Trophy className="h-10 w-10 lg:h-12 lg:w-12 text-white drop-shadow-lg" />
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 border-2 border-dashed border-white/20 rounded-3xl"
-                />
-              </motion.div>
-              
-              <div>
-                <motion.h1 
-                  className="text-4xl lg:text-6xl font-bold text-white font-gaming leading-tight"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <span className="text-gradient bg-gradient-to-r from-neon-blue to-electric-purple">
-                    FREE FIRE
-                  </span>
-                </motion.h1>
-                
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  className="text-xl lg:text-3xl font-bold text-white"
-                >
-                  ULTIMATE ARENA
-                </motion.h2>
-              </div>
-            </div>
-            
-            {/* Hero Text - Desktop Only */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              className="hidden lg:block space-y-6"
-            >
-              <p className="text-xl text-gray-300 leading-relaxed">
-                Enter the battlefield and claim victory in the ultimate Free Fire tournament experience
-              </p>
-              
-              {/* Stats Cards */}
-              <div className="grid grid-cols-3 gap-4">
-                {[
-                  { icon: Trophy, label: 'Tournaments', value: '89+', color: 'text-yellow-400' },
-                  { icon: Gamepad2, label: 'Players', value: '42K+', color: 'text-neon-blue' },
-                  { icon: Crown, label: 'Prize Pool', value: '₹4.8M', color: 'text-neon-green' }
-                ].map((stat, index) => (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8 + index * 0.1 }}
-                    className="text-center glass rounded-xl p-4"
-                  >
-                    <stat.icon className={`h-8 w-8 ${stat.color} mx-auto mb-2`} />
-                    <p className="text-2xl font-bold text-white">{stat.value}</p>
-                    <p className="text-sm text-gray-400">{stat.label}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Right Section - Login Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="w-full max-w-md mx-auto lg:max-w-lg"
-          >
-            {/* Mobile Header */}
-            <div className="text-center mb-8 lg:hidden">
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.7 }}
-                className="text-gray-300 text-base"
-              >
-                Enter the battlefield and claim victory
-              </motion.p>
-            </div>
-
-            {/* Enhanced Form */}
+            {/* Enhanced Login Form - Left Aligned */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
               className="glass rounded-3xl p-8 space-y-8 kinetic-waves relative"
             >
-              <div className="text-center lg:text-left">
+              <div className="text-left">
                 <h3 className="text-2xl lg:text-3xl font-bold text-white mb-2 font-gaming">
                   Welcome Back
                 </h3>
@@ -324,33 +225,8 @@ const Login = () => {
                 </p>
               </div>
             </motion.div>
-
-            {/* Enhanced Demo Credentials */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="glass rounded-2xl p-6 text-center text-sm border border-neon-green/30 relative overflow-hidden mt-6"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-neon-green/5 to-transparent"></div>
-              <div className="relative z-10">
-                <div className="flex items-center justify-center space-x-2 mb-3">
-                  <Shield className="h-5 w-5 text-neon-green" />
-                  <p className="font-bold text-white">Demo Access</p>
-                  <Star className="h-5 w-5 text-neon-green" />
-                </div>
-                <div className="space-y-1 text-gray-300">
-                  <p><span className="font-medium text-neon-blue">Email:</span> demo@tournament.com</p>
-                  <p><span className="font-medium text-neon-purple">Password:</span> demo123</p>
-                </div>
-                <p className="text-xs text-gray-500 mt-3">
-                  Quick access to explore the arena
-                </p>
-              </div>
-            </motion.div>
           </motion.div>
-        </motion.div>
-      </div>
+        </div>
       </div>
     </ErrorBoundary>
   );
