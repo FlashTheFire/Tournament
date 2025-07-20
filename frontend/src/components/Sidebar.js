@@ -196,36 +196,61 @@ const Sidebar = ({ isOpen, onClose }) => {
           transition={{ delay: index * 0.1 }}
         >
           {hasSubmenu ? (
-            <button
+            <motion.button
               onClick={() => toggleMenu(item.key)}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all duration-300 group ${
+              whileHover={{ scale: 1.02, x: 5 }}
+              whileTap={{ scale: 0.98 }}
+              className={`w-full flex items-center space-x-4 px-6 py-4 rounded-2xl font-semibold transition-all duration-300 group relative overflow-hidden ${
                 isActive
-                  ? 'bg-primary-500/20 text-primary-300 border border-primary-400/30'
-                  : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                  ? 'glass border border-neon-blue/50 text-white shadow-glow'
+                  : 'glass border border-white/10 text-gray-300 hover:border-neon-blue/30 hover:text-white'
               }`}
             >
+              {/* Background gradient on hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-neon-blue/0 via-neon-blue/5 to-electric-purple/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
               <MenuIcon icon={item.icon} isActive={isActive} />
-              <span className="flex-1 text-left">{item.title}</span>
+              <div className="flex-1 text-left relative z-10">
+                <p className="font-bold">{item.title}</p>
+                {item.description && (
+                  <p className="text-xs text-gray-400 mt-0.5">{item.description}</p>
+                )}
+              </div>
               <MenuBadge badge={item.badge} isActive={isActive} />
-              <ChevronRight 
-                className={`h-4 w-4 transition-transform duration-200 ${
-                  isExpanded ? 'rotate-90' : ''
-                }`}
-              />
-            </button>
+              <motion.div
+                animate={{ rotate: isExpanded ? 90 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="relative z-10"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </motion.div>
+            </motion.button>
           ) : (
             <Link
               to={item.path}
               onClick={onClose}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all duration-300 group ${
-                isActive
-                  ? 'bg-primary-500/20 text-primary-300 border border-primary-400/30'
-                  : 'text-gray-300 hover:bg-white/10 hover:text-white'
-              }`}
             >
-              <MenuIcon icon={item.icon} isActive={isActive} />
-              <span className="flex-1">{item.title}</span>
-              <MenuBadge badge={item.badge} isActive={isActive} />
+              <motion.div
+                whileHover={{ scale: 1.02, x: 5 }}
+                whileTap={{ scale: 0.98 }}
+                className={`flex items-center space-x-4 px-6 py-4 rounded-2xl font-semibold transition-all duration-300 group relative overflow-hidden ${
+                  isActive
+                    ? 'glass border border-neon-blue/50 text-white shadow-glow'
+                    : 'glass border border-white/10 text-gray-300 hover:border-neon-blue/30 hover:text-white'
+                }`}
+              >
+                {/* Background gradient on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-neon-blue/0 via-neon-blue/5 to-electric-purple/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <MenuIcon icon={item.icon} isActive={isActive} />
+                <div className="flex-1 relative z-10">
+                  <p className="font-bold">{item.title}</p>
+                  {item.description && (
+                    <p className="text-xs text-gray-400 mt-0.5">{item.description}</p>
+                  )}
+                </div>
+                <MenuBadge badge={item.badge} isActive={isActive} />
+              </motion.div>
             </Link>
           )}
         </motion.div>
