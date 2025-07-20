@@ -99,7 +99,7 @@ const Navbar = ({ onMenuClick }) => {
       <div className="kinetic-waves absolute inset-0 opacity-30"></div>
       
       <div className="flex items-center justify-between relative z-10">
-        {/* Left Section - Mobile-First */}
+        {/* Left Section - Brand Logo that opens hamburger */}
         <div className="flex items-center
           /* Mobile: very compact spacing */
           space-x-1.5
@@ -108,13 +108,15 @@ const Navbar = ({ onMenuClick }) => {
           /* Desktop: spacious spacing */
           sm:space-x-4 lg:space-x-6
         ">
-          {/* Mobile-First Hamburger Menu */}
-          <PremiumHamburgerMenu onClick={onMenuClick} />
-
-          {/* Mobile-First Brand Logo - Hidden on very small screens, visible on larger */}
-          <Link to="/" className="hidden xs:flex items-center space-x-3 sm:space-x-4 group">
+          {/* Brand Logo that opens hamburger menu */}
+          <motion.button 
+            onClick={onMenuClick}
+            className="flex items-center space-x-3 sm:space-x-4 group focus:outline-none"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <motion.div 
-              className="relative bg-gradient-to-br from-neon-blue via-electric-purple to-neon-red rounded-2xl flex items-center justify-center shadow-glow
+              className="relative bg-gradient-to-br from-neon-blue via-electric-purple to-neon-red rounded-2xl flex items-center justify-center shadow-glow cursor-pointer hover:shadow-glow-lg transition-all duration-300
                 /* Mobile: smaller logo */
                 w-8 h-8
                 /* Tablet: medium logo */
@@ -148,7 +150,7 @@ const Navbar = ({ onMenuClick }) => {
                 text-xs lg:text-xs
               ">ULTIMATE ARENA</p>
             </div>
-          </Link>
+          </motion.button>
 
           {/* Mobile-First Search Bar - Hidden on mobile, visible on tablet+ */}
           <div className="hidden md:block relative">
