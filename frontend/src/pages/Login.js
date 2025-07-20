@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, Gamepad2, Trophy, Zap, Shield, Star, Crown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import ErrorBoundary from '../components/ErrorBoundary';
 import toast from 'react-hot-toast';
 
 const Login = () => {
