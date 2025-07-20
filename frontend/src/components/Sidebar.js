@@ -141,25 +141,43 @@ const Sidebar = ({ isOpen, onClose }) => {
   };
 
   const MenuIcon = ({ icon: Icon, isActive }) => (
-    <Icon className={`h-5 w-5 ${isActive ? 'text-primary-400' : 'text-gray-400'} group-hover:text-primary-300 transition-colors`} />
+    <motion.div
+      whileHover={{ scale: 1.1, rotate: 5 }}
+      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+        isActive 
+          ? 'bg-gradient-to-r from-neon-blue to-electric-purple shadow-glow' 
+          : 'bg-white/10 group-hover:bg-neon-blue/20'
+      }`}
+    >
+      <Icon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-gray-400'} group-hover:text-white transition-colors`} />
+    </motion.div>
   );
 
   const MenuBadge = ({ badge, isActive }) => {
     if (!badge) return null;
     
     const isAdmin = badge === 'ADMIN';
-    const baseClasses = "ml-auto text-xs px-2 py-1 rounded-full font-medium";
+    const isCurrency = badge.startsWith('₹');
+    const baseClasses = "ml-auto text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wide";
     
     if (isAdmin) {
-      return <span className={`${baseClasses} bg-red-500/20 text-red-400 border border-red-500/30`}>{badge}</span>;
+      return <span className={`${baseClasses} bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-glow animate-pulse-glow`}>{badge}</span>;
+    }
+    
+    if (isCurrency) {
+      return (
+        <span className={`${baseClasses} bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-glow`}>
+          {badge}
+        </span>
+      );
     }
     
     return (
       <span className={`${baseClasses} ${
         isActive 
-          ? 'bg-primary-500/20 text-primary-300 border border-primary-400/30' 
-          : 'bg-white/10 text-gray-300 border border-white/20'
-      }`}>
+          ? 'bg-gradient-to-r from-neon-blue to-electric-purple text-white shadow-glow' 
+          : 'bg-gradient-to-r from-gray-600 to-gray-700 text-gray-300 group-hover:from-neon-blue group-hover:to-electric-purple group-hover:text-white'
+      } transition-all duration-300`}>
         {badge}
       </span>
     );
