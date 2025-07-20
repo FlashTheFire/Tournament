@@ -82,7 +82,7 @@ const Home = () => {
       });
     } catch (error) {
       console.error('Failed to load data:', error);
-      toast.error('Failed to load battle data');
+      safeToast.error('Failed to load battle data');
     } finally {
       setLoading(false);
     }
