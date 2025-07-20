@@ -319,7 +319,7 @@ const AdminPanel = () => {
             icon={Settings}
             title="Platform Settings"
             description="Configure system settings"
-            onClick={() => toast.info('Coming soon!')}
+            onClick={() => safeToast.info('Coming soon!')}
             color="bg-gradient-to-r from-gray-500 to-slate-600"
             disabled={true}
           />
