@@ -30,7 +30,6 @@ load_dotenv()
 app = FastAPI(title="Tournament Platform API", version="1.0.0")
 
 # CORS middleware
-from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Configure this properly for production
