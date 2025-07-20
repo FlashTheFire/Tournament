@@ -648,13 +648,13 @@ const Home = () => {
             ))}
           </motion.div>
           
-          {/* Mobile-first CTA buttons - Stack on mobile, side-by-side on desktop */}
+          {/* Compact CTA buttons */}
           <motion.div 
-            className="flex justify-center items-center mb-8 sm:mb-16
+            className="flex justify-center items-center mb-6 sm:mb-12
               /* Mobile: stack buttons vertically */
-              flex-col gap-4
-              /* Desktop: side-by-side buttons */
-              lg:flex-row lg:gap-8
+              flex-col gap-3
+              /* Desktop: side-by-side buttons with reduced gap */
+              lg:flex-row lg:gap-6
             "
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -664,52 +664,52 @@ const Home = () => {
               to="/tournaments"
               className="btn-premium ripple mobile-friendly group relative overflow-hidden w-full sm:w-auto
                 /* Mobile: compact button */
-                text-base px-8 py-4
-                /* Desktop: large button */
-                lg:text-xl xl:text-2xl lg:px-12 xl:px-16 lg:py-6 xl:py-8
+                text-sm px-6 py-3
+                /* Desktop: medium button */
+                lg:text-lg lg:px-10 lg:py-4
               "
             >
               <motion.div 
-                className="flex items-center justify-center space-x-3 sm:space-x-4"
+                className="flex items-center justify-center space-x-2 sm:space-x-3"
                 whileHover={{ scale: 1.05 }}
               >
                 <Crosshair className="group-hover:animate-spin
                   /* Mobile: smaller icon */
-                  h-6 w-6
-                  /* Desktop: larger icon */
-                  lg:h-8 lg:w-8 xl:h-10 xl:w-10
+                  h-5 w-5
+                  /* Desktop: medium icon */
+                  lg:h-6 lg:w-6
                 " />
                 <span className="font-black tracking-wide">JOIN ELITE BATTLE</span>
                 <Flame className="group-hover:animate-bounce
                   /* Mobile: smaller icon */
-                  h-6 w-6
-                  /* Desktop: larger icon */
-                  lg:h-8 lg:w-8 xl:h-10 xl:w-10
+                  h-5 w-5
+                  /* Desktop: medium icon */
+                  lg:h-6 lg:w-6
                 " />
               </motion.div>
             </Link>
             
             <Link
               to="/leaderboards"
-              className="glass border-2 border-neon-blue/50 hover:border-neon-blue hover:shadow-glow-lg transition-all duration-300 inline-flex items-center justify-center space-x-3 sm:space-x-4 mobile-friendly group backdrop-blur-xl w-full sm:w-auto
+              className="glass border-2 border-neon-blue/50 hover:border-neon-blue hover:shadow-glow-lg transition-all duration-300 inline-flex items-center justify-center space-x-2 sm:space-x-3 mobile-friendly group backdrop-blur-xl w-full sm:w-auto
                 /* Mobile: compact secondary button */
-                px-8 py-4 rounded-2xl font-bold text-base
-                /* Desktop: large secondary button */
-                lg:px-12 xl:px-16 lg:py-6 xl:py-8 lg:rounded-3xl lg:font-bold lg:text-xl xl:text-2xl
+                px-6 py-3 rounded-xl font-bold text-sm
+                /* Desktop: medium secondary button */
+                lg:px-10 lg:py-4 lg:rounded-2xl lg:text-lg
               "
             >
               <Trophy className="text-yellow-400 group-hover:animate-pulse
                 /* Mobile: smaller icon */
-                h-6 w-6
-                /* Desktop: larger icon */
-                lg:h-8 lg:w-8 xl:h-10 xl:w-10
+                h-5 w-5
+                /* Desktop: medium icon */
+                lg:h-6 lg:w-6
               " />
               <span>VIEW CHAMPIONS</span>
               <ArrowRight className="group-hover:translate-x-2 transition-transform
                 /* Mobile: smaller icon */
-                h-6 w-6
-                /* Desktop: larger icon */
-                lg:h-8 lg:w-8 xl:h-10 xl:w-10
+                h-5 w-5
+                /* Desktop: medium icon */
+                lg:h-6 lg:w-6
               " />
             </Link>
           </motion.div>
