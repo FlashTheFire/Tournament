@@ -52,13 +52,16 @@ const Sidebar = ({ isOpen, onClose }) => {
       title: 'Tournaments',
       icon: Trophy,
       path: '/tournaments',
-      badge: '67',
-      description: 'Live battles',
-      submenu: [
-        { title: 'Battle Royale', path: '/tournaments', icon: Crosshair, badge: 'BR' },
-        { title: 'Clash Squad', path: '/tournaments', icon: Swords, badge: 'CS' },
-        { title: 'My Battles', path: '/dashboard', icon: User, badge: null },
-      ]
+      badge: null,
+      description: 'Live battles'
+    },
+    {
+      key: 'my-battles',
+      title: 'My Battles',
+      icon: User,
+      path: '/dashboard',
+      badge: null,
+      description: 'Battle history'
     },
     {
       key: 'advanced-gaming',
@@ -91,14 +94,6 @@ const Sidebar = ({ isOpen, onClose }) => {
       path: '/support',
       badge: null,
       description: 'Get help'
-    },
-    {
-      key: 'settings',
-      title: 'Settings',
-      icon: Settings,
-      path: '/settings',
-      badge: null,
-      description: 'Customize'
     }
   ];
 
