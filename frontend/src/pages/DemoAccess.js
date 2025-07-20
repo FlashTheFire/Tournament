@@ -25,12 +25,12 @@ const DemoAccess = () => {
 
   const handleDemoLogin = async () => {
     try {
-      toast.success('🚀 Launching Demo Arena...');
+      safeToast.success('🚀 Launching Demo Arena...');
       const result = await login(demoCredentials.email, demoCredentials.password);
       if (result.success) {
-        toast.success('🎉 Welcome to the Elite Arena!');
+        safeToast.success('🎉 Welcome to the Elite Arena!');
       } else {
-        toast.error(result.error || 'Demo login failed');
+        safeToast.error(result.error || 'Demo login failed');
       }
     } catch (error) {
       console.error('Demo login error:', error);
