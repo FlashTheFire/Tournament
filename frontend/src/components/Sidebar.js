@@ -132,6 +132,7 @@ const Sidebar = ({ isOpen, onClose }) => {
   const sidebarVariants = {
     open: {
       x: 0,
+      opacity: 1,
       transition: {
         type: "spring",
         stiffness: 300,
@@ -140,6 +141,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     },
     closed: {
       x: "-100%",
+      opacity: 0,
       transition: {
         type: "spring",
         stiffness: 300,
