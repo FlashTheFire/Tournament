@@ -38,11 +38,13 @@ const Tournaments = () => {
   });
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Free Fire specific game modes and features
   const gameTypes = [
-    { value: '', label: 'All Games' },
-    { value: 'free_fire', label: 'Free Fire' },
-    { value: 'pubg', label: 'PUBG Mobile' },
-    { value: 'bgmi', label: 'BGMI' }
+    { value: '', label: 'All Battles', icon: Target },
+    { value: 'battle_royale', label: 'Battle Royale', icon: Crosshair },
+    { value: 'clash_squad', label: 'Clash Squad', icon: Swords },
+    { value: 'lone_wolf', label: 'Lone Wolf', icon: Skull },
+    { value: 'rush_hour', label: 'Rush Hour', icon: Timer }
   ];
 
   const countries = [
