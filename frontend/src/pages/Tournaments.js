@@ -240,7 +240,7 @@ const Tournaments = () => {
         }}
         className="tournament-card glass rounded-3xl overflow-hidden border border-white/10 hover:border-neon-blue/50 group"
       >
-        <div className="relative h-64 overflow-hidden">
+        <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
           <motion.img
             src={battleImage}
             alt={tournament.name}
