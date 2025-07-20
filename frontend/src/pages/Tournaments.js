@@ -276,11 +276,11 @@ const Tournaments = () => {
 
           {/* Prize Pool */}
           <motion.div 
-            className="absolute top-6 right-6"
+            className="absolute top-3 sm:top-4 md:top-6 right-3 sm:right-4 md:right-6"
             whileHover={{ scale: 1.1, rotate: 5 }}
           >
-            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-4 py-2 rounded-xl text-sm font-bold shadow-glow flex items-center space-x-1">
-              <Crown className="h-4 w-4" />
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-xl text-xs sm:text-sm font-bold shadow-glow flex items-center space-x-1">
+              <Crown className="h-3 w-3 sm:h-4 sm:w-4" />
               <span>₹{tournament.prize_pool?.toLocaleString()}</span>
             </div>
           </motion.div>
