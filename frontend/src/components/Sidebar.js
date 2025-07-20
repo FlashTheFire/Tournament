@@ -178,7 +178,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     
     const isAdmin = badge === 'ADMIN';
     const isCurrency = badge.startsWith('₹');
-    const baseClasses = "ml-auto font-bold uppercase tracking-wide rounded-full text-2xs px-2 py-0.5 lg:text-xs lg:px-3 lg:py-1";
+    const baseClasses = "ml-auto font-bold uppercase tracking-wide rounded-full text-2xs px-1.5 py-0.5 xs:px-2 xs:py-0.5 lg:text-xs lg:px-3 lg:py-1";
     
     if (isAdmin) {
       return <span className={`${baseClasses} bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-glow animate-pulse-glow`}>{badge}</span>;
