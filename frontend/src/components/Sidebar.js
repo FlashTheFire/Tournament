@@ -405,8 +405,10 @@ const Sidebar = ({ isOpen, onClose }) => {
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
         className={`fixed left-0 top-0 h-full glass-mobile border-r border-white/10 z-50 kinetic-waves
-          /* Mobile: compact sidebar width */
-          w-72
+          /* Mobile: much more compact sidebar width - 80% of screen */
+          w-[85vw] max-w-72
+          /* Small mobile: even more compact */
+          xs:w-64
           /* Tablet: medium sidebar width */  
           sm:w-80
           /* Desktop: spacious sidebar - show/hide based on isOpen */
