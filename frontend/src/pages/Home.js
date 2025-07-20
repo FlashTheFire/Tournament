@@ -297,8 +297,8 @@ const Home = () => {
           className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
         />
         
-        {/* Remove black overlay backgrounds */}
-        <div className="absolute inset-0 bg-gradient-to-t from-cosmic-dark/60 via-transparent to-transparent"></div>
+        {/* Lighter overlay backgrounds - no black boxes */}
+        <div className="absolute inset-0 bg-gradient-to-t from-cosmic-dark/20 via-transparent to-transparent"></div>
         
         {/* Status Badge */}
         <div className="absolute top-4 lg:top-6 left-4 lg:left-6">
