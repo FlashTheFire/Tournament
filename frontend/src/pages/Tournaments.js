@@ -444,23 +444,22 @@ const Tournaments = () => {
 
       {/* Compact Modern Battle Filters */}
       <motion.div 
-        className="glass rounded-2xl p-4 space-y-4 kinetic-waves border border-white/10"
+        className="glass rounded-2xl p-3 sm:p-4 space-y-3 sm:space-y-4 kinetic-waves border border-white/10"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <div className="flex items-center space-x-3 mb-3">
-          <div className="w-8 h-8 bg-gradient-to-r from-neon-blue to-electric-purple rounded-xl flex items-center justify-center">
-            <Filter className="h-4 w-4 text-white" />
+        <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-3">
+          <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-neon-blue to-electric-purple rounded-xl flex items-center justify-center flex-shrink-0">
+            <Filter className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
           </div>
-          <div>
-            <h3 className="text-white font-bold text-lg">Battle Filters</h3>
+          <div className="min-w-0">
+            <h3 className="text-white font-bold text-base sm:text-lg truncate">Battle Filters</h3>
           </div>
         </div>
 
-        {/* Compact Filter Dropdowns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
+        {/* Mobile-optimized Filter Dropdowns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">{[
             { key: 'game_type', options: gameTypes, icon: gameTypes[0].icon },
             { key: 'country', options: countries, icon: Shield },
             { key: 'mode', options: modes, icon: Users },
@@ -475,11 +474,11 @@ const Tournaments = () => {
                 transition={{ delay: 0.6 + index * 0.1 }}
                 className="relative"
               >
-                <FilterIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neon-blue z-10" />
+                <FilterIcon className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-neon-blue z-10 pointer-events-none" />
                 <select
                   value={filters[filter.key]}
                   onChange={(e) => handleFilterChange(filter.key, e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 glass border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-neon-purple focus:border-neon-purple hover:border-neon-purple/50 transition-all duration-300 appearance-none bg-transparent"
+                  className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 glass border border-white/20 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-neon-purple focus:border-neon-purple hover:border-neon-purple/50 transition-all duration-300 appearance-none bg-transparent truncate"
                 >
                   {filter.options.map(option => (
                     <option key={option.value} value={option.value} className="bg-cosmic-dark text-white">
