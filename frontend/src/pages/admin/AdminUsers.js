@@ -90,13 +90,13 @@ const AdminUsers = () => {
   const handleUpdateUser = async (userId, updateData) => {
     try {
       await apiService.updateUser(userId, updateData);
-      toast.success('User updated successfully');
+      safeToast.success('User updated successfully');
       await loadUsers();
       setShowEditModal(false);
       setEditingUser(null);
     } catch (error) {
       console.error('Failed to update user:', error);
-      toast.error('Failed to update user');
+      safeToast.error('Failed to update user');
     }
   };
 
