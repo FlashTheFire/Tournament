@@ -81,7 +81,7 @@ const AdminTournaments = () => {
     setRefreshing(true);
     await loadTournaments();
     setRefreshing(false);
-    toast.success('Tournaments data refreshed');
+    safeToast.success('Tournaments data refreshed');
   };
 
   const handleUpdateTournament = async (tournamentId, updateData) => {
