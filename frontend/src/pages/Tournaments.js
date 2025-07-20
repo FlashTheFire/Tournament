@@ -267,7 +267,7 @@ const Tournaments = () => {
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-glow"
+                className="px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full text-xs sm:text-sm font-bold bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-glow"
               >
                 🔥 HOUSE FULL
               </motion.div>
