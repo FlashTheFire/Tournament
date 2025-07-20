@@ -151,7 +151,11 @@ const AppContent = () => {
           <div className="flex-1 flex flex-col min-w-0">
             <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
             <main className="flex-1 overflow-auto relative
-              px-4 py-4 
+              /* Mobile: very compact padding to prevent overflow */
+              px-2 py-3
+              /* Small mobile: slightly more padding */
+              xs:px-4 xs:py-4
+              /* Tablet: normal padding */
               sm:px-6 sm:py-6 
               lg:px-8 lg:py-8
               xl:px-12 xl:py-10
