@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Gamepad2 } from 'lucide-react';
 
 const PremiumHamburgerMenu = ({ onClick }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,7 +59,12 @@ const PremiumHamburgerMenu = ({ onClick }) => {
         onHoverEnd={() => setIsHovered(false)}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="relative p-4 rounded-2xl group overflow-hidden mobile-friendly"
+        className="relative rounded-2xl group overflow-hidden mobile-friendly
+          /* Mobile: compact padding */
+          p-2.5
+          /* Desktop: spacious padding */
+          sm:p-3 lg:p-4
+        "
         style={{
           background: isHovered 
             ? 'linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(139, 92, 246, 0.15))' 
@@ -85,77 +91,56 @@ const PremiumHamburgerMenu = ({ onClick }) => {
           className="absolute inset-0 rounded-2xl"
         />
 
-        {/* Premium Hamburger Lines */}
-        <div className="relative w-6 h-6 flex flex-col justify-center items-center">
-          {/* Top Line */}
-          <motion.span
+        {/* Brand Logo Toggle */}
+        <motion.div 
+          className="relative flex items-center justify-center"
+          animate={{
+            rotate: isOpen ? 180 : 0,
+            scale: isOpen ? 1.1 : 1,
+          }}
+          transition={{ 
+            duration: 0.4, 
+            type: "spring", 
+            stiffness: 200, 
+            damping: 20 
+          }}
+        >
+          <motion.div
+            className="bg-gradient-to-br from-neon-blue via-electric-purple to-neon-red rounded-xl flex items-center justify-center
+              /* Mobile: smaller logo */
+              w-6 h-6
+              /* Desktop: larger logo */
+              sm:w-7 sm:h-7 lg:w-8 lg:h-8
+            "
             animate={{
-              rotate: isOpen ? 45 : 0,
-              y: isOpen ? 8 : 0,
-              scaleX: isOpen ? 1.1 : 1,
-            }}
-            transition={{ 
-              duration: 0.3, 
-              type: "spring", 
-              stiffness: 260, 
-              damping: 20 
-            }}
-            className="block h-0.5 w-6 rounded-full mb-1.5 origin-center"
-            style={{
-              background: isOpen || isHovered 
-                ? 'linear-gradient(90deg, #00d4ff, #8b5cf6, #ff0080)' 
-                : 'rgba(255, 255, 255, 0.8)',
               boxShadow: isOpen || isHovered 
-                ? '0 0 10px rgba(0, 212, 255, 0.5)' 
-                : 'none'
+                ? '0 0 20px rgba(0, 212, 255, 0.6), 0 0 40px rgba(139, 92, 246, 0.3)' 
+                : '0 0 0px rgba(0, 212, 255, 0)',
             }}
+            transition={{ duration: 0.3 }}
+          >
+            <Gamepad2 
+              className="text-white drop-shadow-lg
+                /* Mobile: smaller icon */
+                h-3.5 w-3.5
+                /* Desktop: larger icon */
+                sm:h-4 sm:w-4 lg:h-5 lg:w-5
+              " 
+            />
+          </motion.div>
+          
+          {/* Rotating ring effect */}
+          <motion.div
+            animate={{ rotate: isOpen ? -360 : 0 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0 border border-dashed border-white/20 rounded-xl
+              /* Mobile: smaller ring */
+              w-6 h-6
+              /* Desktop: larger ring */
+              sm:w-7 sm:h-7 lg:w-8 lg:h-8
+            "
           />
-
-          {/* Middle Line */}
-          <motion.span
-            animate={{
-              opacity: isOpen ? 0 : 1,
-              scaleX: isOpen ? 0 : 1,
-            }}
-            transition={{ 
-              duration: 0.15,
-              delay: isOpen ? 0 : 0.1
-            }}
-            className="block h-0.5 w-6 rounded-full mb-1.5"
-            style={{
-              background: isHovered 
-                ? 'linear-gradient(90deg, #8b5cf6, #ff0080, #00d4ff)' 
-                : 'rgba(255, 255, 255, 0.8)',
-              boxShadow: isHovered 
-                ? '0 0 10px rgba(139, 92, 246, 0.5)' 
-                : 'none'
-            }}
-          />
-
-          {/* Bottom Line */}
-          <motion.span
-            animate={{
-              rotate: isOpen ? -45 : 0,
-              y: isOpen ? -8 : 0,
-              scaleX: isOpen ? 1.1 : 1,
-            }}
-            transition={{ 
-              duration: 0.3, 
-              type: "spring", 
-              stiffness: 260, 
-              damping: 20 
-            }}
-            className="block h-0.5 w-6 rounded-full origin-center"
-            style={{
-              background: isOpen || isHovered 
-                ? 'linear-gradient(90deg, #ff0080, #00d4ff, #8b5cf6)' 
-                : 'rgba(255, 255, 255, 0.8)',
-              boxShadow: isOpen || isHovered 
-                ? '0 0 10px rgba(255, 0, 128, 0.5)' 
-                : 'none'
-            }}
-          />
-        </div>
+        </motion.div>
 
         {/* Hover Glow Effect */}
         <motion.div
