@@ -387,7 +387,7 @@ def generate_player_analytics(user_data: Dict) -> Dict[str, Any]:
         'competitive_analysis': {
             'vs_similar_players': compare_with_similar_players(skill_score),
             'tournament_readiness': assess_tournament_readiness(skill_score, tournaments_played),
-            'recommended_focus_areas': get_focus_areas(ff_data, skill_score)
+            'recommended_focus_areas': get_focus_areas_list(ff_data, skill_score)
         }
     }
     
