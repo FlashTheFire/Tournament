@@ -101,13 +101,27 @@ const AdvancedGaming = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <h1 className="text-5xl font-bold text-gradient bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red font-gaming mb-4">
+        <h1 className="font-bold text-gradient bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red font-gaming mb-4
+          /* Mobile: compact title */
+          text-2xl
+          /* Tablet: medium title */  
+          sm:text-3xl
+          /* Desktop: large title */
+          lg:text-5xl
+        ">
           ADVANCED GAMING ARENA
         </h1>
-        <p className="text-xl text-gray-300 mb-2">
+        <p className="text-gray-300 mb-2
+          /* Mobile: smaller text */
+          text-sm
+          /* Tablet: medium text */
+          sm:text-base
+          /* Desktop: larger text */
+          lg:text-xl
+        ">
           Premium Free Fire gaming platform with cutting-edge features
         </p>
-        <div className="flex items-center space-x-6 text-sm">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-6 text-sm">
           <div className="flex items-center space-x-1">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
             <span className="text-green-400 font-semibold">{liveStats.totalPlayers.toLocaleString()} Active Players</span>
