@@ -27,6 +27,7 @@ api.interceptors.request.use(
 // Response interceptor for error handling
 api.interceptors.response.use(
   (response) => {
+    console.log('🔵 API Response interceptor success:', response.data);
     return response.data;
   },
   (error) => {
@@ -85,7 +86,7 @@ api.interceptors.response.use(
       if (typeof data === 'string') {
         errorMessage = data;
       } else if (data && typeof data === 'object') {
-        errorMessage = data.message || data.error || JSON.stringify(data);
+        errorMessage = data.message || data.error || 'Request failed';
       }
     } else if (error.message) {
       console.log('🔵 Using error message');
