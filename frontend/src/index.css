@@ -2,116 +2,308 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-/* Custom CSS */
-body {
+/* Custom CSS Variables for 2025 Ultra-Advanced Theme */
+:root {
+  --cosmic-black: #0a0a0f;
+  --cosmic-dark: #121218;
+  --cosmic-deep: #1a1a26;
+  --neon-blue: #00d4ff;
+  --neon-purple: #8b5cf6;
+  --neon-red: #ff0080;
+  --neon-green: #00ff88;
+  --electric-blue: #0066ff;
+  --electric-purple: #6600ff;
+  --glow-shadow: 0 0 20px;
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.08);
+}
+
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: radial-gradient(ellipse at top, var(--cosmic-dark) 0%, var(--cosmic-black) 70%);
   min-height: 100vh;
+  color: white;
+  overflow-x: hidden;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-/* Glassmorphic effect */
+/* Ultra-Premium Glassmorphism Effects */
 .glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Neumorphic effect */
-.neuro {
-  background: linear-gradient(145deg, #e6e6e6, #ffffff);
-  box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+.glass:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 12px 48px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 0 40px rgba(0, 212, 255, 0.1);
 }
 
-.neuro-dark {
-  background: linear-gradient(145deg, #2a2a2a, #3a3a3a);
-  box-shadow: 20px 20px 60px #1e1e1e, -20px -20px 60px #464646;
+/* Advanced Neon Glow Effects */
+.neon-blue {
+  box-shadow: 
+    0 0 20px var(--neon-blue),
+    0 0 40px var(--neon-blue),
+    0 0 80px var(--neon-blue);
+  border: 1px solid var(--neon-blue);
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+.neon-purple {
+  box-shadow: 
+    0 0 20px var(--neon-purple),
+    0 0 40px var(--neon-purple),
+    0 0 80px var(--neon-purple);
+  border: 1px solid var(--neon-purple);
 }
 
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+.neon-red {
+  box-shadow: 
+    0 0 20px var(--neon-red),
+    0 0 40px var(--neon-red),
+    0 0 80px var(--neon-red);
+  border: 1px solid var(--neon-red);
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
+.neon-green {
+  box-shadow: 
+    0 0 20px var(--neon-green),
+    0 0 40px var(--neon-green),
+    0 0 80px var(--neon-green);
+  border: 1px solid var(--neon-green);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+/* Kinetic Energy Waves */
+@keyframes kinetic-wave {
+  0% { transform: translateX(-100%) skewX(-15deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(100%) skewX(-15deg); opacity: 0; }
 }
 
-/* Button ripple effect */
+.kinetic-waves {
+  position: relative;
+  overflow: hidden;
+}
+
+.kinetic-waves::before,
+.kinetic-waves::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(0, 212, 255, 0.1), 
+    rgba(139, 92, 246, 0.1),
+    transparent
+  );
+  animation: kinetic-wave 3s infinite;
+  pointer-events: none;
+}
+
+.kinetic-waves::after {
+  animation-delay: 1.5s;
+}
+
+/* Interactive Particle Effects */
+@keyframes particle-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+  50% { transform: translateY(-20px) rotate(180deg); opacity: 0.7; }
+}
+
+.particle-effect::before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--neon-blue);
+  border-radius: 50%;
+  animation: particle-float 4s infinite ease-in-out;
+  box-shadow: 
+    0 0 10px var(--neon-blue),
+    20px 20px 0 var(--neon-purple),
+    -20px -20px 0 var(--neon-red);
+}
+
+/* Tournament Card Enhancements */
+.tournament-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tournament-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.1), 
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.tournament-card:hover::before {
+  left: 100%;
+}
+
+.tournament-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(0, 212, 255, 0.2);
+}
+
+/* Premium Button Styles */
+.btn-premium {
+  position: relative;
+  background: linear-gradient(135deg, var(--electric-blue), var(--electric-purple));
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 12px 32px;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.btn-premium:hover::before {
+  left: 100%;
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(102, 0, 255, 0.4);
+}
+
+/* Ripple Effect */
 .ripple {
   position: relative;
   overflow: hidden;
-  transform: translate3d(0, 0, 0);
 }
 
-.ripple:before {
-  content: "";
+.ripple::after {
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
   width: 0;
   height: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
   transition: width 0.6s, height 0.6s;
 }
 
-.ripple:focus:not(:active)::before {
-  width: 120%;
-  height: 120%;
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
 }
 
-/* Tournament card hover effects */
-.tournament-card {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Loading Skeleton with Shimmer */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
 }
 
-.tournament-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-}
-
-/* Loading skeleton */
 .skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.05) 25%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
 }
 
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Mobile responsive utilities */
+::-webkit-scrollbar-track {
+  background: var(--cosmic-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--electric-blue), var(--electric-purple));
+}
+
+/* Mobile Optimizations */
 @media (max-width: 768px) {
-  .mobile-friendly {
-    min-height: 44px;
-    min-width: 44px;
+  .glass {
+    backdrop-filter: blur(15px);
   }
+  
+  .tournament-card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+  
+  .btn-premium {
+    padding: 10px 24px;
+  }
+}
+
+/* High Contrast Mode for Accessibility */
+@media (prefers-contrast: high) {
+  .glass {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Reduced Motion for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom Focus Styles */
+*:focus {
+  outline: 2px solid var(--neon-blue);
+  outline-offset: 2px;
 }
