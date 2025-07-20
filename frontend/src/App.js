@@ -150,8 +150,8 @@ const AppContent = () => {
           {/* Full-screen main content - always full width */}
           <div className="w-full flex flex-col min-w-0 relative">
             <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-            <main className="flex-1 relative
-              /* Mobile: full-screen padding with scroll */
+            <main className="flex-1 relative mobile-scroll touch-scroll
+              /* Mobile: full-screen padding with enhanced scroll */
               px-2 py-3 overflow-y-auto
               /* Small mobile: slightly more padding */
               xs:px-4 xs:py-4
@@ -160,10 +160,12 @@ const AppContent = () => {
               lg:px-8 lg:py-8
               xl:px-12 xl:py-10
             " style={{ 
-              /* Ensure mobile scroll */
+              /* Ensure mobile scroll with enhanced indicators */
               overflowY: 'auto',
               height: 'calc(100vh - 64px)', /* Account for navbar height */
-              WebkitOverflowScrolling: 'touch' /* iOS smooth scrolling */
+              WebkitOverflowScrolling: 'touch', /* iOS smooth scrolling */
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'var(--neon-blue) var(--cosmic-dark)'
             }}>
               {/* Page Transition Overlay */}
               <AnimatePresence>
