@@ -42,7 +42,7 @@ const Login = () => {
       console.error('🔴 Login catch block error:', error);
       console.error('🔴 Error type:', typeof error);
       console.error('🔴 Error structure:', JSON.stringify(error, null, 2));
-      toast.error('Login failed. Please try again.');
+      safeToast.error('Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
