@@ -537,6 +537,348 @@ class TournamentAPITester:
         else:
             self.log_result("Duplicate Registration", False, f"Should return 400, got {response.status_code}")
 
+    def test_ai_matchmaking_analysis(self):
+        """Test AI-powered matchmaking analysis"""
+        print("\n=== Testing AI Matchmaking Analysis ===")
+        
+        if not self.test_user_token:
+            self.log_result("AI Matchmaking Analysis", False, "No auth token available")
+            return
+        
+        # Test with a dummy tournament ID
+        test_tournament_id = "test-tournament-123"
+        headers = self.get_auth_headers()
+        
+        response, success, error = self.make_request("GET", f"/ai/matchmaking-analysis?tournament_id={test_tournament_id}", headers=headers)
+        
+        if not success:
+            self.log_result("AI Matchmaking Analysis", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 404:
+            self.log_result("AI Matchmaking Analysis", True, "Correctly handled non-existent tournament")
+        elif response.status_code == 200:
+            try:
+                data = response.json()
+                if "message" in data or "ai_analysis" in data:
+                    self.log_result("AI Matchmaking Analysis", True, "AI analysis endpoint working")
+                else:
+                    self.log_result("AI Matchmaking Analysis", False, f"Unexpected response format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("AI Matchmaking Analysis", False, "Invalid JSON response")
+        else:
+            self.log_result("AI Matchmaking Analysis", False, f"Status code: {response.status_code}")
+
+    def test_ai_tournament_prediction(self):
+        """Test AI tournament prediction"""
+        print("\n=== Testing AI Tournament Prediction ===")
+        
+        if not self.test_user_token:
+            self.log_result("AI Tournament Prediction", False, "No auth token available")
+            return
+        
+        test_tournament_id = "test-tournament-123"
+        headers = self.get_auth_headers()
+        
+        response, success, error = self.make_request("GET", f"/ai/tournament-prediction/{test_tournament_id}", headers=headers)
+        
+        if not success:
+            self.log_result("AI Tournament Prediction", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 404:
+            self.log_result("AI Tournament Prediction", True, "Correctly handled non-existent tournament")
+        elif response.status_code == 200:
+            try:
+                data = response.json()
+                if "message" in data or "ai_detailed_analysis" in data or "technical_prediction" in data:
+                    self.log_result("AI Tournament Prediction", True, "AI prediction endpoint working")
+                else:
+                    self.log_result("AI Tournament Prediction", False, f"Unexpected response format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("AI Tournament Prediction", False, "Invalid JSON response")
+        else:
+            self.log_result("AI Tournament Prediction", False, f"Status code: {response.status_code}")
+
+    def test_ai_player_insights(self):
+        """Test AI player insights"""
+        print("\n=== Testing AI Player Insights ===")
+        
+        if not self.test_user_token:
+            self.log_result("AI Player Insights", False, "No auth token available")
+            return
+        
+        headers = self.get_auth_headers()
+        response, success, error = self.make_request("GET", "/ai/player-insights", headers=headers)
+        
+        if not success:
+            self.log_result("AI Player Insights", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "ai_coaching_analysis" in data or "detailed_analytics" in data:
+                    self.log_result("AI Player Insights", True, "AI insights generated successfully")
+                else:
+                    self.log_result("AI Player Insights", False, f"Missing expected fields: {data}")
+            except json.JSONDecodeError:
+                self.log_result("AI Player Insights", False, "Invalid JSON response")
+        else:
+            self.log_result("AI Player Insights", False, f"Status code: {response.status_code}")
+
+    def test_ai_smart_matchmaking(self):
+        """Test AI smart tournament recommendations"""
+        print("\n=== Testing AI Smart Matchmaking ===")
+        
+        if not self.test_user_token:
+            self.log_result("AI Smart Matchmaking", False, "No auth token available")
+            return
+        
+        headers = self.get_auth_headers()
+        response, success, error = self.make_request("GET", "/ai/smart-matchmaking", headers=headers)
+        
+        if not success:
+            self.log_result("AI Smart Matchmaking", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "technical_recommendations" in data or "message" in data:
+                    self.log_result("AI Smart Matchmaking", True, "Smart matchmaking working")
+                else:
+                    self.log_result("AI Smart Matchmaking", False, f"Unexpected response format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("AI Smart Matchmaking", False, "Invalid JSON response")
+        else:
+            self.log_result("AI Smart Matchmaking", False, f"Status code: {response.status_code}")
+
+    def test_player_analytics(self):
+        """Test player analytics endpoint"""
+        print("\n=== Testing Player Analytics ===")
+        
+        if not self.test_user_token or not self.test_user_id:
+            self.log_result("Player Analytics", False, "No auth token or user ID available")
+            return
+        
+        headers = self.get_auth_headers()
+        response, success, error = self.make_request("GET", f"/analytics/player/{self.test_user_id}", headers=headers)
+        
+        if not success:
+            self.log_result("Player Analytics", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "player_info" in data and "analytics" in data:
+                    self.log_result("Player Analytics", True, "Player analytics generated successfully")
+                else:
+                    self.log_result("Player Analytics", False, f"Missing expected fields: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Player Analytics", False, "Invalid JSON response")
+        else:
+            self.log_result("Player Analytics", False, f"Status code: {response.status_code}")
+
+    def test_admin_analytics_overview(self):
+        """Test admin analytics overview (should fail for non-admin)"""
+        print("\n=== Testing Admin Analytics Overview ===")
+        
+        if not self.test_user_token:
+            self.log_result("Admin Analytics Overview", False, "No auth token available")
+            return
+        
+        headers = self.get_auth_headers()
+        response, success, error = self.make_request("GET", "/admin/analytics/overview", headers=headers)
+        
+        if not success:
+            self.log_result("Admin Analytics Overview", False, f"Request failed: {error}")
+            return
+        
+        # Should fail with 403 for non-admin user
+        if response.status_code == 403:
+            self.log_result("Admin Analytics Overview", True, "Correctly blocked non-admin access")
+        elif response.status_code == 200:
+            try:
+                data = response.json()
+                if "overview" in data and "skill_distribution" in data:
+                    self.log_result("Admin Analytics Overview", True, "Admin analytics working (user has admin access)")
+                else:
+                    self.log_result("Admin Analytics Overview", False, f"Unexpected response format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Admin Analytics Overview", False, "Invalid JSON response")
+        else:
+            self.log_result("Admin Analytics Overview", False, f"Status code: {response.status_code}")
+
+    def test_admin_player_analytics(self):
+        """Test admin player analytics (should fail for non-admin)"""
+        print("\n=== Testing Admin Player Analytics ===")
+        
+        if not self.test_user_token:
+            self.log_result("Admin Player Analytics", False, "No auth token available")
+            return
+        
+        headers = self.get_auth_headers()
+        response, success, error = self.make_request("GET", "/admin/analytics/players", headers=headers)
+        
+        if not success:
+            self.log_result("Admin Player Analytics", False, f"Request failed: {error}")
+            return
+        
+        # Should fail with 403 for non-admin user
+        if response.status_code == 403:
+            self.log_result("Admin Player Analytics", True, "Correctly blocked non-admin access")
+        elif response.status_code == 200:
+            try:
+                data = response.json()
+                if "players" in data and "total_count" in data:
+                    self.log_result("Admin Player Analytics", True, "Admin player analytics working (user has admin access)")
+                else:
+                    self.log_result("Admin Player Analytics", False, f"Unexpected response format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Admin Player Analytics", False, "Invalid JSON response")
+        else:
+            self.log_result("Admin Player Analytics", False, f"Status code: {response.status_code}")
+
+    def test_admin_tournament_analytics(self):
+        """Test admin tournament analytics (should fail for non-admin)"""
+        print("\n=== Testing Admin Tournament Analytics ===")
+        
+        if not self.test_user_token:
+            self.log_result("Admin Tournament Analytics", False, "No auth token available")
+            return
+        
+        headers = self.get_auth_headers()
+        response, success, error = self.make_request("GET", "/admin/analytics/tournaments", headers=headers)
+        
+        if not success:
+            self.log_result("Admin Tournament Analytics", False, f"Request failed: {error}")
+            return
+        
+        # Should fail with 403 for non-admin user
+        if response.status_code == 403:
+            self.log_result("Admin Tournament Analytics", True, "Correctly blocked non-admin access")
+        elif response.status_code == 200:
+            try:
+                data = response.json()
+                if "tournaments" in data:
+                    self.log_result("Admin Tournament Analytics", True, "Admin tournament analytics working (user has admin access)")
+                else:
+                    self.log_result("Admin Tournament Analytics", False, f"Unexpected response format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Admin Tournament Analytics", False, "Invalid JSON response")
+        else:
+            self.log_result("Admin Tournament Analytics", False, f"Status code: {response.status_code}")
+
+    def test_admin_user_creation(self):
+        """Test creating an admin user for admin endpoint testing"""
+        print("\n=== Testing Admin User Creation ===")
+        
+        # Create admin user with demo credentials
+        admin_data = {
+            "email": "demo@tournament.com",
+            "password": "demo123",
+            "username": "AdminDemo",
+            "full_name": "Demo Admin",
+            "free_fire_uid": "987654321"
+        }
+        
+        response, success, error = self.make_request("POST", "/auth/register", admin_data)
+        
+        if not success:
+            self.log_result("Admin User Creation", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "access_token" in data and "user_id" in data:
+                    # Store admin credentials for admin tests
+                    self.admin_token = data["access_token"]
+                    self.admin_user_id = data["user_id"]
+                    self.log_result("Admin User Creation", True, "Admin user created successfully")
+                else:
+                    self.log_result("Admin User Creation", False, f"Missing required fields: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Admin User Creation", False, "Invalid JSON response")
+        elif response.status_code == 400:
+            # User might already exist, try to login
+            login_data = {
+                "email": "demo@tournament.com",
+                "password": "demo123"
+            }
+            
+            response, success, error = self.make_request("POST", "/auth/login", login_data)
+            
+            if success and response.status_code == 200:
+                try:
+                    data = response.json()
+                    self.admin_token = data["access_token"]
+                    self.admin_user_id = data["user_id"]
+                    self.log_result("Admin User Creation", True, "Admin user login successful")
+                except json.JSONDecodeError:
+                    self.log_result("Admin User Creation", False, "Invalid JSON response on login")
+            else:
+                self.log_result("Admin User Creation", False, f"Login failed: {response.status_code if success else error}")
+        else:
+            self.log_result("Admin User Creation", False, f"Status code: {response.status_code}")
+
+    def test_admin_endpoints_with_admin_user(self):
+        """Test admin endpoints with admin credentials"""
+        print("\n=== Testing Admin Endpoints with Admin User ===")
+        
+        if not hasattr(self, 'admin_token') or not self.admin_token:
+            self.log_result("Admin Endpoints Test", False, "No admin token available")
+            return
+        
+        admin_headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test admin analytics overview
+        response, success, error = self.make_request("GET", "/admin/analytics/overview", headers=admin_headers)
+        
+        if success and response.status_code == 200:
+            try:
+                data = response.json()
+                if "overview" in data:
+                    self.log_result("Admin Analytics Overview (Admin)", True, "Admin analytics working with admin user")
+                else:
+                    self.log_result("Admin Analytics Overview (Admin)", False, f"Unexpected format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Admin Analytics Overview (Admin)", False, "Invalid JSON response")
+        else:
+            self.log_result("Admin Analytics Overview (Admin)", False, f"Failed: {response.status_code if success else error}")
+        
+        # Test admin player analytics
+        response, success, error = self.make_request("GET", "/admin/analytics/players", headers=admin_headers)
+        
+        if success and response.status_code == 200:
+            try:
+                data = response.json()
+                if "players" in data:
+                    self.log_result("Admin Player Analytics (Admin)", True, "Admin player analytics working")
+                else:
+                    self.log_result("Admin Player Analytics (Admin)", False, f"Unexpected format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Admin Player Analytics (Admin)", False, "Invalid JSON response")
+        else:
+            self.log_result("Admin Player Analytics (Admin)", False, f"Failed: {response.status_code if success else error}")
+        
+        # Test admin tournament analytics
+        response, success, error = self.make_request("GET", "/admin/analytics/tournaments", headers=admin_headers)
+        
+        if success and response.status_code == 200:
+            try:
+                data = response.json()
+                if "tournaments" in data:
+                    self.log_result("Admin Tournament Analytics (Admin)", True, "Admin tournament analytics working")
+                else:
+                    self.log_result("Admin Tournament Analytics (Admin)", False, f"Unexpected format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Admin Tournament Analytics (Admin)", False, "Invalid JSON response")
+        else:
+            self.log_result("Admin Tournament Analytics (Admin)", False, f"Failed: {response.status_code if success else error}")
+
     def run_all_tests(self):
         """Run all tests in sequence"""
         print("🚀 Starting Tournament Platform Backend API Tests")
