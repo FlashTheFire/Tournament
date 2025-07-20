@@ -48,7 +48,7 @@ const PremiumQRPayment = ({ isOpen, onClose, amount, onSuccess }) => {
         setQrData(result);
         setPaymentStatus('waiting');
         startPolling(result.orderId);
-        toast.success('🎮 QR Code generated! Scan to add battle funds');
+        safeToast.success('🎮 QR Code generated! Scan to add battle funds');
       } else {
         throw new Error(result.error);
       }
