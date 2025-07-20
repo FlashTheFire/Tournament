@@ -379,16 +379,19 @@ const Tournaments = () => {
             </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Buttons - Reduced Height */}
           <div className="flex space-x-3 pt-2">
             <Link
               to={`/tournaments/${tournament.tournament_id}`}
-              className="flex-1 btn-premium py-4 text-center ripple mobile-friendly group"
+              className="flex-1 btn-premium ripple mobile-friendly group
+                /* Reduced height - compact button */
+                py-2.5 text-center
+              "
             >
-              <div className="flex items-center justify-center space-x-3">
-                <Crosshair className="h-5 w-5 group-hover:rotate-45 transition-transform duration-300" />
-                <span className="font-bold">ENTER BATTLE</span>
-                <Flame className="h-5 w-5 group-hover:animate-pulse" />
+              <div className="flex items-center justify-center space-x-2">
+                <Crosshair className="h-4 w-4 group-hover:rotate-45 transition-transform duration-300" />
+                <span className="font-bold text-sm">ENTER BATTLE</span>
+                <Flame className="h-4 w-4 group-hover:animate-pulse" />
               </div>
             </Link>
             
@@ -396,9 +399,12 @@ const Tournaments = () => {
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-4 glass border border-neon-purple/50 text-white rounded-xl hover:border-neon-purple hover:shadow-glow transition-all duration-300"
+                className="glass border border-neon-purple/50 text-white rounded-xl hover:border-neon-purple hover:shadow-glow transition-all duration-300
+                  /* Reduced height - compact star button */
+                  px-4 py-2.5
+                "
               >
-                <Star className="h-6 w-6 text-neon-purple" />
+                <Star className="h-4 w-4 text-neon-purple" />
               </motion.button>
             )}
           </div>
