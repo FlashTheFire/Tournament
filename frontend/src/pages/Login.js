@@ -343,7 +343,7 @@ const Login = () => {
           </motion.div>
         </motion.div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 
