@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Wallet as WalletIcon, Plus, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+import { 
+  Wallet as WalletIcon, 
+  Plus, 
+  ArrowUpRight, 
+  ArrowDownLeft, 
+  CreditCard,
+  QrCode,
+  Trophy,
+  Coins,
+  Gift,
+  Crown,
+  Star,
+  Zap,
+  TrendingUp,
+  History
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import PremiumQRPayment from '../components/PremiumQRPayment';
+import { paytmService } from '../services/PaytmService';
 
 const Wallet = () => {
   const { user } = useAuth();
