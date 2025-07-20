@@ -167,11 +167,11 @@ const DemoAccess = () => {
                 
                 <div className="glass rounded-xl p-4 border border-white/20">
                   <p className="text-gray-400 text-sm mb-2">Password</p>
-                  <div className="flex items-center space-x-3">
-                    <code className="text-lg md:text-xl font-mono text-white bg-black/30 px-3 py-2 rounded-lg flex-1">
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <code className="text-sm sm:text-lg md:text-xl font-mono text-white bg-black/30 px-2 sm:px-3 py-2 rounded-lg flex-1">
                       {demoCredentials.password}
                     </code>
-                    <CheckCircle className="h-5 w-5 text-neon-green flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-neon-green flex-shrink-0" />
                   </div>
                 </div>
               </div>
