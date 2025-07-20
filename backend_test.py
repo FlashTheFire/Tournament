@@ -147,6 +147,7 @@ class TournamentAPITester:
         """Test user login"""
         print("\n=== Testing User Login ===")
         
+        # Use existing user credentials
         login_data = {
             "email": "testgamer@example.com",
             "password": "SecurePass123!"
@@ -164,6 +165,7 @@ class TournamentAPITester:
                 if "access_token" in data:
                     # Update token for subsequent tests
                     self.test_user_token = data["access_token"]
+                    self.test_user_id = data.get("user_id")
                     self.log_result("User Login", True, "Login successful")
                 else:
                     self.log_result("User Login", False, f"Missing access_token: {data}")
