@@ -51,398 +51,340 @@ const Home = () => {
 
   useEffect(() => {
     loadData();
-    loadAIFeatures();
-    // Removed automatic match refresh as per Mobile UI Polish requirement
+    const interval = setInterval(() => {
+      updateLiveStats();
+    }, 30000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const loadData = async () => {
     try {
-      const [tournamentsData, leaderboardData] = await Promise.all([
-        apiService.getTournaments({ limit: 6 }),
-        apiService.getLeaderboards('free_fire', null, 8)
+      setLoading(true);
+      await Promise.all([
+        loadTournaments(),
+        loadLeaderboard(),
+        loadAIPredictions(),
+        loadLiveStats()
       ]);
-
-      setTournaments(tournamentsData.tournaments || []);
-      setLeaderboard(leaderboardData.leaderboard || []);
-      
-      // Enhanced Free Fire stats for 2025
-      setLiveStats({
-        totalTournaments: 347,
-        totalPrizePool: 4850000,
-        activePlayers: 42947,
-        liveMatches: 89
-      });
     } catch (error) {
       console.error('Failed to load data:', error);
-      safeToast.error('Failed to load battle data');
+      safeToast.error('Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
   };
 
-  const loadAIFeatures = async () => {
-    // Static AI predictions - no refresh as per requirement
-    setAiPredictions([
-      {
-        id: 1,
-        type: 'tournament_prediction',
-        title: 'High Win Probability',
-        description: 'Based on your gameplay, you have 78% chance to reach top 10',
-        confidence: 78,
-        tournament: 'Battle Royale Championship'
-      },
-      {
-        id: 2,
-        type: 'aim_improvement',
-        title: 'Aim Improvement Detected',
-        description: 'Your headshot accuracy improved by 15% this week',
-        confidence: 92,
-        improvement: '+15%'
-      },
-      {
-        id: 3,
-        type: 'matchmaking',
-        title: 'Perfect Match Found',
-        description: 'Squad teammates with 95% compatibility available',
-        confidence: 95,
-        players: 3
-      }
-    ]);
-    setMatchmakingStatus('ready');
+  const loadTournaments = async () => {
+    try {
+      const data = await apiService.getTournaments();
+      const mockTournaments = [
+        {
+          tournament_id: 'ff-legends-cup',
+          name: 'Free Fire Legends Cup 2025',
+          prize_pool: 100000,
+          current_participants: 1240,
+          max_participants: 2000,
+          entry_fee: 500,
+          status: 'live',
+          start_time: new Date().toISOString(),
+          battle_map: 'Bermuda Remastered',
+          game_type: 'battle_royale'
+        },
+        {
+          tournament_id: 'clash-masters',
+          name: 'Clash Squad Masters',
+          prize_pool: 50000,
+          current_participants: 856,
+          max_participants: 1000,
+          entry_fee: 250,
+          status: 'upcoming',
+          start_time: new Date(Date.now() + 86400000).toISOString(),
+          battle_map: 'Purgatory',
+          game_type: 'clash_squad'
+        },
+        {
+          tournament_id: 'weekly-warriors',
+          name: 'Weekly Warriors Challenge',
+          prize_pool: 25000,
+          current_participants: 445,
+          max_participants: 500,
+          entry_fee: 150,
+          status: 'upcoming',
+          start_time: new Date(Date.now() + 172800000).toISOString(),
+          battle_map: 'Kalahari',
+          game_type: 'solo'
+        }
+      ];
+      setTournaments([...mockTournaments, ...(data.tournaments || [])]);
+    } catch (error) {
+      console.error('Failed to load tournaments:', error);
+    }
   };
 
-  // Premium Free Fire hero images
-  const heroImages = [
-    "https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxnYW1pbmclMjB0b3VybmFtZW50fGVufDB8fHx8MTc1Mjk5NTc2MXww&ixlib=rb-4.1.0&q=85",
-    "https://images.unsplash.com/photo-1548003693-b55d51032288?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwyfHxnYW1pbmclMjB0b3VybmFtZW50fGVufDB8fHx8MTc1Mjk5NTc2MXww&ixlib=rb-4.1.0&q=85",
-    "https://images.unsplash.com/photo-1558008412-f42c059a9d02?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwzfHxnYW1pbmclMjB0b3VybmFtZW50fGVufDB8fHx8MTc1Mjk5NTc2MXww&ixlib=rb-4.1.0&q=85",
-    "https://images.unsplash.com/photo-1636036824578-d0d300a4effb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHxlc3BvcnRzfGVufDB8fHx8MTc1Mjk5NTc2OHww&ixlib=rb-4.1.0&q=85",
-    "https://images.unsplash.com/photo-1633545495735-25df17fb9f31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwzfHxlc3BvcnRzfGVufDB8fHx8MTc1Mjk5NTc2OHww&ixlib=rb-4.1.0&q=85"
-  ];
+  const loadLeaderboard = async () => {
+    try {
+      const data = await apiService.getLeaderboard();
+      const mockLeaderboard = [
+        { rank: 1, username: 'FF_LEGEND_2025', points: 24500, matches: 156, wins: 124 },
+        { rank: 2, username: 'BOOYAH_MASTER', points: 23800, matches: 142, wins: 118 },
+        { rank: 3, username: 'HEADSHOT_KING', points: 22950, matches: 134, wins: 109 },
+        { rank: 4, username: 'ELITE_SNIPER', points: 22100, matches: 128, wins: 102 },
+        { rank: 5, username: 'SQUAD_LEADER', points: 21650, matches: 125, wins: 98 }
+      ];
+      setLeaderboard([...mockLeaderboard, ...(data.leaderboard || [])]);
+    } catch (error) {
+      console.error('Failed to load leaderboard:', error);
+    }
+  };
 
-  // Mobile-First Responsive StatCard Component
-  const StatCard = ({ icon: Icon, label, value, color, description, animate = false, trend }) => (
+  const loadAIPredictions = async () => {
+    const mockPredictions = [
+      {
+        id: 'ai-1',
+        type: 'matchmaking',
+        title: 'Smart Match Ready',
+        prediction: 'Perfect opponents found with 94% skill match',
+        confidence: 94,
+        action: 'Start Battle',
+        icon: Brain,
+        gradient: 'from-cyan-500 to-blue-600'
+      },
+      {
+        id: 'ai-2',
+        type: 'performance',
+        title: 'Win Probability',
+        prediction: 'High chance of victory in next tournament',
+        confidence: 78,
+        action: 'View Strategy',
+        icon: Target,
+        gradient: 'from-green-500 to-emerald-600'
+      },
+      {
+        id: 'ai-3',
+        type: 'tournament',
+        title: 'Tournament Alert',
+        prediction: 'New high-prize tournament in 2 hours',
+        confidence: 100,
+        action: 'Register Now',
+        icon: Trophy,
+        gradient: 'from-yellow-500 to-orange-600'
+      }
+    ];
+    setAiPredictions(mockPredictions);
+  };
+
+  const loadLiveStats = async () => {
+    const stats = {
+      totalTournaments: 89,
+      totalPrizePool: 4800000,
+      activePlayers: 42000,
+      liveMatches: 156
+    };
+    setLiveStats(stats);
+  };
+
+  const updateLiveStats = () => {
+    setLiveStats(prev => ({
+      ...prev,
+      liveMatches: prev.liveMatches + Math.floor(Math.random() * 5) - 2,
+      activePlayers: prev.activePlayers + Math.floor(Math.random() * 100) - 50
+    }));
+  };
+
+  const StatCard = ({ icon: Icon, label, value, description, color, trend }) => (
     <motion.div
-      whileHover={{ scale: 1.02, rotateY: 2, rotateX: 1 }}
-      whileTap={{ scale: 0.98 }}
-      className="group relative overflow-hidden
-        /* Mobile-first styles */
-        rounded-2xl
-        sm:rounded-3xl
-        lg:rounded-3xl
-      "
+      className={`glass rounded-2xl lg:rounded-3xl p-6 lg:p-8 text-center relative overflow-hidden border border-white/10 ${color} shadow-2xl`}
+      whileHover={{ scale: 1.05, y: -10 }}
+      animate={{ y: [-2, 2, -2] }}
+      transition={{ 
+        y: { duration: 4, repeat: Infinity },
+        scale: { duration: 0.3 },
+        hover: { duration: 0.3 }
+      }}
     >
-      {/* Responsive glass background */}
-      <div className="absolute inset-0 
-        glass-mobile
-        group-hover:border-white/30 
-        transition-all duration-500
-        rounded-2xl sm:rounded-3xl lg:rounded-3xl
-      "></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></div>
       
-      {/* Animated border glow - desktop only */}
       <motion.div
-        className="absolute inset-0 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 hidden lg:block bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        style={{ padding: '2px' }}
-      />
-
-      <div className="relative text-center
-        /* Mobile: compact padding */
-        p-4
-        /* Tablet: medium padding */
-        sm:p-6
-        /* Desktop: spacious padding */
-        lg:p-8
-      ">
-        <div className={`mx-auto ${color} rounded-2xl sm:rounded-3xl flex items-center justify-center mb-4 sm:mb-6 group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110
-          /* Mobile: smaller icon container */
-          w-12 h-12
-          /* Tablet: medium icon container */
-          sm:w-16 sm:h-16
-          /* Desktop: large icon container */
-          lg:w-20 lg:h-20
-        `}>
-          <Icon className="text-white drop-shadow-2xl
-            /* Mobile: small icon */
-            h-6 w-6
-            /* Tablet: medium icon */
-            sm:h-8 sm:w-8
-            /* Desktop: large icon */
-            lg:h-10 lg:w-10
-          " />
-        </div>
+        animate={{ rotate: [0, 360] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        className="relative z-10 mb-4 lg:mb-6"
+      >
+        <Icon className="h-12 w-12 lg:h-16 lg:w-16 text-white mx-auto drop-shadow-2xl" />
+      </motion.div>
+      
+      <div className="relative z-10">
+        <motion.p 
+          className="text-white font-gaming font-black text-2xl lg:text-4xl xl:text-5xl mb-2 lg:mb-4 drop-shadow-2xl"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          {value}
+        </motion.p>
+        <p className="text-white/90 font-bold text-lg lg:text-xl xl:text-2xl mb-2">{label}</p>
+        <p className="text-white/70 text-sm lg:text-base">{description}</p>
         
-        <div className="flex items-center justify-center space-x-2 mb-2">
-          <motion.h3 
-            className="text-white font-gaming font-black
-              /* Mobile: compact title */
-              text-xl
-              /* Tablet: medium title */
-              sm:text-3xl
-              /* Desktop: large title */
-              lg:text-4xl
-            "
-            animate={animate ? { scale: [1, 1.05, 1] } : {}}
-            transition={{ duration: 2, repeat: Infinity }}
+        {trend && (
+          <motion.div 
+            className="flex items-center justify-center mt-3 lg:mt-4"
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
           >
-            {typeof value === 'number' ? value.toLocaleString() : value}
-          </motion.h3>
-          {trend && (
-            <motion.div
-              animate={{ y: [-2, 2, -2] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="hidden sm:block"
-            >
-              {trend === 'up' ? 
-                <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-neon-green" /> : 
-                <TrendingDown className="h-4 w-4 sm:h-6 sm:w-6 text-neon-red" />
-              }
-            </motion.div>
-          )}
-        </div>
-        
-        <p className="text-neon-blue font-bold uppercase tracking-wider mb-2
-          /* Mobile: small label */
-          text-2xs
-          /* Tablet: medium label */
-          sm:text-sm
-        ">{label}</p>
-        <p className="text-gray-300 opacity-90
-          /* Mobile: tiny description */
-          text-2xs hidden
-          /* Tablet: show description */
-          sm:block sm:text-xs
-        ">{description}</p>
-        
-        {animate && (
-          <motion.div
-            className="absolute top-2 right-2 sm:top-4 sm:right-4 w-2 h-2 sm:w-3 sm:h-3 bg-red-500 rounded-full"
-            animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}
-          />
+            {trend === 'up' ? (
+              <TrendingUp className="h-5 w-5 lg:h-6 lg:w-6 text-green-400 mr-2" />
+            ) : (
+              <TrendingDown className="h-5 w-5 lg:h-6 lg:w-6 text-red-400 mr-2" />
+            )}
+            <span className={`font-bold text-sm lg:text-base ${trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
+              {trend === 'up' ? '+12.5%' : '-3.2%'}
+            </span>
+          </motion.div>
         )}
       </div>
     </motion.div>
   );
 
-  // Mobile-First AI Insight Card
   const AIInsightCard = ({ insight, index }) => (
     <motion.div
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.2, type: "spring", stiffness: 100 }}
+      className={`glass rounded-2xl lg:rounded-3xl p-6 lg:p-8 relative overflow-hidden border border-white/10 bg-gradient-to-br ${insight.gradient}/20 shadow-2xl`}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.2 }}
       whileHover={{ scale: 1.02, y: -5 }}
-      className="group relative overflow-hidden
-        /* Mobile: compact card */
-        rounded-xl
-        /* Desktop: larger card */
-        lg:rounded-2xl
-      "
     >
-      {/* Mobile-first glass effect */}
-      <div className="absolute inset-0 glass-mobile group-hover:border-neon-blue/40 transition-all duration-500 
-        rounded-xl lg:rounded-2xl
-      "></div>
-      
-      <div className="relative
-        /* Mobile: compact padding */
-        p-4
-        /* Desktop: spacious padding */
-        lg:p-6
-      ">
-        <div className="flex items-start space-x-3 sm:space-x-4">
-          <div className={`rounded-lg sm:rounded-xl flex items-center justify-center ${
-            insight.type === 'tournament_prediction' ? 'bg-gradient-to-r from-blue-500 to-cyan-600' :
-            insight.type === 'skill_analysis' ? 'bg-gradient-to-r from-green-500 to-emerald-600' :
-            'bg-gradient-to-r from-purple-500 to-indigo-600'
-          } group-hover:shadow-glow transition-shadow duration-300
-            /* Mobile: smaller icon container */
-            w-10 h-10
-            /* Desktop: larger icon container */
-            sm:w-12 sm:h-12
-          `}>
-            {insight.type === 'tournament_prediction' && <Target className="h-5 w-5 sm:h-6 sm:w-6 text-white" />}
-            {insight.type === 'skill_analysis' && <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-white" />}
-            {insight.type === 'matchmaking' && <Users className="h-5 w-5 sm:h-6 sm:w-6 text-white" />}
-          </div>
-          
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="text-white font-bold group-hover:text-neon-blue transition-colors
-                /* Mobile: compact title */
-                text-sm
-                /* Desktop: larger title */
-                lg:text-lg
-              ">
-                {insight.title}
-              </h4>
-              <div className="flex items-center space-x-1">
-                <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-neon-purple" />
-                <span className="text-neon-purple font-bold text-2xs sm:text-sm">{insight.confidence}%</span>
-              </div>
-            </div>
-            <p className="text-gray-300 leading-relaxed mb-3
-              /* Mobile: small text */
-              text-2xs
-              /* Desktop: normal text */
-              sm:text-sm
-            ">{insight.description}</p>
-            
-            {/* Confidence bar */}
-            <div className="w-full h-1.5 sm:h-2 bg-gray-700 rounded-full overflow-hidden">
-              <motion.div
-                className="h-full bg-gradient-to-r from-neon-blue to-electric-purple rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${insight.confidence}%` }}
-                transition={{ delay: 0.5 + index * 0.1, duration: 1.5 }}
-              />
-            </div>
-            
-            {insight.tournament && (
-              <p className="text-gray-400 mt-2 text-2xs sm:text-xs">Tournament: {insight.tournament}</p>
-            )}
-          </div>
+      <div className="flex items-start justify-between mb-4 lg:mb-6">
+        <div className={`w-12 h-12 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-r ${insight.gradient} flex items-center justify-center shadow-glow`}>
+          <insight.icon className="h-6 w-6 lg:h-8 lg:w-8 text-white" />
         </div>
+        <motion.div 
+          className={`px-3 py-1 lg:px-4 lg:py-2 rounded-full bg-gradient-to-r ${insight.gradient} text-white font-bold text-sm lg:text-base`}
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          {insight.confidence}%
+        </motion.div>
       </div>
+      
+      <h3 className="text-white font-bold text-lg lg:text-xl xl:text-2xl mb-3 lg:mb-4">{insight.title}</h3>
+      <p className="text-gray-300 mb-4 lg:mb-6 text-sm lg:text-base leading-relaxed">{insight.prediction}</p>
+      
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className={`w-full btn-premium bg-gradient-to-r ${insight.gradient} text-white font-bold py-3 lg:py-4 rounded-xl lg:rounded-2xl text-sm lg:text-base transition-all duration-300`}
+      >
+        {insight.action}
+      </motion.button>
     </motion.div>
   );
 
-  // Mobile-First Tournament Card with Dramatically Different Layouts
   const TournamentCard = ({ tournament, index }) => (
     <motion.div
-      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      className="tournament-card glass rounded-2xl lg:rounded-3xl overflow-hidden border border-white/10 hover:border-neon-blue/50 group shadow-2xl"
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay: index * 0.15, type: "spring", stiffness: 80 }}
+      transition={{ delay: index * 0.15, type: "spring", stiffness: 100 }}
       whileHover={{ 
-        y: -15, 
+        y: -10, 
         scale: 1.02,
-        rotateX: 5,
         transition: { type: "spring", stiffness: 300, damping: 20 }
       }}
-      className="group relative overflow-hidden
-        /* Mobile: compact card */
-        rounded-2xl
-        /* Desktop: larger rounded corners */
-        lg:rounded-3xl
-      "
     >
-      {/* Mobile-first card background */}
-      <div className="absolute inset-0 glass-mobile group-hover:border-white/40 transition-all duration-500
-        rounded-2xl lg:rounded-3xl
-      "></div>
-      
-      <div className="relative">
-        <div className="relative overflow-hidden
-          /* Mobile: shorter image for more compact layout */
-          h-48
-          /* Tablet: medium height */
-          sm:h-64
-          /* Desktop: tall image for cinematic effect */
-          lg:h-80
-          rounded-t-2xl lg:rounded-t-3xl
-        ">
-          <motion.img
-            src={heroImages[index % heroImages.length]}
-            alt={tournament.name}
-            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-115"
-          />
-          
-          {/* Enhanced overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-neon-red/10 via-transparent to-neon-blue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          
-          {/* Mobile-optimized badges */}
-          <div className="absolute top-3 left-3 sm:top-6 sm:left-6 flex flex-wrap gap-2 sm:gap-3">
-            <motion.div 
-              whileHover={{ scale: 1.1 }}
-              className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-white shadow-2xl bg-gradient-to-r from-red-500 to-pink-600 backdrop-blur-sm border border-red-300/30
-                /* Mobile: smaller badge */
-                text-2xs
-                /* Desktop: larger badge */
-                sm:text-sm
-              "
-            >
-              <div className="flex items-center space-x-1 sm:space-x-2">
-                <Activity className="h-3 w-3 sm:h-4 sm:w-4 animate-pulse" />
-                <span className="uppercase tracking-wide">🔴 LIVE</span>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Mobile-optimized prize pool */}
+      <div className="relative h-48 lg:h-64 overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxnYW1pbmclMjB0b3VybmFtZW50fGVufDB8fHx8MTc1Mjk5NTc2MXww&ixlib=rb-4.1.0&q=85"
+          alt={tournament.name}
+          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+        />
+        
+        {/* Remove black overlay backgrounds */}
+        <div className="absolute inset-0 bg-gradient-to-t from-cosmic-dark/60 via-transparent to-transparent"></div>
+        
+        {/* Status Badge */}
+        <div className="absolute top-4 lg:top-6 left-4 lg:left-6">
           <motion.div 
-            className="absolute top-3 right-3 sm:top-6 sm:right-6"
-            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileHover={{ scale: 1.1 }}
+            className={`px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-sm lg:text-base font-bold text-white shadow-glow ${
+              tournament.status === 'live' 
+                ? 'bg-gradient-to-r from-red-500 to-pink-600 animate-pulse-glow'
+                : 'bg-gradient-to-r from-blue-500 to-cyan-600'
+            }`}
           >
-            <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-black px-3 py-1.5 sm:px-5 sm:py-2 rounded-lg sm:rounded-xl font-black shadow-2xl flex items-center space-x-1 sm:space-x-2 backdrop-blur-sm
-              /* Mobile: smaller prize badge */
-              text-2xs
-              /* Desktop: larger prize badge */
-              sm:text-sm
-            ">
-              <Crown className="h-3 w-3 sm:h-5 sm:w-5" />
-              <span>₹{tournament.prize_pool?.toLocaleString()}</span>
-            </div>
+            {tournament.status === 'live' ? 'LIVE BATTLE' : 'STARTING SOON'}
           </motion.div>
-          
-          {/* Mobile-first title and info positioning */}
-          <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6">
-            <h3 className="text-white font-black drop-shadow-2xl leading-tight mb-3 sm:mb-4
-              /* Mobile: compact title */
-              text-lg
-              /* Desktop: large title */
-              lg:text-2xl
-            ">
-              {tournament.name}
-            </h3>
-            
-            {/* Mobile: Stack info vertically for space efficiency */}
-            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:items-center sm:justify-between">
-              <motion.div 
-                className="flex items-center space-x-2 bg-black/50 backdrop-blur-lg px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-white/30"
-                whileHover={{ scale: 1.05 }}
-              >
-                <Users className="h-4 w-4 sm:h-5 sm:w-5 text-neon-blue" />
-                <span className="text-white font-bold text-xs sm:text-sm">{tournament.current_participants}/{tournament.max_participants}</span>
-              </motion.div>
-              <motion.div 
-                className="flex items-center space-x-2 bg-black/50 backdrop-blur-lg px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-white/30"
-                whileHover={{ scale: 1.05 }}
-              >
-                <Crosshair className="h-4 w-4 sm:h-5 sm:w-5 text-neon-green" />
-                <span className="text-white font-bold text-xs sm:text-sm">₹{tournament.entry_fee}</span>
-              </motion.div>
-            </div>
-          </div>
         </div>
 
-        <div className="space-y-4 sm:space-y-6
-          /* Mobile: compact padding */
-          p-4
-          /* Desktop: spacious padding */
-          lg:p-8
-        ">
-          <Link
-            to={`/tournaments/${tournament.tournament_id}`}
-            className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden
-              /* Mobile: smaller button */
-              py-3 px-4 text-sm
-              /* Desktop: larger button */
-              lg:py-4 lg:px-6 lg:text-base
-            "
-          >
-            <motion.div 
-              className="flex items-center justify-center space-x-2 sm:space-x-4"
-              whileHover={{ scale: 1.02 }}
-            >
-              <Gamepad2 className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-12 transition-transform" />
-              <span className="font-black tracking-wide">ENTER BATTLE</span>
-              <Flame className="h-5 w-5 sm:h-6 sm:w-6 group-hover:animate-pulse" />
-            </motion.div>
-          </Link>
+        {/* Prize Pool */}
+        <motion.div 
+          className="absolute top-4 lg:top-6 right-4 lg:right-6"
+          whileHover={{ scale: 1.1, rotate: 5 }}
+        >
+          <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-3 lg:px-4 py-1.5 lg:py-2 rounded-xl text-sm lg:text-base font-bold shadow-glow flex items-center space-x-1">
+            <Crown className="h-4 w-4" />
+            <span>₹{tournament.prize_pool?.toLocaleString()}</span>
+          </div>
+        </motion.div>
+
+        {/* Battle Map */}
+        <div className="absolute bottom-4 lg:bottom-6 left-4 lg:left-6">
+          <div className="flex items-center space-x-2 text-white/90 mb-2">
+            <MapPin className="h-4 w-4 text-neon-green" />
+            <span className="text-sm lg:text-base font-medium backdrop-blur-sm px-2 py-1 rounded">
+              {tournament.battle_map}
+            </span>
+          </div>
         </div>
+        
+        {/* Tournament Title */}
+        <div className="absolute bottom-4 lg:bottom-6 left-4 lg:left-6 right-4 lg:right-6">
+          <h3 className="text-white font-bold text-lg lg:text-xl xl:text-2xl mb-4 drop-shadow-2xl leading-tight">
+            {tournament.name}
+          </h3>
+          
+          {/* Mobile: Stack info vertically for space efficiency */}
+          <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:items-center sm:justify-between">
+            <motion.div 
+              className="flex items-center space-x-2 backdrop-blur-lg px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-white/30"
+              whileHover={{ scale: 1.05 }}
+            >
+              <Users className="h-4 w-4 sm:h-5 sm:w-5 text-neon-blue" />
+              <span className="text-white font-bold text-xs sm:text-sm">{tournament.current_participants}/{tournament.max_participants}</span>
+            </motion.div>
+            <motion.div 
+              className="flex items-center space-x-2 backdrop-blur-lg px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-white/30"
+              whileHover={{ scale: 1.05 }}
+            >
+              <Crosshair className="h-4 w-4 sm:h-5 sm:w-5 text-neon-green" />
+              <span className="text-white font-bold text-xs sm:text-sm">₹{tournament.entry_fee}</span>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-4 sm:space-y-6
+        /* Mobile: compact padding */
+        p-4
+        /* Desktop: spacious padding */
+        lg:p-8
+      ">
+        <Link
+          to={`/tournaments/${tournament.tournament_id}`}
+          className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden
+            /* Mobile: smaller button */
+            py-3 px-4 text-sm
+            /* Desktop: larger button */
+            lg:py-4 lg:px-6 lg:text-base
+          "
+        >
+          <motion.div 
+            className="flex items-center justify-center space-x-2 sm:space-x-4"
+            whileHover={{ scale: 1.02 }}
+          >
+            <Gamepad2 className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-12 transition-transform" />
+            <span className="font-black tracking-wide">ENTER BATTLE</span>
+            <Flame className="h-5 w-5 sm:h-6 sm:w-6 group-hover:animate-pulse" />
+          </motion.div>
+        </Link>
       </div>
     </motion.div>
   );
@@ -485,7 +427,7 @@ const Home = () => {
       transition={{ duration: 1 }}
       className="w-full"
     >
-      {/* Mobile-First Hero Section */}
+      {/* Mobile-First Hero Section - Clean background */}
       <motion.section
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -497,9 +439,9 @@ const Home = () => {
           lg:min-h-screen
         "
       >
-        {/* Background removed as per requirement */}
+        {/* Clean gradient background - no black boxes */}
         <div className="absolute inset-0 w-full h-full">
-          <div className="absolute inset-0 bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-cosmic-dark/40 via-cosmic-black/20 to-cosmic-deep/40"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-neon-red/8 via-transparent to-electric-blue/8"></div>
         </div>
 
@@ -800,131 +742,66 @@ const Home = () => {
             />
             <StatCard
               icon={Users}
-              label="Warriors Online"
+              label="Active Players"
               value={`${Math.floor(liveStats.activePlayers/1000)}K+`}
-              description="Players battling now"
-              color="bg-gradient-to-br from-blue-500 via-cyan-600 to-indigo-600"
-              animate={true}
+              description="Warriors online now"
+              color="bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600"
+              trend="up"
             />
             <StatCard
               icon={Activity}
               label="Live Matches"
               value={liveStats.liveMatches}
               description="Battles in progress"
-              color="bg-gradient-to-br from-red-500 via-pink-600 to-purple-600"
-              animate={true}
+              color="bg-gradient-to-br from-pink-500 via-red-600 to-rose-600"
+              trend="down"
             />
           </div>
         </section>
 
-        {/* Featured Tournaments - Mobile-First Layout */}
+        {/* Featured Tournaments */}
         <section>
           <motion.div 
-            className="mb-8 sm:mb-12 lg:mb-16
-              /* Mobile: center everything */
-              text-center
-              /* Desktop: flex layout with space between */
-              lg:flex lg:items-center lg:justify-between lg:text-left
-            "
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.2 }}
           >
-            <div>
-              <h2 className="text-white font-gaming font-black mb-4
-                /* Mobile: compact title */
-                text-3xl
-                /* Desktop: large title */
-                lg:text-6xl lg:mb-4
-              ">FEATURED BATTLES</h2>
-              <p className="text-gray-400
-                /* Mobile: small description */
-                text-sm mb-4
-                /* Desktop: larger description, no bottom margin */
-                lg:text-xl lg:mb-0
-              ">Elite tournaments for champions</p>
-            </div>
-            <Link
-              to="/tournaments"
-              className="text-neon-blue hover:text-electric-blue font-bold flex items-center justify-center space-x-2 sm:space-x-3 transition-all duration-300 group
-                /* Mobile: smaller link */
-                text-sm
-                /* Desktop: larger link */
-                lg:text-xl
-              "
-            >
-              <span>View All Tournaments</span>
-              <ArrowRight className="h-4 w-4 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform" />
-            </Link>
+            <h2 className="text-white font-gaming font-black mb-4 sm:mb-6
+              /* Mobile: compact title */
+              text-3xl
+              /* Desktop: large title */
+              lg:text-6xl
+            ">FEATURED TOURNAMENTS</h2>
+            <p className="text-gray-400
+              /* Mobile: small description */
+              text-sm
+              /* Desktop: larger description */
+              lg:text-xl
+            ">Join the most epic battles</p>
           </motion.div>
           
           <div className="max-w-7xl mx-auto
-            /* Mobile: single column for better mobile experience */
+            /* Mobile: single column */
             grid grid-cols-1 gap-6
-            /* Tablet: 2 columns */
-            md:grid-cols-2 md:gap-8
-            /* Desktop: 3 columns */
-            xl:grid-cols-3 xl:gap-10
+            /* Desktop: horizontal layout */
+            lg:grid-cols-3 lg:gap-8
           ">
-            {tournaments.slice(0, 6).map((tournament, index) => (
+            {tournaments.slice(0, 3).map((tournament, index) => (
               <TournamentCard key={tournament.tournament_id} tournament={tournament} index={index} />
             ))}
           </div>
-        </section>
-
-        {/* CTA Section - Mobile-First */}
-        <section className="text-center
-          /* Mobile: compact padding */
-          py-12
-          /* Desktop: spacious padding */
-          lg:py-20
-        ">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
-            className="max-w-4xl mx-auto"
-          >
-            <h2 className="text-white font-gaming font-black mb-6 sm:mb-8
-              /* Mobile: compact CTA title */
-              text-3xl
-              /* Desktop: large CTA title */
-              lg:text-6xl
-            ">
-              READY TO DOMINATE?
-            </h2>
-            <p className="text-gray-300 leading-relaxed mb-8 sm:mb-12
-              /* Mobile: compact description */
-              text-base
-              /* Desktop: large description */
-              lg:text-2xl
-            ">
-              Join thousands of elite warriors in the ultimate Free Fire tournament experience
-            </p>
-            <div className="flex justify-center">
-              <Link
-                to="/tournaments"
-                className="btn-premium ripple mobile-friendly group
-                  /* Mobile: full-width button */
-                  w-full text-lg px-8 py-4
-                  /* Tablet: auto width */
-                  sm:w-auto
-                  /* Desktop: large button */
-                  lg:text-2xl lg:px-16 lg:py-8
-                "
-              >
-                <div className="flex items-center justify-center space-x-3 sm:space-x-4">
-                  <Target className="group-hover:rotate-45 transition-transform
-                    /* Mobile: smaller icon */
-                    h-6 w-6
-                    /* Desktop: larger icon */
-                    lg:h-8 lg:w-8
-                  " />
-                  <span className="font-black">START BATTLING</span>
-                </div>
-              </Link>
-            </div>
-          </motion.div>
+          
+          <div className="text-center mt-8 lg:mt-12">
+            <Link
+              to="/tournaments"
+              className="btn-premium inline-flex items-center space-x-3 px-8 lg:px-12 py-4 lg:py-5 text-lg lg:text-xl ripple mobile-friendly group"
+            >
+              <Trophy className="group-hover:animate-bounce h-6 w-6" />
+              <span className="font-black">VIEW ALL TOURNAMENTS</span>
+              <ArrowRight className="group-hover:translate-x-2 transition-transform h-6 w-6" />
+            </Link>
+          </div>
         </section>
       </div>
     </motion.div>

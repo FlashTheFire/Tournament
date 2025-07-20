@@ -139,7 +139,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       }
     },
     closed: {
-      x: "100%",
+      x: "-100%",
       transition: {
         type: "spring",
         stiffness: 300,
@@ -211,14 +211,14 @@ const Sidebar = ({ isOpen, onClose }) => {
     return (
       <div key={item.key} className="mb-1.5 sm:mb-2">
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: index * 0.1 }}
         >
           {hasSubmenu ? (
             <motion.button
               onClick={() => toggleMenu(item.key)}
-              whileHover={{ scale: 1.02, x: -5 }}
+              whileHover={{ scale: 1.02, x: 5 }}
               whileTap={{ scale: 0.98 }}
               className={`w-full flex items-center font-semibold transition-all duration-300 group relative overflow-hidden ${
                 isActive
@@ -263,7 +263,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               </div>
               <MenuBadge badge={item.badge} isActive={isActive} />
               <motion.div
-                animate={{ rotate: isExpanded ? -90 : 0 }}
+                animate={{ rotate: isExpanded ? 90 : 0 }}
                 transition={{ duration: 0.3 }}
                 className="relative z-10"
               >
@@ -276,7 +276,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               onClick={onClose}
             >
               <motion.div
-                whileHover={{ scale: 1.02, x: -5 }}
+                whileHover={{ scale: 1.02, x: 5 }}
                 whileTap={{ scale: 0.98 }}
                 className={`flex items-center font-semibold transition-all duration-300 group relative overflow-hidden ${
                   isActive
@@ -334,15 +334,15 @@ const Sidebar = ({ isOpen, onClose }) => {
               transition={{ duration: 0.4, type: "spring", stiffness: 100 }}
               className="overflow-hidden
                 /* Mobile: compact submenu spacing */
-                mr-4 mt-2 space-y-1
+                ml-4 mt-2 space-y-1
                 /* Desktop: spacious submenu spacing */
-                lg:mr-6 lg:mt-3 lg:space-y-2
+                lg:ml-6 lg:mt-3 lg:space-y-2
               "
             >
               {item.submenu.map((subItem, subIndex) => (
                 <motion.div
                   key={subItem.path}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: subIndex * 0.1, type: "spring", stiffness: 150 }}
                 >
@@ -351,7 +351,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     onClick={onClose}
                   >
                     <motion.div
-                      whileHover={{ scale: 1.02, x: -3 }}
+                      whileHover={{ scale: 1.02, x: 3 }}
                       whileTap={{ scale: 0.98 }}
                       className={`flex items-center font-medium transition-all duration-300 group relative overflow-hidden ${
                         isActiveLink(subItem.path)
@@ -419,12 +419,12 @@ const Sidebar = ({ isOpen, onClose }) => {
         )}
       </AnimatePresence>
 
-      {/* Mobile-First Sidebar - Right Aligned with Full Width */}
+      {/* Mobile-First Sidebar - Left Aligned with Full Width Text */}
       <motion.aside
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
-        className={`fixed right-0 top-0 h-full glass-mobile border-l border-white/10 z-50 kinetic-waves
+        className={`fixed left-0 top-0 h-full glass-mobile border-r border-white/10 z-50 kinetic-waves
           /* Mobile: full width for maximum accessibility */
           w-full
           /* Small mobile: most of screen width */
@@ -442,13 +442,29 @@ const Sidebar = ({ isOpen, onClose }) => {
         }}
       >
         <div className={`flex flex-col h-full relative z-10 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-          {/* Mobile-First Header - Close button on left, navigation title on right */}
+          {/* Mobile-First Header - Close button on right, navigation title on left */}
           <div className="flex items-center justify-between border-b border-white/10
             /* Mobile: compact header */
             p-4
             /* Desktop: spacious header */
             lg:p-6
           ">
+            {/* Left-aligned brand text */}
+            <div className="text-left">
+              <h2 className="text-white font-gaming font-bold
+                /* Mobile: compact title */
+                text-lg
+                /* Desktop: larger title */
+                lg:text-xl
+              ">Navigation</h2>
+              <p className="text-gray-400
+                /* Mobile: small subtitle */
+                text-xs
+                /* Desktop: normal subtitle */
+                lg:text-sm
+              ">Battle Arena Menu</p>
+            </div>
+
             <motion.button
               onClick={onClose}
               whileHover={{ scale: 1.1, rotate: 90 }}
@@ -462,22 +478,6 @@ const Sidebar = ({ isOpen, onClose }) => {
             >
               <X className="h-5 w-5 sm:h-6 sm:w-6" />
             </motion.button>
-
-            {/* Right-aligned brand text */}
-            <div className="text-right">
-              <h2 className="text-white font-gaming font-bold
-                /* Mobile: compact title */
-                text-lg
-                /* Desktop: larger title */
-                lg:text-xl
-              ">Navigation Menu</h2>
-              <p className="text-gray-400
-                /* Mobile: small subtitle */
-                text-xs
-                /* Desktop: normal subtitle */
-                lg:text-sm
-              ">Ultimate Battle Arena</p>
-            </div>
           </div>
 
           {/* Mobile-First User Info */}
