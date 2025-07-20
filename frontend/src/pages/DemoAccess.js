@@ -13,7 +13,7 @@ import {
   CheckCircle,
   Rocket
 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import safeToast from '../utils/safeToast';
 
 const DemoAccess = () => {
   const { login } = useAuth();
