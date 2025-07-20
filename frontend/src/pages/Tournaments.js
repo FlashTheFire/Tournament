@@ -177,7 +177,7 @@ const Tournaments = () => {
       setTournaments([...mockTournaments, ...(data.tournaments || [])]);
     } catch (error) {
       console.error('Failed to load tournaments:', error);
-      toast.error('Failed to load tournaments');
+      safeToast.error('Failed to load tournaments');
     } finally {
       setLoading(false);
     }
