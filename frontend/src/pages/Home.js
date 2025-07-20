@@ -682,26 +682,26 @@ const Home = () => {
           
           {/* Premium Mobile Auto-Scroll Carousel for AI Insights */}
           <div className="max-w-7xl mx-auto">
-            {/* Mobile: Premium Auto-Scroll Carousel */}
+            {/* Mobile: Advanced Premium Auto-Scroll Carousel */}
             <div className="lg:hidden">
               <div className="relative overflow-hidden rounded-2xl">
-                {/* Auto-scrolling container */}
+                {/* Premium auto-scrolling container - Full element scroll */}
                 <motion.div
                   className="flex gap-4"
                   animate={{
-                    x: [0, -33.33, -66.66, -100, 0],
+                    x: ['0%', '-100%', '-200%', '0%'],
                   }}
                   transition={{
-                    duration: 12,
+                    duration: 15,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    repeatDelay: 1
+                    repeatDelay: 2
                   }}
-                  style={{ width: '400%' }}
+                  style={{ width: '300%' }}
                 >
-                  {/* Render cards 4 times for seamless loop */}
-                  {[...aiPredictions, ...aiPredictions, ...aiPredictions, ...aiPredictions].map((insight, index) => (
-                    <div key={`${insight.id}-${index}`} className="w-1/4 flex-shrink-0 px-2">
+                  {/* Triple the cards for seamless infinite loop */}
+                  {[...aiPredictions, ...aiPredictions, ...aiPredictions].map((insight, index) => (
+                    <div key={`${insight.id}-${Math.floor(index/3)}-${index%3}`} className="w-1/3 flex-shrink-0 px-2">
                       <motion.div
                         className={`glass rounded-2xl p-6 relative overflow-hidden border border-white/10 bg-gradient-to-br ${insight.gradient}/20 shadow-2xl h-full`}
                         whileHover={{ scale: 1.02, y: -5 }}
@@ -709,15 +709,19 @@ const Home = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: (index % 3) * 0.2 }}
                       >
-                        {/* Premium glow effect */}
+                        {/* Advanced premium glow effect */}
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></div>
+                        
+                        {/* Premium floating orbs */}
+                        <div className="absolute top-2 right-2 w-3 h-3 bg-gradient-to-r from-neon-blue to-electric-purple rounded-full animate-pulse opacity-60"></div>
+                        <div className="absolute bottom-2 left-2 w-2 h-2 bg-gradient-to-r from-neon-red to-neon-pink rounded-full animate-ping opacity-40"></div>
                         
                         <div className="flex items-start justify-between mb-4 relative z-10">
                           <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${insight.gradient} flex items-center justify-center shadow-glow`}>
                             <insight.icon className="h-6 w-6 text-white" />
                           </div>
                           <motion.div 
-                            className={`px-3 py-1 rounded-full bg-gradient-to-r ${insight.gradient} text-white font-bold text-sm`}
+                            className={`px-3 py-1 rounded-full bg-gradient-to-r ${insight.gradient} text-white font-bold text-sm shadow-neon`}
                             animate={{ scale: [1, 1.1, 1] }}
                             transition={{ duration: 2, repeat: Infinity }}
                           >
@@ -731,26 +735,28 @@ const Home = () => {
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          className={`w-full btn-premium bg-gradient-to-r ${insight.gradient} text-white font-bold py-3 rounded-xl text-sm transition-all duration-300 relative z-10`}
+                          className={`w-full btn-premium bg-gradient-to-r ${insight.gradient} text-white font-bold py-3 rounded-xl text-sm transition-all duration-300 relative z-10 shadow-glow-lg`}
                         >
                           {insight.action}
                         </motion.button>
 
-                        {/* Premium floating particles effect */}
-                        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-                          {[...Array(5)].map((_, i) => (
+                        {/* Advanced premium particle effects */}
+                        <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+                          {[...Array(8)].map((_, i) => (
                             <motion.div
                               key={i}
-                              className={`absolute w-1 h-1 bg-gradient-to-r ${insight.gradient} rounded-full opacity-60`}
+                              className={`absolute w-1 h-1 bg-gradient-to-r ${insight.gradient} rounded-full opacity-70`}
                               animate={{
-                                x: [0, Math.random() * 200 - 100],
-                                y: [0, Math.random() * 200 - 100],
+                                x: [0, Math.random() * 150 - 75],
+                                y: [0, Math.random() * 150 - 75],
                                 opacity: [0, 1, 0],
+                                scale: [0, 1, 0],
                               }}
                               transition={{
-                                duration: 3 + Math.random() * 2,
+                                duration: 4 + Math.random() * 3,
                                 repeat: Infinity,
-                                delay: i * 0.5,
+                                delay: i * 0.7,
+                                ease: "easeInOut",
                               }}
                               style={{
                                 left: `${Math.random() * 100}%`,
@@ -764,43 +770,37 @@ const Home = () => {
                   ))}
                 </motion.div>
 
-                {/* Premium scroll indicators */}
-                <div className="flex justify-center space-x-2 mt-4">
+                {/* Enhanced premium scroll indicators */}
+                <div className="flex justify-center space-x-3 mt-6">
                   {aiPredictions.map((_, index) => (
                     <motion.div
                       key={index}
-                      className="w-2 h-2 rounded-full bg-gradient-to-r from-neon-blue to-electric-purple"
+                      className="relative"
                       animate={{
-                        scale: [1, 1.5, 1],
-                        opacity: [0.5, 1, 0.5],
+                        scale: [1, 1.3, 1],
                       }}
                       transition={{
-                        duration: 4,
+                        duration: 5,
                         repeat: Infinity,
-                        delay: index * 4,
+                        delay: index * 5,
                       }}
-                    />
+                    >
+                      <div className="w-3 h-3 rounded-full bg-gradient-to-r from-neon-blue via-electric-purple to-neon-pink opacity-80"></div>
+                      <motion.div
+                        className="absolute inset-0 w-3 h-3 rounded-full bg-gradient-to-r from-neon-blue to-electric-purple"
+                        animate={{
+                          opacity: [0.3, 1, 0.3],
+                          scale: [0.8, 1.2, 0.8],
+                        }}
+                        transition={{
+                          duration: 5,
+                          repeat: Infinity,
+                          delay: index * 5,
+                        }}
+                      />
+                    </motion.div>
                   ))}
                 </div>
-
-                {/* Mobile swipe hint */}
-                <motion.div
-                  className="flex items-center justify-center space-x-2 mt-3 text-gray-400 text-xs"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <div className="flex space-x-1">
-                    <div className="w-1 h-1 bg-current rounded-full"></div>
-                    <div className="w-1 h-1 bg-current rounded-full"></div>
-                    <div className="w-1 h-1 bg-current rounded-full"></div>
-                  </div>
-                  <span>Auto-scrolling AI insights</span>
-                  <div className="flex space-x-1">
-                    <div className="w-1 h-1 bg-current rounded-full"></div>
-                    <div className="w-1 h-1 bg-current rounded-full"></div>
-                    <div className="w-1 h-1 bg-current rounded-full"></div>
-                  </div>
-                </motion.div>
               </div>
             </div>
 
