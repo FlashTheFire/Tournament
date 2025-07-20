@@ -17,6 +17,7 @@ from typing import Union
 import qrcode
 from io import BytesIO
 import asyncio
+import numpy as np
 
 # Perplexity AI Configuration
 PERPLEXITY_API_KEY = "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"
