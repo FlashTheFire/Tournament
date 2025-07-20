@@ -137,7 +137,7 @@ const TournamentDetails = () => {
       setIsRegistered(Math.random() > 0.5); // Mock registration status
     } catch (error) {
       console.error('Failed to load tournament:', error);
-      toast.error('Failed to load tournament details');
+      safeToast.error('Failed to load tournament details');
     } finally {
       setLoading(false);
     }
