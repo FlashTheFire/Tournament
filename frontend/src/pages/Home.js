@@ -24,7 +24,12 @@ import {
   Activity,
   Timer,
   MapPin,
-  Headphones
+  Headphones,
+  ChevronRight,
+  ArrowRight,
+  Brain,
+  BarChart3,
+  TrendingDown
 } from 'lucide-react';
 import { apiService } from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -35,6 +40,8 @@ const Home = () => {
   const [tournaments, setTournaments] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [aiPredictions, setAiPredictions] = useState([]);
+  const [matchmakingStatus, setMatchmakingStatus] = useState('ready');
   const [liveStats, setLiveStats] = useState({
     totalTournaments: 0,
     totalPrizePool: 0,
@@ -44,14 +51,15 @@ const Home = () => {
 
   useEffect(() => {
     loadData();
+    loadAIFeatures();
     // Simulate real-time updates
     const interval = setInterval(() => {
       setLiveStats(prev => ({
         ...prev,
-        activePlayers: prev.activePlayers + Math.floor(Math.random() * 3) - 1,
-        liveMatches: Math.max(20, prev.liveMatches + Math.floor(Math.random() * 2) - 1)
+        activePlayers: prev.activePlayers + Math.floor(Math.random() * 5) - 2,
+        liveMatches: Math.max(45, prev.liveMatches + Math.floor(Math.random() * 3) - 1)
       }));
-    }, 3000);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -59,7 +67,7 @@ const Home = () => {
     try {
       const [tournamentsData, leaderboardData] = await Promise.all([
         apiService.getTournaments({ limit: 6 }),
-        apiService.getLeaderboards('free_fire', null, 10)
+        apiService.getLeaderboards('free_fire', null, 8)
       ]);
 
       setTournaments(tournamentsData.tournaments || []);
@@ -67,10 +75,10 @@ const Home = () => {
       
       // Enhanced Free Fire stats for 2025
       setLiveStats({
-        totalTournaments: 247,
-        totalPrizePool: 2850000,
-        activePlayers: 28947,
-        liveMatches: 67
+        totalTournaments: 347,
+        totalPrizePool: 4850000,
+        activePlayers: 42947,
+        liveMatches: 89
       });
     } catch (error) {
       console.error('Failed to load data:', error);
@@ -80,7 +88,37 @@ const Home = () => {
     }
   };
 
-  // Premium Free Fire gaming images
+  const loadAIFeatures = async () => {
+    // Simulate AI predictions and matchmaking
+    setAiPredictions([
+      {
+        id: 1,
+        type: 'tournament_prediction',
+        title: 'High Win Probability',
+        description: 'Based on your gameplay, you have 78% chance to reach top 10',
+        confidence: 78,
+        tournament: 'Battle Royale Championship'
+      },
+      {
+        id: 2,
+        type: 'skill_analysis',
+        title: 'Aim Improvement Detected',
+        description: 'Your accuracy improved by 15% this week. Keep practicing!',
+        confidence: 92,
+        trend: 'up'
+      },
+      {
+        id: 3,
+        type: 'matchmaking',
+        title: 'Perfect Match Found',
+        description: 'Found teammates with similar skill level and playstyle',
+        confidence: 85,
+        players: 3
+      }
+    ]);
+  };
+
+  // Premium Free Fire hero images
   const heroImages = [
     "https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxnYW1pbmclMjB0b3VybmFtZW50fGVufDB8fHx8MTc1Mjk5NTc2MXww&ixlib=rb-4.1.0&q=85",
     "https://images.unsplash.com/photo-1548003693-b55d51032288?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwyfHxnYW1pbmclMjB0b3VybmFtZW50fGVufDB8fHx8MTc1Mjk5NTc2MXww&ixlib=rb-4.1.0&q=85",
@@ -89,255 +127,224 @@ const Home = () => {
     "https://images.unsplash.com/photo-1633545495735-25df17fb9f31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwzfHxlc3BvcnRzfGVufDB8fHx8MTc1Mjk5NTc2OHww&ixlib=rb-4.1.0&q=85"
   ];
 
-  // Free Fire specific modes and features
-  const gameModes = [
-    { name: 'Battle Royale', icon: Target, color: 'from-red-500 to-pink-600', players: '50 Players' },
-    { name: 'Clash Squad', icon: Swords, color: 'from-blue-500 to-cyan-600', players: '4v4' },
-    { name: 'Lone Wolf', icon: Skull, color: 'from-purple-500 to-indigo-600', players: 'Solo' },
-    { name: 'Rush Hour', icon: Timer, color: 'from-green-500 to-emerald-600', players: 'Fast Match' }
-  ];
-
-  const StatCard = ({ icon: Icon, label, value, color, description, animate = false }) => (
+  const StatCard = ({ icon: Icon, label, value, color, description, animate = false, trend }) => (
     <motion.div
-      whileHover={{ scale: 1.06, rotateY: 8, rotateX: 2 }}
+      whileHover={{ scale: 1.05, rotateY: 5, rotateX: 2 }}
       whileTap={{ scale: 0.98 }}
-      className="glass rounded-3xl p-8 text-center relative overflow-hidden group cursor-pointer kinetic-waves"
+      className="group relative overflow-hidden rounded-3xl"
     >
-      {/* Dynamic background glow */}
-      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      {/* Premium glass background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.15] to-white/[0.05] backdrop-blur-xl rounded-3xl border border-white/20 group-hover:border-white/30 transition-all duration-500"></div>
       
-      {/* Animated border */}
+      {/* Animated border glow */}
       <motion.div
-        className="absolute inset-0 rounded-3xl border border-transparent bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red bg-clip-border opacity-0 group-hover:opacity-30"
+        className="absolute inset-0 rounded-3xl bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red opacity-0 group-hover:opacity-20 transition-opacity duration-500"
         animate={{ rotate: 360 }}
         transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        style={{ padding: '2px' }}
       />
 
-      <div className={`mx-auto w-20 h-20 ${color} rounded-3xl flex items-center justify-center mb-6 relative z-10 group-hover:shadow-neon-lg transition-all duration-300 group-hover:scale-110`}>
-        <Icon className="h-10 w-10 text-white drop-shadow-2xl" />
+      <div className="relative p-8 text-center">
+        <div className={`mx-auto w-20 h-20 ${color} rounded-3xl flex items-center justify-center mb-6 group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110`}>
+          <Icon className="h-10 w-10 text-white drop-shadow-2xl" />
+        </div>
+        
+        <div className="flex items-center justify-center space-x-2 mb-2">
+          <motion.h3 
+            className="text-4xl font-black text-white font-gaming"
+            animate={animate ? { scale: [1, 1.05, 1] } : {}}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            {typeof value === 'number' ? value.toLocaleString() : value}
+          </motion.h3>
+          {trend && (
+            <motion.div
+              animate={{ y: [-2, 2, -2] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              {trend === 'up' ? 
+                <TrendingUp className="h-6 w-6 text-neon-green" /> : 
+                <TrendingDown className="h-6 w-6 text-neon-red" />
+              }
+            </motion.div>
+          )}
+        </div>
+        
+        <p className="text-neon-blue text-sm font-bold mb-2 uppercase tracking-wider">{label}</p>
+        <p className="text-gray-300 text-xs opacity-90">{description}</p>
+        
         {animate && (
           <motion.div
-            className="absolute inset-0 rounded-3xl border-2 border-white/30"
-            animate={{ scale: [1, 1.2, 1], opacity: [1, 0.5, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            className="absolute top-4 right-4 w-3 h-3 bg-red-500 rounded-full"
+            animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+            transition={{ duration: 1, repeat: Infinity }}
           />
         )}
       </div>
-      
-      <motion.h3 
-        className="text-4xl font-bold text-white mb-3 font-gaming"
-        animate={animate ? { scale: [1, 1.05, 1] } : {}}
-        transition={{ duration: 1.5, repeat: Infinity }}
-      >
-        {typeof value === 'number' ? value.toLocaleString() : value}
-      </motion.h3>
-      <p className="text-neon-blue text-sm font-bold mb-2 uppercase tracking-wide">{label}</p>
-      <p className="text-gray-400 text-xs opacity-80">{description}</p>
-      
-      {/* Pulse effect for live stats */}
-      {animate && (
-        <motion.div
-          className="absolute top-4 right-4 w-3 h-3 bg-red-500 rounded-full"
-          animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-          transition={{ duration: 1, repeat: Infinity }}
-        />
-      )}
     </motion.div>
   );
 
-  const GameModeCard = ({ mode, index }) => (
+  const AIInsightCard = ({ insight, index }) => (
     <motion.div
       initial={{ opacity: 0, x: -50 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.1, type: "spring", stiffness: 100 }}
-      whileHover={{ scale: 1.05, rotateY: 5 }}
-      className="glass rounded-2xl p-6 group hover:border-neon-blue/50 transition-all duration-300 cursor-pointer"
+      transition={{ delay: index * 0.2, type: "spring", stiffness: 100 }}
+      whileHover={{ scale: 1.02, y: -5 }}
+      className="group relative overflow-hidden rounded-2xl"
     >
-      <div className={`w-16 h-16 bg-gradient-to-r ${mode.color} rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-neon transition-shadow duration-300`}>
-        <mode.icon className="h-8 w-8 text-white" />
+      {/* Advanced glass effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.12] to-white/[0.03] backdrop-blur-2xl rounded-2xl border border-white/20 group-hover:border-neon-blue/40 transition-all duration-500"></div>
+      
+      <div className="relative p-6">
+        <div className="flex items-start space-x-4">
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+            insight.type === 'tournament_prediction' ? 'bg-gradient-to-r from-blue-500 to-cyan-600' :
+            insight.type === 'skill_analysis' ? 'bg-gradient-to-r from-green-500 to-emerald-600' :
+            'bg-gradient-to-r from-purple-500 to-indigo-600'
+          } group-hover:shadow-glow transition-shadow duration-300`}>
+            {insight.type === 'tournament_prediction' && <Target className="h-6 w-6 text-white" />}
+            {insight.type === 'skill_analysis' && <TrendingUp className="h-6 w-6 text-white" />}
+            {insight.type === 'matchmaking' && <Users className="h-6 w-6 text-white" />}
+          </div>
+          
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-white font-bold text-lg group-hover:text-neon-blue transition-colors">
+                {insight.title}
+              </h4>
+              <div className="flex items-center space-x-1">
+                <Brain className="h-4 w-4 text-neon-purple" />
+                <span className="text-neon-purple text-sm font-bold">{insight.confidence}%</span>
+              </div>
+            </div>
+            <p className="text-gray-300 text-sm mb-3 leading-relaxed">{insight.description}</p>
+            
+            {/* Confidence bar */}
+            <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-neon-blue to-electric-purple rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${insight.confidence}%` }}
+                transition={{ delay: 0.5 + index * 0.1, duration: 1.5 }}
+              />
+            </div>
+            
+            {insight.tournament && (
+              <p className="text-xs text-gray-400 mt-2">Tournament: {insight.tournament}</p>
+            )}
+          </div>
+        </div>
       </div>
-      <h3 className="text-white font-bold text-lg mb-2">{mode.name}</h3>
-      <p className="text-gray-400 text-sm">{mode.players}</p>
     </motion.div>
   );
 
   const TournamentCard = ({ tournament, index }) => (
     <motion.div
-      initial={{ opacity: 0, y: 50, rotateX: -15 }}
-      animate={{ opacity: 1, y: 0, rotateX: 0 }}
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: index * 0.15, type: "spring", stiffness: 80 }}
       whileHover={{ 
         y: -15, 
-        rotateX: 8, 
-        rotateY: 3,
+        scale: 1.02,
+        rotateX: 5,
         transition: { type: "spring", stiffness: 300, damping: 20 }
       }}
-      className="tournament-card glass rounded-3xl overflow-hidden relative group border border-white/10 hover:border-neon-blue/50"
+      className="group relative overflow-hidden rounded-3xl"
     >
-      <div className="relative h-64 overflow-hidden">
-        <motion.img
-          src={heroImages[index % heroImages.length]}
-          alt={tournament.name}
-          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-115"
-        />
-        
-        {/* Enhanced overlay with Free Fire theme */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-neon-blue/10 via-transparent to-neon-red/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-        {/* Battle Status with enhanced animation */}
-        <motion.div 
-          className="absolute top-6 left-6"
-          whileHover={{ scale: 1.15 }}
-        >
-          <div className={`px-5 py-2 rounded-full text-sm font-bold flex items-center space-x-2 shadow-2xl ${
-            tournament.status === 'live' 
-              ? 'bg-gradient-to-r from-red-500 to-pink-600 text-white animate-pulse-glow' 
-              : tournament.status === 'upcoming'
-              ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
-              : 'bg-gradient-to-r from-gray-600 to-gray-700 text-white'
-          }`}>
-            {tournament.status === 'live' && <Activity className="h-4 w-4 animate-pulse" />}
-            {tournament.status === 'upcoming' && <Timer className="h-4 w-4" />}
-            {tournament.status === 'completed' && <Award className="h-4 w-4" />}
-            <span className="uppercase tracking-wide">
-              {tournament.status === 'live' ? 'LIVE BATTLE' : 
-               tournament.status === 'upcoming' ? 'STARTING SOON' : 
-               'COMPLETED'}
-            </span>
-          </div>
-        </motion.div>
-
-        {/* Prize Pool with glow effect */}
-        <motion.div 
-          className="absolute top-6 right-6"
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ delay: 0.5 + index * 0.1, type: "spring", stiffness: 200 }}
-          whileHover={{ scale: 1.1, rotate: 5 }}
-        >
-          <div className="bg-gradient-to-r from-yellow-500 to-orange-600 text-black px-4 py-2 rounded-xl text-sm font-bold shadow-glow flex items-center space-x-1">
-            <Crown className="h-4 w-4" />
-            <span>₹{tournament.prize_pool.toLocaleString()}</span>
-          </div>
-        </motion.div>
-
-        {/* Battle Zone Indicator */}
-        <div className="absolute bottom-6 left-6">
-          <div className="flex items-center space-x-2 text-white/90 mb-2">
-            <MapPin className="h-4 w-4 text-neon-green" />
-            <span className="text-sm font-medium">Bermuda Remastered</span>
-          </div>
-        </div>
-        
-        <div className="absolute bottom-6 left-6 right-6">
-          <h3 className="text-white font-bold text-2xl mb-4 drop-shadow-2xl">{tournament.name}</h3>
-          <div className="flex items-center justify-between text-white/90 text-sm">
-            <motion.div 
-              className="flex items-center space-x-2 bg-black/40 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/20"
-              whileHover={{ scale: 1.05, backgroundColor: 'rgba(0, 212, 255, 0.1)' }}
-            >
-              <Users className="h-5 w-5 text-neon-blue" />
-              <span className="font-medium">{tournament.current_participants}/{tournament.max_participants}</span>
-            </motion.div>
-            <motion.div 
-              className="flex items-center space-x-2 bg-black/40 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/20"
-              whileHover={{ scale: 1.05, backgroundColor: 'rgba(0, 255, 136, 0.1)' }}
-            >
-              <Crosshair className="h-5 w-5 text-neon-green" />
-              <span className="font-medium">₹{tournament.entry_fee}</span>
-            </motion.div>
-          </div>
-        </div>
-      </div>
+      {/* Premium card background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.15] to-white/[0.05] backdrop-blur-2xl rounded-3xl border border-white/20 group-hover:border-white/40 transition-all duration-500"></div>
       
-      <div className="p-8 relative">
-        {/* Game Mode Details */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="text-center">
-            <p className="text-gray-400 text-sm mb-2">Battle Mode</p>
-            <div className="flex items-center space-x-2">
-              <Scope className="h-5 w-5 text-neon-purple" />
-              <p className="text-white font-bold capitalize">{tournament.mode || 'Battle Royale'}</p>
-            </div>
+      <div className="relative">
+        <div className="relative h-80 overflow-hidden rounded-t-3xl">
+          <motion.img
+            src={heroImages[index % heroImages.length]}
+            alt={tournament.name}
+            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-115"
+          />
+          
+          {/* Enhanced overlays */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-neon-red/10 via-transparent to-neon-blue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          
+          {/* Premium badges */}
+          <div className="absolute top-6 left-6 flex flex-wrap gap-3">
+            <motion.div 
+              whileHover={{ scale: 1.1 }}
+              className="px-4 py-2 rounded-full text-sm font-bold text-white shadow-2xl bg-gradient-to-r from-red-500 to-pink-600 backdrop-blur-sm border border-red-300/30"
+            >
+              <div className="flex items-center space-x-2">
+                <Activity className="h-4 w-4 animate-pulse" />
+                <span className="uppercase tracking-wide">🔴 LIVE BATTLE</span>
+              </div>
+            </motion.div>
           </div>
-          <div className="text-center">
-            <p className="text-gray-400 text-sm mb-2">Match Type</p>
-            <div className="flex items-center space-x-2">
-              <Target className="h-5 w-5 text-neon-red" />
-              <p className="text-white font-bold capitalize">{tournament.tournament_type || 'Squad'}</p>
-            </div>
-          </div>
-          <div className="text-center">
-            <p className="text-gray-400 text-sm mb-2">Region</p>
-            <div className="flex items-center space-x-2">
-              <MapPin className="h-5 w-5 text-neon-green" />
-              <p className="text-white font-bold">{tournament.country || 'Global'}</p>
-            </div>
-          </div>
-        </div>
-        
-        {/* Battle Time */}
-        <div className="flex items-center space-x-3 mb-8 p-4 bg-gradient-to-r from-neon-blue/10 to-electric-purple/10 rounded-xl border border-neon-blue/20">
-          <Clock className="h-5 w-5 text-neon-blue" />
-          <div>
-            <p className="text-white font-semibold">
-              {new Date(tournament.start_time).toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'short',
-                day: 'numeric'
-              })}
-            </p>
-            <p className="text-gray-400 text-sm">
-              {new Date(tournament.start_time).toLocaleTimeString([], {
-                hour: '2-digit', 
-                minute: '2-digit'
-              })}
-            </p>
-          </div>
-        </div>
-        
-        {/* Enhanced Action Button */}
-        <Link
-          to={`/tournaments/${tournament.tournament_id}`}
-          className="block w-full btn-premium text-center ripple mobile-friendly relative z-10 group overflow-hidden"
-        >
+
+          {/* Prize pool with enhanced styling */}
           <motion.div 
-            className="flex items-center justify-center space-x-3"
-            whileHover={{ scale: 1.02 }}
+            className="absolute top-6 right-6"
+            whileHover={{ scale: 1.1, rotate: 5 }}
           >
-            <Gamepad2 className="h-6 w-6 group-hover:rotate-12 transition-transform" />
-            <span className="font-bold text-lg">ENTER BATTLE</span>
-            <Flame className="h-6 w-6 group-hover:animate-pulse" />
+            <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-black px-5 py-2 rounded-xl text-sm font-black shadow-2xl flex items-center space-x-2 backdrop-blur-sm">
+              <Crown className="h-5 w-5" />
+              <span>₹{tournament.prize_pool?.toLocaleString()}</span>
+            </div>
           </motion.div>
-        </Link>
+          
+          {/* Title and info */}
+          <div className="absolute bottom-6 left-6 right-6">
+            <h3 className="text-white font-black text-2xl mb-4 drop-shadow-2xl leading-tight">
+              {tournament.name}
+            </h3>
+            <div className="flex items-center justify-between">
+              <motion.div 
+                className="flex items-center space-x-2 bg-black/50 backdrop-blur-lg px-4 py-2 rounded-xl border border-white/30"
+                whileHover={{ scale: 1.05 }}
+              >
+                <Users className="h-5 w-5 text-neon-blue" />
+                <span className="text-white font-bold">{tournament.current_participants}/{tournament.max_participants}</span>
+              </motion.div>
+              <motion.div 
+                className="flex items-center space-x-2 bg-black/50 backdrop-blur-lg px-4 py-2 rounded-xl border border-white/30"
+                whileHover={{ scale: 1.05 }}
+              >
+                <Crosshair className="h-5 w-5 text-neon-green" />
+                <span className="text-white font-bold">₹{tournament.entry_fee}</span>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-8 space-y-6">
+          <Link
+            to={`/tournaments/${tournament.tournament_id}`}
+            className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 group overflow-hidden"
+          >
+            <motion.div 
+              className="flex items-center justify-center space-x-4"
+              whileHover={{ scale: 1.02 }}
+            >
+              <Gamepad2 className="h-6 w-6 group-hover:rotate-12 transition-transform" />
+              <span className="font-black text-lg tracking-wide">ENTER BATTLE</span>
+              <Flame className="h-6 w-6 group-hover:animate-pulse" />
+            </motion.div>
+          </Link>
+        </div>
       </div>
     </motion.div>
   );
 
   if (loading) {
     return (
-      <div className="space-y-12">
-        {/* Enhanced Skeleton Loading */}
-        <div className="relative">
-          <div className="skeleton h-[500px] rounded-3xl kinetic-waves relative overflow-hidden">
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-neon-blue/20 to-transparent"
-              animate={{ x: [-100, 1000] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </div>
-        </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="skeleton h-48 rounded-3xl"></div>
-          ))}
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="skeleton h-[600px] rounded-3xl"></div>
-          ))}
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <motion.div className="text-center">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="w-16 h-16 border-4 border-neon-blue border-t-transparent rounded-full mx-auto mb-8"
+          />
+          <h2 className="text-3xl font-bold text-white mb-4 font-gaming">Loading Arena...</h2>
+          <p className="text-gray-400">Preparing the ultimate battle experience</p>
+        </motion.div>
       </div>
     );
   }
@@ -347,380 +354,270 @@ const Home = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className="space-y-16"
+      className="min-h-screen"
     >
       {/* Ultra-Premium Hero Section */}
       <motion.section
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.2, type: "spring", stiffness: 80 }}
-        className="relative h-[600px] rounded-3xl overflow-hidden group"
+        transition={{ duration: 1.2, type: "spring", stiffness: 60 }}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
       >
-        <motion.img
-          src={heroImages[0]}
-          alt="Free Fire Arena"
-          className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 3 }}
-        />
-        
-        {/* Dynamic overlay with Free Fire colors */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-neon-red/20 via-transparent to-electric-blue/20"></div>
-        
-        {/* Enhanced Kinetic Effects */}
-        <div className="absolute inset-0 kinetic-waves opacity-60"></div>
-        
-        {/* Floating Battle Elements */}
+        {/* Hero background */}
         <div className="absolute inset-0">
-          <motion.div
-            className="absolute top-20 right-32 text-neon-blue"
-            animate={{ y: [-10, 10, -10] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            <Crosshair className="h-8 w-8" />
-          </motion.div>
-          <motion.div
-            className="absolute bottom-32 left-1/4 text-neon-red"
-            animate={{ rotate: [0, 360] }}
-            transition={{ duration: 8, repeat: Infinity }}
-          >
-            <Target className="h-6 w-6" />
-          </motion.div>
+          <motion.img
+            src={heroImages[0]}
+            alt="Free Fire Arena"
+            className="w-full h-full object-cover"
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 8 }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-neon-red/10 via-transparent to-electric-blue/10"></div>
         </div>
-        
-        <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-12">
-            <motion.div
-              initial={{ opacity: 0, x: -150 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6, type: "spring", stiffness: 60 }}
-              className="max-w-4xl"
-            >
-              {/* Battle Royale Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-500/20 to-orange-600/20 backdrop-blur-sm border border-red-500/30 rounded-full px-6 py-2 mb-6"
-              >
-                <Flame className="h-5 w-5 text-red-400" />
-                <span className="text-red-300 font-bold uppercase tracking-wide">Battle Royale Championship</span>
-              </motion.div>
 
-              <motion.h1 
-                className="text-7xl md:text-9xl font-bold mb-8 font-gaming leading-none"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-              >
-                <span className="text-white drop-shadow-2xl">FREE FIRE</span>
-                <br />
-                <span className="text-gradient bg-gradient-to-r from-neon-red via-electric-purple to-neon-blue animate-glow">
-                  ULTIMATE ARENA
-                </span>
-              </motion.h1>
-              
-              <motion.p 
-                className="text-2xl text-gray-200 mb-12 leading-relaxed drop-shadow-lg max-w-2xl"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.0 }}
-              >
-                Dominate the battleground in the most intense Free Fire tournaments. 
-                <span className="text-neon-blue font-semibold"> Survive, Eliminate, Conquer!</span>
-              </motion.p>
-              
-              {/* Battle Stats */}
+        {/* Main content */}
+        <div className="relative z-10 text-center px-8 max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="mb-8"
+          >
+            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-500/20 to-orange-600/20 backdrop-blur-sm border border-red-500/30 rounded-full px-8 py-3 mb-8">
+              <Flame className="h-6 w-6 text-red-400 animate-pulse" />
+              <span className="text-red-300 font-bold uppercase tracking-wide text-lg">Battle Royale Championship</span>
+              <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
+            </div>
+          </motion.div>
+
+          <motion.h1 
+            className="text-7xl md:text-9xl lg:text-[12rem] font-black mb-8 font-gaming leading-none"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 1 }}
+          >
+            <span className="text-white drop-shadow-2xl block">FREE FIRE</span>
+            <motion.span 
+              className="text-gradient bg-gradient-to-r from-neon-red via-electric-purple to-neon-blue block"
+              animate={{ 
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+              }}
+              transition={{ 
+                duration: 4, 
+                repeat: Infinity, 
+                ease: "easeInOut"
+              }}
+              style={{ backgroundSize: '200% 200%' }}
+            >
+              ULTIMATE ARENA
+            </motion.span>
+          </motion.h1>
+          
+          <motion.p 
+            className="text-2xl md:text-3xl text-gray-200 mb-12 leading-relaxed drop-shadow-lg max-w-4xl mx-auto font-medium"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 1 }}
+          >
+            Experience the most intense Free Fire tournaments with{' '}
+            <span className="text-neon-blue font-bold">AI-powered matchmaking</span>, 
+            real-time analytics, and massive prize pools!
+          </motion.p>
+          
+          {/* Live battle stats */}
+          <motion.div
+            className="flex flex-wrap items-center justify-center gap-8 mb-12 text-lg font-bold"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 1 }}
+          >
+            {[
+              { icon: Activity, label: 'Live Battles', value: liveStats.liveMatches, color: 'text-neon-green' },
+              { icon: Users, label: 'Warriors', value: `${Math.floor(liveStats.activePlayers/1000)}K+`, color: 'text-neon-purple' },
+              { icon: Crown, label: 'Prize Pool', value: `₹${Math.floor(liveStats.totalPrizePool/100000)/10}M`, color: 'text-yellow-400' }
+            ].map((stat, index) => (
               <motion.div
-                className="flex items-center space-x-8 mb-12"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
+                key={stat.label}
+                className="flex items-center space-x-3 bg-black/30 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20"
+                whileHover={{ scale: 1.05 }}
+                animate={{ y: [-2, 2, -2] }}
+                transition={{ 
+                  y: { duration: 3, repeat: Infinity, delay: index * 0.5 },
+                  scale: { duration: 0.3 }
+                }}
               >
-                <div className="flex items-center space-x-2 text-neon-green">
-                  <Activity className="h-5 w-5 animate-pulse" />
-                  <span className="font-bold">67 Live Battles</span>
-                </div>
-                <div className="flex items-center space-x-2 text-neon-purple">
-                  <Users className="h-5 w-5" />
-                  <span className="font-bold">28,947 Warriors</span>
-                </div>
-                <div className="flex items-center space-x-2 text-yellow-400">
-                  <Crown className="h-5 w-5" />
-                  <span className="font-bold">₹2.85M Prize Pool</span>
-                </div>
+                <stat.icon className={`h-6 w-6 ${stat.color} animate-pulse`} />
+                <span className={`${stat.color}`}>{stat.value}</span>
+                <span className="text-white">{stat.label}</span>
               </motion.div>
-              
+            ))}
+          </motion.div>
+          
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.4, duration: 1 }}
+          >
+            <Link
+              to="/tournaments"
+              className="btn-premium text-xl px-12 py-6 ripple mobile-friendly group relative overflow-hidden"
+            >
               <motion.div 
-                className="flex flex-col sm:flex-row space-y-6 sm:space-y-0 sm:space-x-8"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 }}
+                className="flex items-center justify-center space-x-4"
+                whileHover={{ scale: 1.05 }}
               >
-                <Link
-                  to="/tournaments"
-                  className="btn-premium text-xl px-12 py-5 ripple mobile-friendly group relative overflow-hidden"
-                >
-                  <motion.div 
-                    className="flex items-center justify-center space-x-4"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <Crosshair className="h-7 w-7 group-hover:animate-spin" />
-                    <span className="font-bold">JOIN BATTLE</span>
-                    <Flame className="h-7 w-7 group-hover:animate-bounce" />
-                  </motion.div>
-                </Link>
-                
-                <Link
-                  to="/leaderboards"
-                  className="glass px-12 py-5 rounded-2xl font-bold text-xl border-2 border-neon-blue/50 hover:border-neon-blue hover:shadow-glow-lg transition-all duration-300 inline-flex items-center justify-center space-x-4 mobile-friendly group"
-                >
-                  <Shield className="h-7 w-7 text-yellow-400 group-hover:animate-pulse" />
-                  <span className="text-white">HALL OF FAME</span>
-                  <Crown className="h-7 w-7 text-yellow-400 group-hover:rotate-12 transition-transform" />
-                </Link>
+                <Crosshair className="h-8 w-8 group-hover:animate-spin" />
+                <span className="font-black tracking-wide">JOIN BATTLE NOW</span>
+                <Flame className="h-8 w-8 group-hover:animate-bounce" />
               </motion.div>
-            </motion.div>
-          </div>
+            </Link>
+            
+            <Link
+              to="/leaderboards"
+              className="glass px-12 py-6 rounded-2xl font-bold text-xl border-2 border-neon-blue/50 hover:border-neon-blue hover:shadow-glow-lg transition-all duration-300 inline-flex items-center justify-center space-x-4 mobile-friendly group backdrop-blur-xl"
+            >
+              <Shield className="h-8 w-8 text-yellow-400 group-hover:animate-pulse" />
+              <span className="text-white">VIEW HALL OF FAME</span>
+              <Crown className="h-8 w-8 text-yellow-400 group-hover:rotate-12 transition-transform" />
+            </Link>
+          </motion.div>
         </div>
       </motion.section>
 
-      {/* Enhanced Stats Section */}
-      <section>
-        <motion.div 
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <h2 className="text-5xl font-bold text-white mb-6 font-gaming">BATTLEFIELD STATS</h2>
-          <p className="text-gray-400 text-xl">Real-time battle arena metrics</p>
-        </motion.div>
-        
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          <StatCard
-            icon={Trophy}
-            label="Active Tournaments"
-            value={liveStats.totalTournaments}
-            description="Epic battles ongoing"
-            color="bg-gradient-to-br from-yellow-500 via-orange-600 to-red-600"
-          />
-          <StatCard
-            icon={DollarSign}
-            label="Total Prize Pool"
-            value={`₹${(liveStats.totalPrizePool / 1000000).toFixed(2)}M`}
-            description="Battle rewards waiting"
-            color="bg-gradient-to-br from-green-500 via-emerald-600 to-teal-600"
-          />
-          <StatCard
-            icon={Users}
-            label="Active Warriors"
-            value={liveStats.activePlayers}
-            description="Players battling now"
-            color="bg-gradient-to-br from-blue-500 via-cyan-600 to-indigo-600"
-            animate={true}
-          />
-          <StatCard
-            icon={Activity}
-            label="Live Battles"
-            value={liveStats.liveMatches}
-            description="Matches in progress"
-            color="bg-gradient-to-br from-red-500 via-pink-600 to-purple-600"
-            animate={true}
-          />
-        </div>
-      </section>
-
-      {/* Free Fire Game Modes */}
-      <section>
-        <motion.div 
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <h2 className="text-5xl font-bold text-white mb-6 font-gaming">BATTLE MODES</h2>
-          <p className="text-gray-400 text-xl">Choose your path to victory</p>
-        </motion.div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {gameModes.map((mode, index) => (
-            <GameModeCard key={mode.name} mode={mode} index={index} />
-          ))}
-        </div>
-      </section>
-
-      {/* Enhanced Tournament Section */}
-      <section>
-        <motion.div 
-          className="flex items-center justify-between mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <div>
-            <h2 className="text-5xl font-bold text-white mb-4 font-gaming">FEATURED BATTLES</h2>
-            <p className="text-gray-400 text-xl">Elite tournaments for true warriors</p>
-          </div>
-          <Link
-            to="/tournaments"
-            className="text-neon-blue hover:text-electric-blue font-bold flex items-center space-x-3 transition-all duration-300 group text-lg"
+      <div className="space-y-20 px-8 py-20">
+        {/* AI-Powered Features Section */}
+        <section>
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
           >
-            <span>All Tournaments</span>
-            <Swords className="h-6 w-6 group-hover:animate-bounce" />
-          </Link>
-        </motion.div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
-          {tournaments.slice(0, 6).map((tournament, index) => (
-            <TournamentCard key={tournament.tournament_id} tournament={tournament} index={index} />
-          ))}
-        </div>
-      </section>
-
-      {/* Elite Leaderboard with enhanced Free Fire theme */}
-      <section>
-        <motion.div 
-          className="flex items-center justify-between mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <div>
-            <h2 className="text-5xl font-bold text-white mb-4 font-gaming">HALL OF LEGENDS</h2>
-            <p className="text-gray-400 text-xl">Elite warriors of Free Fire arena</p>
-          </div>
-          <Link
-            to="/leaderboards"
-            className="text-neon-purple hover:text-electric-purple font-bold flex items-center space-x-3 transition-all duration-300 group text-lg"
-          >
-            <span>Full Rankings</span>
-            <Crown className="h-6 w-6 group-hover:animate-pulse" />
-          </Link>
-        </motion.div>
-        
-        <div className="glass rounded-3xl p-10 kinetic-waves border-2 border-white/10">
-          <div className="space-y-8">
-            {leaderboard.slice(0, 8).map((player, index) => (
-              <motion.div
-                key={player.user_id}
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + index * 0.1 }}
-                whileHover={{ scale: 1.03, x: 15 }}
-                className="flex items-center space-x-8 p-6 hover:bg-gradient-to-r hover:from-white/5 hover:to-transparent rounded-2xl transition-all duration-300 group cursor-pointer border border-transparent hover:border-neon-blue/30"
-              >
-                {/* Enhanced Rank Badge */}
-                <motion.div 
-                  className={`relative flex items-center justify-center w-16 h-16 rounded-2xl text-white font-bold text-xl ${
-                    index === 0 ? 'bg-gradient-to-r from-yellow-400 to-orange-500 shadow-glow-lg' :
-                    index === 1 ? 'bg-gradient-to-r from-gray-300 to-gray-500 shadow-glow' :
-                    index === 2 ? 'bg-gradient-to-r from-orange-600 to-red-500 shadow-glow' :
-                    'bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500'
-                  }`}
-                  whileHover={{ rotate: 10, scale: 1.1 }}
-                >
-                  {index < 3 ? (
-                    <Crown className="h-8 w-8" />
-                  ) : (
-                    <span>#{player.rank}</span>
-                  )}
-                  {index === 0 && (
-                    <motion.div
-                      className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center"
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      <Star className="h-3 w-3 text-white" />
-                    </motion.div>
-                  )}
-                </motion.div>
-                
-                {/* Player Avatar with Free Fire theme */}
-                <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-neon-blue/20 via-neon-purple/20 to-neon-red/20 flex items-center justify-center border-2 border-neon-blue/30 group-hover:border-neon-blue">
-                  <Skull className="h-8 w-8 text-neon-blue group-hover:text-white transition-colors" />
-                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
-                </div>
-                
-                <div className="flex-1">
-                  <h4 className="text-white font-bold text-xl group-hover:text-neon-blue transition-colors mb-2">
-                    {player.username}
-                  </h4>
-                  <div className="flex items-center space-x-6 text-sm text-gray-400">
-                    <div className="flex items-center space-x-2">
-                      <Target className="h-4 w-4 text-red-400" />
-                      <span>Level {player.level}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Trophy className="h-4 w-4 text-yellow-400" />
-                      <span>{player.wins} Victories</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Crosshair className="h-4 w-4 text-green-400" />
-                      <span>{player.kills} Eliminations</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="text-right">
-                  <p className="text-white font-bold text-2xl mb-1">
-                    {player.points.toLocaleString()}
-                  </p>
-                  <p className="text-neon-green text-sm font-semibold uppercase tracking-wide">Battle Points</p>
-                </div>
-                
-                <motion.div
-                  whileHover={{ scale: 1.3, rotate: 15 }}
-                  className="text-neon-blue opacity-0 group-hover:opacity-100 transition-all duration-300"
-                >
-                  <TrendingUp className="h-8 w-8" />
-                </motion.div>
-              </motion.div>
+            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-purple-500/20 to-indigo-600/20 backdrop-blur-sm border border-purple-500/30 rounded-full px-8 py-3 mb-8">
+              <Brain className="h-6 w-6 text-purple-400" />
+              <span className="text-purple-300 font-bold uppercase tracking-wide">AI-Powered Gaming</span>
+              <Zap className="h-6 w-6 text-yellow-400" />
+            </div>
+            <h2 className="text-6xl font-black text-white mb-6 font-gaming">SMART BATTLE SYSTEM</h2>
+            <p className="text-gray-400 text-xl max-w-3xl mx-auto">
+              Experience next-generation gaming with AI-driven matchmaking, predictive analytics, and personalized insights
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {aiPredictions.map((insight, index) => (
+              <AIInsightCard key={insight.id} insight={insight} index={index} />
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Quick Actions Section */}
-      <section>
-        <motion.div 
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <h2 className="text-5xl font-bold text-white mb-6 font-gaming">QUICK ACTIONS</h2>
-          <p className="text-gray-400 text-xl">Ready for battle? Get started now!</p>
-        </motion.div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Link to="/tournaments" className="glass rounded-3xl p-8 text-center group hover:border-neon-blue/50 transition-all duration-300">
-            <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-pink-600 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:shadow-glow transition-shadow duration-300">
-              <Play className="h-10 w-10 text-white" />
-            </div>
-            <h3 className="text-white font-bold text-xl mb-3">Join Tournament</h3>
-            <p className="text-gray-400">Enter live battles and compete for prizes</p>
-          </Link>
+        {/* Enhanced Stats Section */}
+        <section>
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h2 className="text-6xl font-black text-white mb-6 font-gaming">LIVE BATTLE STATS</h2>
+            <p className="text-gray-400 text-xl">Real-time battlefield intelligence</p>
+          </motion.div>
           
-          <Link to="/wallet" className="glass rounded-3xl p-8 text-center group hover:border-neon-green/50 transition-all duration-300">
-            <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:shadow-glow transition-shadow duration-300">
-              <DollarSign className="h-10 w-10 text-white" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+            <StatCard
+              icon={Trophy}
+              label="Active Tournaments"
+              value={liveStats.totalTournaments}
+              description="Epic battles ongoing"
+              color="bg-gradient-to-br from-yellow-500 via-orange-600 to-red-600"
+              trend="up"
+            />
+            <StatCard
+              icon={DollarSign}
+              label="Prize Pool"
+              value={`₹${(liveStats.totalPrizePool / 1000000).toFixed(1)}M`}
+              description="Battle rewards waiting"
+              color="bg-gradient-to-br from-green-500 via-emerald-600 to-teal-600"
+              trend="up"
+            />
+            <StatCard
+              icon={Users}
+              label="Warriors Online"
+              value={`${Math.floor(liveStats.activePlayers/1000)}K+`}
+              description="Players battling now"
+              color="bg-gradient-to-br from-blue-500 via-cyan-600 to-indigo-600"
+              animate={true}
+            />
+            <StatCard
+              icon={Activity}
+              label="Live Matches"
+              value={liveStats.liveMatches}
+              description="Battles in progress"
+              color="bg-gradient-to-br from-red-500 via-pink-600 to-purple-600"
+              animate={true}
+            />
+          </div>
+        </section>
+
+        {/* Featured Tournaments */}
+        <section>
+          <motion.div 
+            className="flex items-center justify-between mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <div>
+              <h2 className="text-6xl font-black text-white mb-4 font-gaming">FEATURED BATTLES</h2>
+              <p className="text-gray-400 text-xl">Elite tournaments for champions</p>
             </div>
-            <h3 className="text-white font-bold text-xl mb-3">Add Funds</h3>
-            <p className="text-gray-400">Top up your wallet for tournament entries</p>
-          </Link>
+            <Link
+              to="/tournaments"
+              className="text-neon-blue hover:text-electric-blue font-bold flex items-center space-x-3 transition-all duration-300 group text-xl"
+            >
+              <span>View All Tournaments</span>
+              <ArrowRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
+            </Link>
+          </motion.div>
           
-          <Link to="/leaderboards" className="glass rounded-3xl p-8 text-center group hover:border-neon-purple/50 transition-all duration-300">
-            <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:shadow-glow transition-shadow duration-300">
-              <Crown className="h-10 w-10 text-white" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 max-w-7xl mx-auto">
+            {tournaments.slice(0, 6).map((tournament, index) => (
+              <TournamentCard key={tournament.tournament_id} tournament={tournament} index={index} />
+            ))}
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="text-center py-20">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
+            className="max-w-4xl mx-auto"
+          >
+            <h2 className="text-6xl font-black text-white mb-8 font-gaming">
+              READY TO DOMINATE?
+            </h2>
+            <p className="text-2xl text-gray-300 mb-12 leading-relaxed">
+              Join thousands of elite warriors in the ultimate Free Fire tournament experience
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Link
+                to="/tournaments"
+                className="btn-premium text-2xl px-16 py-8 ripple mobile-friendly group"
+              >
+                <div className="flex items-center space-x-4">
+                  <Target className="h-8 w-8 group-hover:rotate-45 transition-transform" />
+                  <span className="font-black">START BATTLING</span>
+                </div>
+              </Link>
             </div>
-            <h3 className="text-white font-bold text-xl mb-3">View Rankings</h3>
-            <p className="text-gray-400">Check your position among elite warriors</p>
-          </Link>
-        </div>
-      </section>
+          </motion.div>
+        </section>
+      </div>
     </motion.div>
   );
 };
