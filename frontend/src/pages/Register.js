@@ -50,6 +50,8 @@ const Register = () => {
       const result = await register(userData);
       if (result.success) {
         toast.success('Welcome to the Arena! Account created successfully! 🎉🔥');
+        // Navigate to home page after successful registration
+        navigate('/');
       } else {
         toast.error(result.error || 'Registration failed. Please try again.');
       }
