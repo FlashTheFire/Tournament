@@ -23,7 +23,7 @@ import {
   Star
 } from 'lucide-react';
 import { apiService } from '../services/api';
-import toast from 'react-hot-toast';
+import safeToast from '../utils/safeToast';
 
 const Tournaments = () => {
   const [tournaments, setTournaments] = useState([]);
