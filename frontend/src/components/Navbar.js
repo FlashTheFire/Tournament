@@ -93,14 +93,8 @@ const Navbar = ({ onMenuClick }) => {
       <div className="flex items-center justify-between relative z-10">
         {/* Left Section */}
         <div className="flex items-center space-x-6">
-          <motion.button
-            onClick={onMenuClick}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className="p-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 mobile-friendly group"
-          >
-            <Menu className="h-6 w-6 group-hover:rotate-180 transition-transform duration-300" />
-          </motion.button>
+          {/* Ultra-Premium Hamburger Menu */}
+          <PremiumHamburgerMenu onClick={onMenuClick} />
 
           {/* Enhanced Brand Logo */}
           <Link to="/" className="hidden sm:flex items-center space-x-4 group">
