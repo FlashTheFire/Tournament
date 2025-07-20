@@ -52,15 +52,7 @@ const Home = () => {
   useEffect(() => {
     loadData();
     loadAIFeatures();
-    // Simulate real-time updates
-    const interval = setInterval(() => {
-      setLiveStats(prev => ({
-        ...prev,
-        activePlayers: prev.activePlayers + Math.floor(Math.random() * 5) - 2,
-        liveMatches: Math.max(45, prev.liveMatches + Math.floor(Math.random() * 3) - 1)
-      }));
-    }, 4000);
-    return () => clearInterval(interval);
+    // Removed automatic match refresh as per Mobile UI Polish requirement
   }, []);
 
   const loadData = async () => {
