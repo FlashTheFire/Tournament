@@ -8,8 +8,8 @@ import safeToast from '../utils/safeToast';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: 'demo@tournament.com',
-    password: 'demo123'
+    email: '',
+    password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -58,32 +58,131 @@ const Login = () => {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative overflow-hidden">
-        {/* Advanced Particle Background */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="kinetic-waves"></div>
-        </div>
-        
-        {/* Floating Elements */}
-        <div className="absolute top-20 left-20 w-2 h-2 bg-neon-blue rounded-full animate-particle"></div>
-        <div className="absolute top-40 right-32 w-1 h-1 bg-neon-purple rounded-full animate-particle" style={{animationDelay: '1s'}}></div>
-        <div className="absolute bottom-32 left-1/4 w-1.5 h-1.5 bg-neon-red rounded-full animate-particle" style={{animationDelay: '2s'}}></div>
-        
-        {/* Left-aligned Login Form Container */}
-        <div className="min-h-screen flex items-center justify-start relative z-10 px-4 py-8 lg:px-12">
+      {/* Advanced Particle Background */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="kinetic-waves"></div>
+      </div>
+      
+      {/* Floating Elements */}
+      <div className="absolute top-20 left-20 w-2 h-2 bg-neon-blue rounded-full animate-particle"></div>
+      <div className="absolute top-40 right-32 w-1 h-1 bg-neon-purple rounded-full animate-particle" style={{animationDelay: '1s'}}></div>
+      <div className="absolute bottom-32 left-1/4 w-1.5 h-1.5 bg-neon-red rounded-full animate-particle" style={{animationDelay: '2s'}}></div>
+      
+      {/* Horizontal Layout Container */}
+      <div className="min-h-screen flex items-center justify-center relative z-10 px-4 py-8 lg:px-12">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+          className="w-full max-w-md space-y-6 lg:max-w-6xl lg:grid lg:grid-cols-2 lg:gap-16 lg:space-y-0 lg:items-center"
+        >
+          {/* Left Section - Brand/Hero */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: -50 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
-            className="w-full max-w-md lg:max-w-lg"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-center lg:text-left space-y-8"
           >
-            {/* Enhanced Login Form - Left Aligned */}
+            {/* Enhanced Brand Logo */}
+            <div className="flex items-center justify-center lg:justify-start space-x-4 mb-8">
+              <motion.div
+                initial={{ scale: 0, rotateY: 180 }}
+                animate={{ scale: 1, rotateY: 0 }}
+                transition={{ delay: 0.3, type: "spring", stiffness: 150 }}
+                className="h-20 w-20 lg:h-24 lg:w-24 bg-gradient-to-br from-neon-blue via-electric-purple to-neon-red rounded-3xl flex items-center justify-center shadow-glow-lg relative"
+              >
+                <Trophy className="h-10 w-10 lg:h-12 lg:w-12 text-white drop-shadow-lg" />
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-0 border-2 border-dashed border-white/20 rounded-3xl"
+                />
+              </motion.div>
+              
+              <div>
+                <motion.h1 
+                  className="text-4xl lg:text-6xl font-bold text-white font-gaming leading-tight"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <span className="text-gradient bg-gradient-to-r from-neon-blue to-electric-purple">
+                    FREE FIRE
+                  </span>
+                </motion.h1>
+                
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                  className="text-xl lg:text-3xl font-bold text-white"
+                >
+                  ULTIMATE ARENA
+                </motion.h2>
+              </div>
+            </div>
+            
+            {/* Hero Text - Desktop Only */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+              className="hidden lg:block space-y-6"
+            >
+              <p className="text-xl text-gray-300 leading-relaxed">
+                Enter the battlefield and claim victory in the ultimate Free Fire tournament experience
+              </p>
+              
+              {/* Stats Cards */}
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { icon: Trophy, label: 'Tournaments', value: '89+', color: 'text-yellow-400' },
+                  { icon: Gamepad2, label: 'Players', value: '42K+', color: 'text-neon-blue' },
+                  { icon: Crown, label: 'Prize Pool', value: '₹4.8M', color: 'text-neon-green' }
+                ].map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 + index * 0.1 }}
+                    className="text-center glass rounded-xl p-4"
+                  >
+                    <stat.icon className={`h-8 w-8 ${stat.color} mx-auto mb-2`} />
+                    <p className="text-2xl font-bold text-white">{stat.value}</p>
+                    <p className="text-sm text-gray-400">{stat.label}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Right Section - Login Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="w-full max-w-md mx-auto lg:max-w-lg"
+          >
+            {/* Mobile Header */}
+            <div className="text-center mb-8 lg:hidden">
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+                className="text-gray-300 text-base"
+              >
+                Enter the battlefield and claim victory
+              </motion.p>
+            </div>
+
+            {/* Enhanced Form */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+              transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
               className="glass rounded-3xl p-8 space-y-8 kinetic-waves relative"
             >
-              <div className="text-left">
+              <div className="text-center lg:text-left">
                 <h3 className="text-2xl lg:text-3xl font-bold text-white mb-2 font-gaming">
                   Welcome Back
                 </h3>
@@ -193,6 +292,13 @@ const Login = () => {
                 </motion.button>
               </form>
 
+              {/* Separator Line */}
+              <div className="flex items-center space-x-4">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
+                <span className="text-gray-400 text-sm font-medium">OR</span>
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
+              </div>
+
               {/* Premium Google Sign In Button */}
               <motion.button
                 whileHover={{ scale: 1.02, y: -2 }}
@@ -226,7 +332,8 @@ const Login = () => {
               </div>
             </motion.div>
           </motion.div>
-        </div>
+        </motion.div>
+      </div>
       </div>
     </ErrorBoundary>
   );
