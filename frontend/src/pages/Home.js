@@ -725,35 +725,34 @@ const Home = () => {
         /* Desktop: reduced spacing for horizontal layout */
         lg:space-y-16 lg:px-8 lg:py-16
       ">
-        {/* AI-Powered Features Section - Mobile-First */}
         <section>
           <motion.div 
-            className="text-center mb-8 sm:mb-12 lg:mb-16"
+            className="text-center mb-6 sm:mb-10 lg:mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="inline-flex items-center space-x-2 sm:space-x-3 bg-gradient-to-r from-purple-500/20 to-indigo-600/20 backdrop-blur-sm border border-purple-500/30 rounded-full mb-6 sm:mb-8
+            <div className="inline-flex items-center space-x-2 sm:space-x-3 bg-gradient-to-r from-purple-500/20 to-indigo-600/20 backdrop-blur-sm border border-purple-500/30 rounded-full mb-4 sm:mb-6
               /* Mobile: compact badge */
               px-4 py-2 text-xs
-              /* Desktop: larger badge */
-              lg:px-8 lg:py-3 lg:text-sm
+              /* Desktop: medium badge */
+              lg:px-6 lg:py-2 lg:text-sm
             ">
-              <Brain className="h-4 w-4 sm:h-6 sm:w-6 text-purple-400" />
+              <Brain className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400" />
               <span className="text-purple-300 font-bold uppercase tracking-wide">AI-Powered Gaming</span>
-              <Zap className="h-4 w-4 sm:h-6 sm:w-6 text-yellow-400" />
+              <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400" />
             </div>
-            <h2 className="text-white font-gaming font-black mb-4 sm:mb-6
+            <h2 className="text-white font-gaming font-black mb-3 sm:mb-4
               /* Mobile: compact section title */
-              text-3xl
-              /* Desktop: large section title */
-              lg:text-6xl
+              text-2xl
+              /* Desktop: medium section title */
+              lg:text-4xl
             ">SMART BATTLE SYSTEM</h2>
             <p className="text-gray-400 max-w-3xl mx-auto
               /* Mobile: compact description */
               text-sm
-              /* Desktop: larger description */
-              lg:text-xl
+              /* Desktop: medium description */
+              lg:text-lg
             ">
               Experience next-generation gaming with AI-driven matchmaking, predictive analytics, and personalized insights
             </p>
@@ -761,9 +760,9 @@ const Home = () => {
           
           <div className="max-w-7xl mx-auto
             /* Mobile: single column */
-            grid grid-cols-1 gap-4
-            /* Desktop: three columns */
-            lg:grid-cols-3 lg:gap-8
+            grid grid-cols-1 gap-3
+            /* Desktop: horizontal layout */
+            lg:grid-cols-3 lg:gap-6
           ">
             {aiPredictions.map((insight, index) => (
               <AIInsightCard key={insight.id} insight={insight} index={index} />
