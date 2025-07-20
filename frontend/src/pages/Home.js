@@ -1032,17 +1032,17 @@ const Home = () => {
             ">Join the most epic battles</p>
           </motion.div>
           
-          {/* Professional Touch-Enabled Tournament Carousel */}
+          {/* Professional Touch-Enabled Tournament Carousel - Fixed Sizing */}
           <div className="max-w-7xl mx-auto">
             {/* Mobile: Professional Touch-Enabled Tournament Carousel */}
             <div className="lg:hidden">
               <div 
-                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl"
+                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl mx-4"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={() => handleTouchEnd('tournament')}
               >
-                {/* Professional tournament carousel container */}
+                {/* Professional tournament carousel container - Full width cards */}
                 <motion.div
                   className="flex"
                   animate={{
@@ -1056,9 +1056,9 @@ const Home = () => {
                   style={{ width: `${Math.min(tournaments.length, 3) * 100}%` }}
                 >
                   {tournaments.slice(0, 3).map((tournament, index) => (
-                    <div key={tournament.tournament_id} className="w-full flex-shrink-0 p-4">
+                    <div key={tournament.tournament_id} className="w-full flex-shrink-0 p-6">
                       <motion.div
-                        className="tournament-card relative overflow-hidden border border-white/20 hover:border-neon-blue/50 group shadow-2xl h-full backdrop-blur-xl rounded-2xl bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60"
+                        className="tournament-card relative overflow-hidden border border-white/20 hover:border-neon-blue/50 group shadow-2xl backdrop-blur-xl rounded-2xl bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ 
                           opacity: index === tournamentCurrentIndex ? 1 : 0.7,
@@ -1083,7 +1083,7 @@ const Home = () => {
                           />
                         </div>
 
-                        <div className="relative h-48 lg:h-64 overflow-hidden rounded-t-2xl">
+                        <div className="relative h-64 overflow-hidden rounded-t-2xl">
                           <img
                             src="https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxnYW1pbmclMjB0b3VybmFtZW50fGVufDB8fHx8MTc1Mjk5NTc2MXww&ixlib=rb-4.1.0&q=85"
                             alt={tournament.name}
@@ -1093,10 +1093,10 @@ const Home = () => {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
                           
                           {/* Enhanced Status Badge */}
-                          <div className="absolute top-4 lg:top-6 left-4 lg:left-6">
+                          <div className="absolute top-4 left-4">
                             <motion.div 
                               whileHover={{ scale: 1.1 }}
-                              className={`px-4 lg:px-5 py-2 lg:py-2.5 rounded-full text-sm lg:text-base font-bold text-white shadow-glow-lg border border-white/30 backdrop-blur-xl ${
+                              className={`px-4 py-2 rounded-full text-sm font-bold text-white shadow-glow-lg border border-white/30 backdrop-blur-xl ${
                                 tournament.status === 'live' 
                                   ? 'bg-gradient-to-r from-red-500 to-pink-600 animate-pulse-glow'
                                   : 'bg-gradient-to-r from-blue-500 to-cyan-600'
@@ -1108,45 +1108,45 @@ const Home = () => {
 
                           {/* Enhanced Prize Pool */}
                           <motion.div 
-                            className="absolute top-4 lg:top-6 right-4 lg:right-6"
+                            className="absolute top-4 right-4"
                             whileHover={{ scale: 1.1, rotate: 5 }}
                           >
-                            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-4 lg:px-5 py-2 lg:py-2.5 rounded-xl text-sm lg:text-base font-bold shadow-glow-lg flex items-center space-x-2 border border-white/30">
+                            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-4 py-2 rounded-xl text-sm font-bold shadow-glow-lg flex items-center space-x-2 border border-white/30">
                               <Crown className="h-4 w-4" />
                               <span>₹{tournament.prize_pool?.toLocaleString()}</span>
                             </div>
                           </motion.div>
 
                           {/* Enhanced Battle Map */}
-                          <div className="absolute bottom-20 lg:bottom-24 left-4 lg:left-6">
+                          <div className="absolute bottom-16 left-4">
                             <div className="flex items-center space-x-2 text-white/90 mb-2">
                               <MapPin className="h-4 w-4 text-neon-green animate-pulse" />
-                              <span className="text-sm lg:text-base font-medium backdrop-blur-xl bg-black/40 px-4 py-2 rounded-xl border border-white/30 shadow-glow">
+                              <span className="text-sm font-medium backdrop-blur-xl bg-black/40 px-3 py-1 rounded-xl border border-white/30 shadow-glow">
                                 {tournament.battle_map}
                               </span>
                             </div>
                           </div>
                           
                           {/* Enhanced Tournament Title */}
-                          <div className="absolute bottom-4 lg:bottom-6 left-4 lg:left-6 right-4 lg:right-6">
-                            <h3 className="text-white font-bold text-lg lg:text-xl xl:text-2xl mb-4 drop-shadow-2xl leading-tight">
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <h3 className="text-white font-bold text-lg mb-3 drop-shadow-2xl leading-tight">
                               {tournament.name}
                             </h3>
                             
-                            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:items-center sm:justify-between">
+                            <div className="flex items-center justify-between">
                               <motion.div 
-                                className="flex items-center space-x-2 backdrop-blur-xl bg-black/50 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl border border-white/30 shadow-glow-lg"
+                                className="flex items-center space-x-2 backdrop-blur-xl bg-black/50 px-3 py-1.5 rounded-xl border border-white/30 shadow-glow-lg"
                                 whileHover={{ scale: 1.05 }}
                               >
-                                <Users className="h-4 w-4 sm:h-5 sm:w-5 text-neon-blue animate-pulse" />
-                                <span className="text-white font-bold text-xs sm:text-sm">{tournament.current_participants}/{tournament.max_participants}</span>
+                                <Users className="h-4 w-4 text-neon-blue animate-pulse" />
+                                <span className="text-white font-bold text-xs">{tournament.current_participants}/{tournament.max_participants}</span>
                               </motion.div>
                               <motion.div 
-                                className="flex items-center space-x-2 backdrop-blur-xl bg-black/50 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl border border-white/30 shadow-glow-lg"
+                                className="flex items-center space-x-2 backdrop-blur-xl bg-black/50 px-3 py-1.5 rounded-xl border border-white/30 shadow-glow-lg"
                                 whileHover={{ scale: 1.05 }}
                               >
-                                <Crosshair className="h-4 w-4 sm:h-5 sm:w-5 text-neon-green animate-pulse" />
-                                <span className="text-white font-bold text-xs sm:text-sm">₹{tournament.entry_fee}</span>
+                                <Crosshair className="h-4 w-4 text-neon-green animate-pulse" />
+                                <span className="text-white font-bold text-xs">₹{tournament.entry_fee}</span>
                               </motion.div>
                             </div>
                           </div>
@@ -1155,15 +1155,15 @@ const Home = () => {
                         <div className="relative z-10 p-6">
                           <Link
                             to={`/tournaments/${tournament.tournament_id}`}
-                            className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden py-4 px-6 text-sm lg:py-5 lg:px-8 lg:text-base shadow-glow-lg border border-white/30"
+                            className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden py-4 px-6 text-base shadow-glow-lg border border-white/30"
                           >
                             <motion.div 
                               className="flex items-center justify-center space-x-3"
                               whileHover={{ scale: 1.02 }}
                             >
-                              <Gamepad2 className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-12 transition-transform" />
+                              <Gamepad2 className="h-6 w-6 group-hover:rotate-12 transition-transform" />
                               <span className="font-black tracking-wide">ENTER BATTLE</span>
-                              <Flame className="h-5 w-5 sm:h-6 sm:w-6 group-hover:animate-pulse" />
+                              <Flame className="h-6 w-6 group-hover:animate-pulse" />
                             </motion.div>
                           </Link>
                         </div>
@@ -1172,38 +1172,15 @@ const Home = () => {
                   ))}
                 </motion.div>
 
-                {/* Professional Tournament Navigation Controls */}
-                <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-20">
-                  <motion.button
-                    whileHover={{ scale: 1.1, x: -2 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="w-14 h-14 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 shadow-glow-lg border border-white/30 backdrop-blur-xl flex items-center justify-center text-black font-bold"
-                    onClick={prevTournamentSlide}
-                  >
-                    <ChevronLeft className="h-7 w-7" />
-                  </motion.button>
-                </div>
-                
-                <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-20">
-                  <motion.button
-                    whileHover={{ scale: 1.1, x: 2 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="w-14 h-14 rounded-full bg-gradient-to-r from-orange-500 to-red-500 shadow-glow-lg border border-white/30 backdrop-blur-xl flex items-center justify-center text-white font-bold"
-                    onClick={nextTournamentSlide}
-                  >
-                    <ChevronRight className="h-7 w-7" />
-                  </motion.button>
-                </div>
-
-                {/* Professional Tournament Progress Bar */}
-                <div className="flex justify-center space-x-2 mt-6 pb-4">
+                {/* Fixed Tournament Progress Dots */}
+                <div className="flex justify-center space-x-3 py-6">
                   {tournaments.slice(0, 3).map((_, index) => (
                     <motion.button
                       key={index}
-                      className={`h-2 rounded-full transition-all duration-300 ${
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
                         index === tournamentCurrentIndex 
-                          ? 'w-10 bg-gradient-to-r from-yellow-400 to-orange-500' 
-                          : 'w-2 bg-white/30'
+                          ? 'bg-gradient-to-r from-yellow-400 to-orange-500 scale-125' 
+                          : 'bg-white/30 hover:bg-white/50'
                       }`}
                       onClick={() => {
                         setIsTournamentAutoPlaying(false);
@@ -1211,22 +1188,23 @@ const Home = () => {
                         setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
                       }}
                       whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
                     >
                       {index === tournamentCurrentIndex && (
                         <motion.div
-                          className="h-full bg-gradient-to-r from-white/50 to-transparent rounded-full"
-                          animate={{ x: ['-100%', '100%'] }}
-                          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                          className="absolute inset-0 w-3 h-3 rounded-full bg-white/40"
+                          animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
+                          transition={{ duration: 1, repeat: Infinity }}
                         />
                       )}
                     </motion.button>
                   ))}
                 </div>
 
-                {/* Tournament Auto-play indicator */}
-                <div className="absolute top-4 right-4 z-20">
+                {/* Tournament Auto-play indicator - repositioned */}
+                <div className="absolute top-6 right-6 z-20">
                   <motion.div
-                    className={`w-3 h-3 rounded-full ${isTournamentAutoPlaying ? 'bg-orange-400' : 'bg-gray-400'}`}
+                    className={`w-2 h-2 rounded-full ${isTournamentAutoPlaying ? 'bg-orange-400' : 'bg-gray-400'}`}
                     animate={{ opacity: [0.5, 1, 0.5] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   />
