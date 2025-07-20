@@ -351,6 +351,13 @@ const Register = () => {
                 </motion.button>
               </form>
 
+              {/* Separator Line */}
+              <div className="flex items-center space-x-4">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
+                <span className="text-gray-400 text-sm font-medium">OR</span>
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
+              </div>
+
               {/* Premium Google Sign Up Button */}
               <motion.button
                 whileHover={{ scale: 1.02, y: -2 }}
