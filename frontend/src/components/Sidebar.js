@@ -41,49 +41,56 @@ const Sidebar = ({ isOpen, onClose }) => {
   const menuItems = [
     {
       key: 'home',
-      title: 'Home',
+      title: 'Battle Arena',
       icon: Home,
       path: '/',
-      badge: null
+      badge: null,
+      description: 'Main battlefield'
     },
     {
       key: 'tournaments',
       title: 'Tournaments',
       icon: Trophy,
       path: '/tournaments',
-      badge: '12',
+      badge: '67',
+      description: 'Live battles',
       submenu: [
-        { title: 'All Tournaments', path: '/tournaments', icon: Trophy },
-        { title: 'My Tournaments', path: '/dashboard', icon: User },
+        { title: 'Battle Royale', path: '/tournaments', icon: Crosshair, badge: 'BR' },
+        { title: 'Clash Squad', path: '/tournaments', icon: Swords, badge: 'CS' },
+        { title: 'My Battles', path: '/dashboard', icon: User, badge: null },
       ]
     },
     {
       key: 'leaderboards',
-      title: 'Leaderboards',
+      title: 'Hall of Fame',
       icon: Crown,
       path: '/leaderboards',
-      badge: null
+      badge: null,
+      description: 'Elite warriors'
     },
     {
       key: 'wallet',
       title: 'Wallet',
       icon: Wallet,
       path: '/wallet',
-      badge: '₹' + (user?.wallet_balance || 0)
+      badge: '₹' + (user?.wallet_balance || 0),
+      description: 'Battle funds'
     },
     {
       key: 'support',
       title: 'Support',
       icon: HelpCircle,
       path: '/support',
-      badge: null
+      badge: null,
+      description: 'Get help'
     },
     {
       key: 'settings',
       title: 'Settings',
       icon: Settings,
       path: '/settings',
-      badge: null
+      badge: null,
+      description: 'Customize'
     }
   ];
 
