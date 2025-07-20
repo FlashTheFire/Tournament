@@ -1742,6 +1742,338 @@ async def get_user_tournaments(current_user: dict = Depends(get_current_user)):
     
     return {"tournaments": user_tournaments}
 
+# AI-Powered API Endpoints
+@app.get("/api/ai/matchmaking-analysis")
+async def get_matchmaking_analysis(tournament_id: str, current_user: dict = Depends(get_current_user)):
+    """Get AI-powered matchmaking analysis for a tournament"""
+    try:
+        tournament = tournaments_collection.find_one({"tournament_id": tournament_id})
+        if not tournament:
+            raise HTTPException(status_code=404, detail="Tournament not found")
+        
+        # Get registered players
+        registrations = list(registrations_collection.find({"tournament_id": tournament_id}))
+        player_data = []
+        
+        for reg in registrations:
+            player = users_collection.find_one({"user_id": reg["user_id"]})
+            if player:
+                player_data.append(player)
+        
+        if not player_data:
+            return {"message": "No players registered yet"}
+        
+        analysis = await generate_ai_matchmaking_analysis(player_data)
+        return analysis
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+
+@app.get("/api/ai/tournament-prediction/{tournament_id}")
+async def get_tournament_prediction(tournament_id: str, current_user: dict = Depends(get_current_user)):
+    """Get AI-powered tournament winner prediction"""
+    try:
+        tournament = tournaments_collection.find_one({"tournament_id": tournament_id})
+        if not tournament:
+            raise HTTPException(status_code=404, detail="Tournament not found")
+        
+        # Get participants
+        registrations = list(registrations_collection.find({"tournament_id": tournament_id}))
+        participants = []
+        
+        for reg in registrations:
+            player = users_collection.find_one({"user_id": reg["user_id"]})
+            if player:
+                participants.append(player)
+        
+        if len(participants) < 2:
+            return {"message": "Need at least 2 participants for prediction"}
+        
+        prediction = await generate_ai_tournament_prediction(tournament, participants)
+        return prediction
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+
+@app.get("/api/ai/player-insights")
+async def get_player_insights(current_user: dict = Depends(get_current_user)):
+    """Get comprehensive AI-powered player insights and coaching"""
+    try:
+        insights = await generate_ai_player_insights(current_user)
+        return insights
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Insights generation failed: {str(e)}")
+
+@app.get("/api/ai/smart-matchmaking")
+async def get_smart_tournament_recommendations(current_user: dict = Depends(get_current_user)):
+    """Get AI-powered tournament recommendations for smart matchmaking"""
+    try:
+        available_tournaments = list(tournaments_collection.find({"status": "upcoming"}))
+        
+        if not available_tournaments:
+            return {"message": "No upcoming tournaments available"}
+        
+        recommendations = generate_matchmaking_recommendations(current_user, available_tournaments)
+        
+        # Enhance with AI recommendations
+        ai_recommendations = await get_ai_tournament_recommendations(current_user)
+        
+        return {
+            "technical_recommendations": recommendations,
+            "ai_enhanced_suggestions": ai_recommendations[:3],
+            "user_skill_level": calculate_player_skill_score(current_user.get('free_fire_data', {})),
+            "recommendation_count": len(recommendations)
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Recommendations failed: {str(e)}")
+
+@app.get("/api/analytics/player/{user_id}")
+async def get_detailed_player_analytics(user_id: str, current_user: dict = Depends(get_current_user)):
+    """Get detailed player analytics (for admin or self)"""
+    try:
+        # Check if admin or requesting own data
+        if not current_user.get("is_admin", False) and current_user["user_id"] != user_id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        target_user = users_collection.find_one({"user_id": user_id})
+        if not target_user:
+            raise HTTPException(status_code=404, detail="Player not found")
+        
+        analytics = generate_player_analytics(target_user)
+        ai_insights = await generate_ai_player_insights(target_user)
+        
+        return {
+            "player_info": {
+                "user_id": target_user["user_id"],
+                "username": target_user["username"],
+                "full_name": target_user["full_name"]
+            },
+            "analytics": analytics,
+            "ai_insights": ai_insights
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Analytics failed: {str(e)}")
+
+# Admin Analytics Endpoints
+@app.get("/api/admin/analytics/overview")
+async def get_admin_analytics_overview(current_user: dict = Depends(get_current_user)):
+    """Get comprehensive admin analytics overview"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Get all players
+        all_players = list(users_collection.find({}))
+        all_tournaments = list(tournaments_collection.find({}))
+        all_registrations = list(registrations_collection.find({}))
+        
+        # Calculate overall statistics
+        total_players = len(all_players)
+        active_players = len([p for p in all_players if p.get('free_fire_data')])
+        total_tournaments = len(all_tournaments)
+        total_registrations = len(all_registrations)
+        
+        # Skill distribution
+        skill_scores = [calculate_player_skill_score(p.get('free_fire_data', {})) for p in all_players if p.get('free_fire_data')]
+        avg_skill = sum(skill_scores) / len(skill_scores) if skill_scores else 0
+        
+        skill_tiers = {}
+        for score in skill_scores:
+            tier = get_skill_tier(score)
+            skill_tiers[tier] = skill_tiers.get(tier, 0) + 1
+        
+        # Tournament analytics
+        tournament_stats = {
+            "total_tournaments": total_tournaments,
+            "upcoming": len([t for t in all_tournaments if t.get("status") == "upcoming"]),
+            "live": len([t for t in all_tournaments if t.get("status") == "live"]),
+            "completed": len([t for t in all_tournaments if t.get("status") == "completed"]),
+            "total_prize_pool": sum([t.get("prize_pool", 0) for t in all_tournaments])
+        }
+        
+        # Top performers
+        top_players = sorted(all_players, key=lambda x: calculate_player_skill_score(x.get('free_fire_data', {})), reverse=True)[:10]
+        top_performers = []
+        
+        for player in top_players:
+            if player.get('free_fire_data'):
+                skill_score = calculate_player_skill_score(player['free_fire_data'])
+                top_performers.append({
+                    "username": player["username"],
+                    "skill_score": skill_score,
+                    "skill_tier": get_skill_tier(skill_score),
+                    "tournaments_played": len(list(registrations_collection.find({"user_id": player["user_id"]})))
+                })
+        
+        return {
+            "overview": {
+                "total_players": total_players,
+                "active_players": active_players,
+                "average_skill_level": round(avg_skill, 1),
+                "total_tournaments": total_tournaments,
+                "total_registrations": total_registrations
+            },
+            "skill_distribution": skill_tiers,
+            "tournament_statistics": tournament_stats,
+            "top_performers": top_performers,
+            "platform_health": {
+                "player_engagement": round((active_players / max(total_players, 1)) * 100, 1),
+                "tournament_participation_rate": round((total_registrations / max(total_players, 1)), 1),
+                "skill_diversity": len(skill_tiers)
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Admin analytics failed: {str(e)}")
+
+@app.get("/api/admin/analytics/players")
+async def get_admin_player_analytics(
+    skip: int = 0, 
+    limit: int = 50,
+    skill_filter: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get detailed analytics for all players (admin only)"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Build filter query
+        filter_query = {}
+        
+        # Get players with pagination
+        all_players = list(users_collection.find(filter_query).skip(skip).limit(limit))
+        
+        detailed_analytics = []
+        
+        for player in all_players:
+            if player.get('free_fire_data'):
+                skill_score = calculate_player_skill_score(player['free_fire_data'])
+                skill_tier = get_skill_tier(skill_score)
+                
+                # Skip if skill filter doesn't match
+                if skill_filter and skill_tier.lower() != skill_filter.lower():
+                    continue
+                
+                tournaments_played = len(list(registrations_collection.find({"user_id": player["user_id"]})))
+                
+                player_analytics = {
+                    "user_info": {
+                        "user_id": player["user_id"],
+                        "username": player["username"],
+                        "full_name": player["full_name"],
+                        "email": player["email"],
+                        "created_at": player["created_at"].isoformat() if isinstance(player.get("created_at"), datetime) else str(player.get("created_at", ""))
+                    },
+                    "performance": {
+                        "skill_score": round(skill_score, 1),
+                        "skill_tier": skill_tier,
+                        "tournaments_played": tournaments_played,
+                        "win_rate": (player['free_fire_data'].get('wins', 0) / max(player['free_fire_data'].get('total_matches', 1), 1)) * 100,
+                        "kd_ratio": player['free_fire_data'].get('kills', 0) / max(player['free_fire_data'].get('total_matches', 1), 1),
+                        "headshot_rate": player['free_fire_data'].get('headshot_rate', '0%'),
+                        "avg_damage": player['free_fire_data'].get('avg_damage', 0)
+                    },
+                    "activity": {
+                        "last_tournament": "N/A",  # Would need to implement last tournament tracking
+                        "wallet_balance": player.get("wallet_balance", 0),
+                        "is_verified": player.get("is_verified", False)
+                    }
+                }
+                
+                detailed_analytics.append(player_analytics)
+        
+        return {
+            "players": detailed_analytics,
+            "total_count": len(detailed_analytics),
+            "page_info": {
+                "skip": skip,
+                "limit": limit,
+                "has_more": len(detailed_analytics) == limit
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Player analytics failed: {str(e)}")
+
+@app.get("/api/admin/analytics/tournaments")
+async def get_admin_tournament_analytics(current_user: dict = Depends(get_current_user)):
+    """Get comprehensive tournament analytics (admin only)"""
+    if not current_user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        all_tournaments = list(tournaments_collection.find({}))
+        tournament_analytics = []
+        
+        for tournament in all_tournaments:
+            # Get registrations for this tournament
+            registrations = list(registrations_collection.find({"tournament_id": tournament["tournament_id"]}))
+            participants = []
+            
+            for reg in registrations:
+                player = users_collection.find_one({"user_id": reg["user_id"]})
+                if player:
+                    participants.append(player)
+            
+            # Calculate tournament-specific analytics
+            skill_scores = [calculate_player_skill_score(p.get('free_fire_data', {})) for p in participants if p.get('free_fire_data')]
+            avg_skill = sum(skill_scores) / len(skill_scores) if skill_scores else 0
+            
+            tournament_data = {
+                "tournament_info": {
+                    "tournament_id": tournament["tournament_id"],
+                    "name": tournament["name"],
+                    "game_type": tournament["game_type"],
+                    "status": tournament["status"],
+                    "entry_fee": tournament["entry_fee"],
+                    "prize_pool": tournament["prize_pool"],
+                    "start_time": tournament["start_time"].isoformat() if isinstance(tournament.get("start_time"), datetime) else str(tournament.get("start_time", ""))
+                },
+                "participation": {
+                    "registered_players": len(participants),
+                    "max_participants": tournament.get("max_participants", 0),
+                    "fill_rate": (len(participants) / max(tournament.get("max_participants", 1), 1)) * 100
+                },
+                "skill_analysis": {
+                    "average_skill": round(avg_skill, 1),
+                    "skill_range": {
+                        "min": min(skill_scores) if skill_scores else 0,
+                        "max": max(skill_scores) if skill_scores else 0
+                    },
+                    "competitiveness": assess_competitiveness(skill_scores) if skill_scores else "N/A"
+                }
+            }
+            
+            # Add prediction if tournament is upcoming/live
+            if tournament["status"] in ["upcoming", "live"] and len(participants) >= 2:
+                try:
+                    prediction = await generate_ai_tournament_prediction(tournament, participants)
+                    tournament_data["ai_prediction"] = {
+                        "top_contender": prediction.get("technical_prediction", {}).get("top_contender"),
+                        "confidence_level": prediction.get("technical_prediction", {}).get("confidence_level", 0)
+                    }
+                except:
+                    tournament_data["ai_prediction"] = {"status": "prediction_unavailable"}
+            
+            tournament_analytics.append(tournament_data)
+        
+        return {
+            "tournaments": tournament_analytics,
+            "summary": {
+                "total_tournaments": len(all_tournaments),
+                "total_participants": sum([len(list(registrations_collection.find({"tournament_id": t["tournament_id"]}))) for t in all_tournaments]),
+                "total_prize_pool": sum([t.get("prize_pool", 0) for t in all_tournaments]),
+                "average_participation_rate": sum([ta["participation"]["fill_rate"] for ta in tournament_analytics]) / max(len(tournament_analytics), 1)
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Tournament analytics failed: {str(e)}")
+
 @app.get("/api/leaderboards")
 async def get_leaderboards(
     game_type: Optional[str] = "free_fire",
