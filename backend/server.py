@@ -95,6 +95,34 @@ class PaymentCreate(BaseModel):
     tournament_id: str
     amount: float
 
+# Enhanced Pydantic models for admin operations
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    username: Optional[str] = None
+    full_name: Optional[str] = None
+    wallet_balance: Optional[float] = None
+    is_verified: Optional[bool] = None
+    is_admin: Optional[bool] = None
+
+class TournamentUpdate(BaseModel):
+    name: Optional[str] = None
+    entry_fee: Optional[float] = None
+    prize_pool: Optional[float] = None
+    max_participants: Optional[int] = None
+    start_time: Optional[datetime] = None
+    registration_deadline: Optional[datetime] = None
+    status: Optional[str] = None
+    description: Optional[str] = None
+
+class AdminStats(BaseModel):
+    total_users: int
+    total_tournaments: int
+    total_revenue: float
+    active_tournaments: int
+    pending_payments: int
+    new_users_today: int
+    tournaments_today: int
+
 class FreeFrieUserVerify(BaseModel):
     free_fire_uid: str
 
