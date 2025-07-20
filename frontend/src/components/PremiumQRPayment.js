@@ -68,7 +68,7 @@ const PremiumQRPayment = ({ isOpen, onClose, amount, onSuccess }) => {
       
       if (update.status.isPaid) {
         setPaymentStatus('success');
-        toast.success('🏆 Payment successful! Battle funds added!');
+        safeToast.success('🏆 Payment successful! Battle funds added!');
         setTimeout(() => {
           onSuccess && onSuccess(update.status);
           onClose();
