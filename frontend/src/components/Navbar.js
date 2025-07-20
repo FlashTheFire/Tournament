@@ -604,35 +604,6 @@ const Navbar = ({ onMenuClick }) => {
         </div>
       </div>
 
-      {/* Mobile-First Search Bar - Only visible on mobile when main search is hidden */}
-      <motion.div 
-        className="md:hidden mt-3"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <div className="relative">
-          <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${
-            searchFocused ? 'text-neon-blue' : 'text-gray-400'
-          }
-            /* Mobile: compact search icon */
-            h-4 w-4
-          `} />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
-            placeholder="Search battles, tournaments..."
-            className="w-full glass-mobile rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-blue/50 transition-all duration-300
-              /* Mobile: compact mobile search */
-              pl-10 pr-4 py-2.5 text-sm
-            "
-          />
-        </div>
-      </motion.div>
-
       {/* Click outside handlers */}
       {(showProfileMenu || showNotifications) && (
         <div
