@@ -55,7 +55,7 @@ const PremiumQRPayment = ({ isOpen, onClose, amount, onSuccess }) => {
     } catch (error) {
       console.error('QR Generation failed:', error);
       setPaymentStatus('error');
-      toast.error('Failed to generate QR code');
+      safeToast.error('Failed to generate QR code');
     } finally {
       setIsLoading(false);
     }
