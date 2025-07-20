@@ -441,8 +441,8 @@ const Home = () => {
       >
         {/* Clean gradient background - no black boxes */}
         <div className="absolute inset-0 w-full h-full">
-          <div className="absolute inset-0 bg-gradient-to-br from-cosmic-dark/40 via-cosmic-black/20 to-cosmic-deep/40"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-neon-red/8 via-transparent to-electric-blue/8"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-cosmic-dark/20 via-cosmic-black/10 to-cosmic-deep/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-neon-red/5 via-transparent to-electric-blue/5"></div>
         </div>
 
         {/* Mobile-first hero content */}
