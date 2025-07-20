@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Register error details:', error);
       
-      // Extract clean error message
+      // Extract clean error message with multiple fallbacks
       let errorMessage = 'Registration failed';
       
       if (error.cleanMessage) {
@@ -115,7 +115,12 @@ export const AuthProvider = ({ children }) => {
       } else if (error.response?.data?.detail) {
         const detail = error.response.data.detail;
         if (Array.isArray(detail)) {
-          errorMessage = detail.map(err => typeof err === 'object' && err.msg ? err.msg : String(err)).join(', ');
+          errorMessage = detail.map(err => {
+            if (typeof err === 'object' && err.msg) {
+              return err.msg;
+            }
+            return typeof err === 'string' ? err : 'Validation error';
+          }).join(', ');
         } else if (typeof detail === 'string') {
           errorMessage = detail;
         } else if (typeof detail === 'object' && detail.msg) {
@@ -123,6 +128,12 @@ export const AuthProvider = ({ children }) => {
         }
       } else if (error.message) {
         errorMessage = error.message;
+      }
+      
+      // Additional safety check to ensure we only pass strings to toast
+      if (typeof errorMessage !== 'string') {
+        console.error('Error message is not a string:', errorMessage);
+        errorMessage = 'Registration failed. Please try again.';
       }
       
       return { 
