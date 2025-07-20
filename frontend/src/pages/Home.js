@@ -817,39 +817,44 @@ const Home = () => {
             </p>
           </motion.div>
           
-          {/* Professional Premium Auto-Scroll Carousel for AI Insights */}
+          {/* Professional Touch-Enabled AI Carousel */}
           <div className="max-w-7xl mx-auto">
-            {/* Mobile: Professional Auto-Scroll Carousel with Navigation */}
+            {/* Mobile: Professional Touch-Enabled Carousel */}
             <div className="lg:hidden">
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl">
-                {/* Professional auto-scrolling container with manual controls */}
+              <div 
+                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={() => handleTouchEnd('ai')}
+              >
+                {/* Professional carousel container */}
                 <motion.div
-                  className="flex gap-4"
+                  className="flex"
                   animate={{
-                    x: ['0%', '-100%', '-200%', '0%'],
+                    x: `${-aiCurrentIndex * 100}%`,
                   }}
                   transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    repeatDelay: 3
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
                   }}
-                  style={{ width: '300%' }}
+                  style={{ width: `${aiPredictions.length * 100}%` }}
                 >
-                  {/* Triple the cards for seamless infinite loop */}
-                  {[...aiPredictions, ...aiPredictions, ...aiPredictions].map((insight, index) => (
-                    <div key={`${insight.id}-${Math.floor(index/3)}-${index%3}`} className="w-1/3 flex-shrink-0 p-4">
+                  {aiPredictions.map((insight, index) => (
+                    <div key={insight.id} className="w-full flex-shrink-0 p-4">
                       <motion.div
-                        className={`relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl h-full backdrop-blur-xl rounded-2xl`}
-                        whileHover={{ scale: 1.02, y: -5 }}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: (index % 3) * 0.2 }}
+                        className="relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl h-full backdrop-blur-xl rounded-2xl"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ 
+                          opacity: index === aiCurrentIndex ? 1 : 0.7,
+                          scale: index === aiCurrentIndex ? 1 : 0.95 
+                        }}
+                        transition={{ duration: 0.5 }}
                       >
-                        {/* Professional Shine Animation Effect */}
+                        {/* Professional Shine Animation */}
                         <div className="absolute inset-0 overflow-hidden rounded-2xl">
                           <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12"
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent transform -skew-x-12"
                             animate={{
                               x: ['-200%', '200%'],
                             }}
@@ -862,9 +867,6 @@ const Home = () => {
                             style={{ width: '150%' }}
                           />
                         </div>
-                        
-                        {/* Professional branded glow frame */}
-                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-neon-blue/20 via-transparent to-electric-purple/20 animate-pulse"></div>
                         
                         <div className="relative z-10 p-6">
                           <div className="flex items-start justify-between mb-4">
@@ -902,7 +904,7 @@ const Home = () => {
                     whileHover={{ scale: 1.1, x: -2 }}
                     whileTap={{ scale: 0.9 }}
                     className="w-12 h-12 rounded-full bg-gradient-to-r from-neon-blue to-electric-purple shadow-glow-lg border border-white/30 backdrop-blur-xl flex items-center justify-center text-white"
-                    onClick={() => {/* Previous logic */}}
+                    onClick={prevAiSlide}
                   >
                     <ChevronLeft className="h-6 w-6" />
                   </motion.button>
@@ -913,48 +915,47 @@ const Home = () => {
                     whileHover={{ scale: 1.1, x: 2 }}
                     whileTap={{ scale: 0.9 }}
                     className="w-12 h-12 rounded-full bg-gradient-to-r from-electric-purple to-neon-pink shadow-glow-lg border border-white/30 backdrop-blur-xl flex items-center justify-center text-white"
-                    onClick={() => {/* Next logic */}}
+                    onClick={nextAiSlide}
                   >
                     <ChevronRight className="h-6 w-6" />
                   </motion.button>
                 </div>
 
-                {/* Professional Progress Indicators */}
-                <div className="flex justify-center space-x-4 mt-6 pb-4">
+                {/* Professional Progress Bar */}
+                <div className="flex justify-center space-x-2 mt-6 pb-4">
                   {aiPredictions.map((_, index) => (
-                    <motion.div
+                    <motion.button
                       key={index}
-                      className="relative w-8 h-2 bg-black/40 rounded-full overflow-hidden border border-white/20"
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        index === aiCurrentIndex 
+                          ? 'w-8 bg-gradient-to-r from-neon-blue to-electric-purple' 
+                          : 'w-2 bg-white/30'
+                      }`}
+                      onClick={() => {
+                        setIsAiAutoPlaying(false);
+                        setAiCurrentIndex(index);
+                        setTimeout(() => setIsAiAutoPlaying(true), 5000);
+                      }}
+                      whileHover={{ scale: 1.2 }}
                     >
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-neon-blue via-electric-purple to-neon-pink rounded-full"
-                        animate={{
-                          x: ['-100%', '0%', '100%'],
-                          opacity: [0.3, 1, 0.3],
-                        }}
-                        transition={{
-                          duration: 6.67,
-                          repeat: Infinity,
-                          delay: index * 6.67,
-                          ease: "easeInOut",
-                        }}
-                      />
-                      
-                      {/* Shine effect on progress bar */}
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                        animate={{
-                          x: ['-100%', '100%'],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          repeatDelay: 4,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    </motion.div>
+                      {index === aiCurrentIndex && (
+                        <motion.div
+                          className="h-full bg-gradient-to-r from-white/40 to-transparent rounded-full"
+                          animate={{ x: ['-100%', '100%'] }}
+                          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                        />
+                      )}
+                    </motion.button>
                   ))}
+                </div>
+
+                {/* Auto-play indicator */}
+                <div className="absolute top-4 right-4 z-20">
+                  <motion.div
+                    className={`w-3 h-3 rounded-full ${isAiAutoPlaying ? 'bg-green-400' : 'bg-gray-400'}`}
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  />
                 </div>
               </div>
             </div>
