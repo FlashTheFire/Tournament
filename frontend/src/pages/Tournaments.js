@@ -48,11 +48,13 @@ const Tournaments = () => {
   ];
 
   const countries = [
-    { value: '', label: 'All Countries' },
-    { value: 'IN', label: 'India' },
-    { value: 'US', label: 'United States' },
-    { value: 'BR', label: 'Brazil' },
-    { value: 'ID', label: 'Indonesia' }
+    { value: '', label: 'All Regions' },
+    { value: 'IN', label: '🇮🇳 India' },
+    { value: 'BR', label: '🇧🇷 Brazil' },
+    { value: 'ID', label: '🇮🇩 Indonesia' },
+    { value: 'TH', label: '🇹🇭 Thailand' },
+    { value: 'MY', label: '🇲🇾 Malaysia' },
+    { value: 'SG', label: '🇸🇬 Singapore' }
   ];
 
   const modes = [
