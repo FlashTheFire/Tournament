@@ -79,6 +79,19 @@ api.interceptors.response.use(
 // API Service object with all methods
 export const apiService = {
   // =====================
+  // Utility Functions
+  // =====================
+  
+  // Set authentication token
+  setAuthToken(token) {
+    if (token) {
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+    } else {
+      delete api.defaults.headers.Authorization;
+    }
+  },
+
+  // =====================
   // Authentication APIs
   // =====================
   
