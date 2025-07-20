@@ -2458,50 +2458,57 @@ async def get_leaderboards(
     tournament_id: Optional[str] = None,
     limit: int = 50
 ):
-    """Get leaderboards - demo data for now"""
-    # Mock leaderboard data
-    mock_leaderboard = [
-        {
-            "rank": 1,
-            "user_id": "user1",
-            "username": "ProGamer_FF",
-            "kills": 245,
-            "wins": 89,
-            "points": 8750,
-            "level": 65,
-            "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
-        },
-        {
-            "rank": 2,
-            "user_id": "user2", 
-            "username": "FF_Champion",
-            "kills": 220,
-            "wins": 82,
-            "points": 8200,
-            "level": 72,
-            "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
-        },
-        # Add more mock data...
-    ]
-    
-    # Add more mock entries
-    for i in range(3, limit + 1):
-        mock_leaderboard.append({
-            "rank": i,
-            "user_id": f"user{i}",
-            "username": f"Player_{i:03d}",
-            "kills": max(10, 250 - (i * 5)),
-            "wins": max(5, 90 - (i * 2)),
-            "points": max(100, 9000 - (i * 50)),
-            "level": max(10, 70 - i),
-            "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
-        })
-    
-    return {
-        "leaderboard": mock_leaderboard[:limit],
-        "game_type": game_type,
-        "tournament_id": tournament_id
-    }
+    """Get real leaderboards based on actual tournament performance"""
+    try:
+        # Get leaderboard data from database
+        leaderboard_data = list(leaderboards_collection.find({}).sort("rank", 1).limit(limit))
+        
+        if not leaderboard_data:
+            # If no leaderboard data, return empty results
+            return {
+                "leaderboard": [],
+                "game_type": game_type,
+                "tournament_id": tournament_id,
+                "message": "No leaderboard data available"
+            }
+        
+        # Format leaderboard data
+        formatted_leaderboard = []
+        for entry in leaderboard_data:
+            # Get user details
+            user = users_collection.find_one({"user_id": entry["user_id"]})
+            if user:
+                formatted_entry = {
+                    "rank": entry["rank"],
+                    "user_id": entry["user_id"],
+                    "username": entry["username"],
+                    "full_name": entry["full_name"],
+                    "skill_rating": entry.get("skill_rating", 0),
+                    "total_earnings": entry.get("total_earnings", 0),
+                    "tournaments_played": entry.get("tournaments_played", 0),
+                    "tournaments_won": entry.get("tournaments_won", 0),
+                    "avg_placement": entry.get("avg_placement", 0),
+                    "total_kills": entry.get("total_kills", 0),
+                    "level": user.get("free_fire_data", {}).get("level", 0),
+                    "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+                }
+                formatted_leaderboard.append(formatted_entry)
+        
+        return {
+            "leaderboard": formatted_leaderboard,
+            "game_type": game_type,
+            "tournament_id": tournament_id,
+            "total_entries": len(formatted_leaderboard)
+        }
+        
+    except Exception as e:
+        # Fallback to empty leaderboard on error
+        return {
+            "leaderboard": [],
+            "game_type": game_type,
+            "tournament_id": tournament_id,
+            "error": f"Failed to load leaderboard: {str(e)}"
+        }
 
 if __name__ == "__main__":
     import uvicorn
