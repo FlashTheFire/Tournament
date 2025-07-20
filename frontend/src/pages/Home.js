@@ -1223,11 +1223,68 @@ const Home = () => {
           <div className="text-center mt-8 lg:mt-12">
             <Link
               to="/tournaments"
-              className="btn-premium inline-flex items-center space-x-3 px-8 lg:px-12 py-4 lg:py-5 text-lg lg:text-xl ripple mobile-friendly group"
+              className="inline-flex items-center space-x-4 px-8 lg:px-12 py-4 lg:py-5 text-lg lg:text-xl font-black tracking-wide text-white bg-gradient-to-r from-neon-blue via-electric-purple to-neon-pink rounded-2xl lg:rounded-3xl shadow-glow-lg border border-white/30 backdrop-blur-xl relative overflow-hidden group transition-all duration-300 hover:scale-105 hover:shadow-glow-xl"
             >
-              <Trophy className="group-hover:animate-bounce h-6 w-6" />
-              <span className="font-black">VIEW ALL TOURNAMENTS</span>
-              <ArrowRight className="group-hover:translate-x-2 transition-transform h-6 w-6" />
+              {/* Enhanced shine animation for button */}
+              <div className="absolute inset-0 overflow-hidden rounded-2xl lg:rounded-3xl">
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12"
+                  animate={{
+                    x: ['-200%', '200%'],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatDelay: 5,
+                    ease: "easeInOut",
+                  }}
+                  style={{ width: '150%' }}
+                />
+              </div>
+              
+              <div className="relative z-10 flex items-center space-x-4">
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                >
+                  <Trophy className="h-6 w-6 lg:h-8 lg:w-8 text-yellow-400 drop-shadow-glow" />
+                </motion.div>
+                
+                <span className="text-white drop-shadow-lg">VIEW ALL TOURNAMENTS</span>
+                
+                <motion.div
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <ArrowRight className="h-6 w-6 lg:h-8 lg:w-8 text-white group-hover:translate-x-2 transition-transform drop-shadow-glow" />
+                </motion.div>
+              </div>
+
+              {/* Button floating particles */}
+              <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+                {[...Array(8)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-1 h-1 bg-white rounded-full opacity-60"
+                    animate={{
+                      x: [0, Math.random() * 100 - 50],
+                      y: [0, Math.random() * 50 - 25],
+                      opacity: [0, 0.8, 0],
+                      scale: [0, 1.5, 0],
+                    }}
+                    transition={{
+                      duration: 3 + Math.random() * 2,
+                      repeat: Infinity,
+                      delay: i * 0.4,
+                      ease: "easeInOut",
+                    }}
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                    }}
+                  />
+                ))}
+              </div>
             </Link>
           </div>
         </section>
