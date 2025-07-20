@@ -15,7 +15,7 @@ import {
   Star
 } from 'lucide-react';
 import { paytmService } from '../services/PaytmService';
-import toast from 'react-hot-toast';
+import safeToast from '../utils/safeToast';
 
 const PremiumQRPayment = ({ isOpen, onClose, amount, onSuccess }) => {
   const [qrData, setQrData] = useState(null);
