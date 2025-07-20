@@ -127,31 +127,70 @@ const Home = () => {
     "https://images.unsplash.com/photo-1633545495735-25df17fb9f31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwzfHxlc3BvcnRzfGVufDB8fHx8MTc1Mjk5NTc2OHww&ixlib=rb-4.1.0&q=85"
   ];
 
+  // Mobile-First Responsive StatCard Component
   const StatCard = ({ icon: Icon, label, value, color, description, animate = false, trend }) => (
     <motion.div
-      whileHover={{ scale: 1.05, rotateY: 5, rotateX: 2 }}
+      whileHover={{ scale: 1.02, rotateY: 2, rotateX: 1 }}
       whileTap={{ scale: 0.98 }}
-      className="group relative overflow-hidden rounded-3xl"
+      className="group relative overflow-hidden
+        /* Mobile-first styles */
+        rounded-2xl
+        sm:rounded-3xl
+        lg:rounded-3xl
+      "
     >
-      {/* Premium glass background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.15] to-white/[0.05] backdrop-blur-xl rounded-3xl border border-white/20 group-hover:border-white/30 transition-all duration-500"></div>
+      {/* Responsive glass background */}
+      <div className="absolute inset-0 
+        glass-mobile
+        group-hover:border-white/30 
+        transition-all duration-500
+        rounded-2xl sm:rounded-3xl lg:rounded-3xl
+      "></div>
       
-      {/* Animated border glow */}
+      {/* Animated border glow - desktop only */}
       <motion.div
-        className="absolute inset-0 rounded-3xl bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red opacity-0 group-hover:opacity-20 transition-opacity duration-500"
+        className="absolute inset-0 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 hidden lg:block bg-gradient-to-r from-neon-blue via-electric-purple to-neon-red"
         animate={{ rotate: 360 }}
         transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
         style={{ padding: '2px' }}
       />
 
-      <div className="relative p-8 text-center">
-        <div className={`mx-auto w-20 h-20 ${color} rounded-3xl flex items-center justify-center mb-6 group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110`}>
-          <Icon className="h-10 w-10 text-white drop-shadow-2xl" />
+      <div className="relative text-center
+        /* Mobile: compact padding */
+        p-4
+        /* Tablet: medium padding */
+        sm:p-6
+        /* Desktop: spacious padding */
+        lg:p-8
+      ">
+        <div className={`mx-auto ${color} rounded-2xl sm:rounded-3xl flex items-center justify-center mb-4 sm:mb-6 group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110
+          /* Mobile: smaller icon container */
+          w-12 h-12
+          /* Tablet: medium icon container */
+          sm:w-16 sm:h-16
+          /* Desktop: large icon container */
+          lg:w-20 lg:h-20
+        `}>
+          <Icon className="text-white drop-shadow-2xl
+            /* Mobile: small icon */
+            h-6 w-6
+            /* Tablet: medium icon */
+            sm:h-8 sm:w-8
+            /* Desktop: large icon */
+            lg:h-10 lg:w-10
+          " />
         </div>
         
         <div className="flex items-center justify-center space-x-2 mb-2">
           <motion.h3 
-            className="text-4xl font-black text-white font-gaming"
+            className="text-white font-gaming font-black
+              /* Mobile: compact title */
+              text-xl
+              /* Tablet: medium title */
+              sm:text-3xl
+              /* Desktop: large title */
+              lg:text-4xl
+            "
             animate={animate ? { scale: [1, 1.05, 1] } : {}}
             transition={{ duration: 2, repeat: Infinity }}
           >
@@ -161,21 +200,32 @@ const Home = () => {
             <motion.div
               animate={{ y: [-2, 2, -2] }}
               transition={{ duration: 1.5, repeat: Infinity }}
+              className="hidden sm:block"
             >
               {trend === 'up' ? 
-                <TrendingUp className="h-6 w-6 text-neon-green" /> : 
-                <TrendingDown className="h-6 w-6 text-neon-red" />
+                <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-neon-green" /> : 
+                <TrendingDown className="h-4 w-4 sm:h-6 sm:w-6 text-neon-red" />
               }
             </motion.div>
           )}
         </div>
         
-        <p className="text-neon-blue text-sm font-bold mb-2 uppercase tracking-wider">{label}</p>
-        <p className="text-gray-300 text-xs opacity-90">{description}</p>
+        <p className="text-neon-blue font-bold uppercase tracking-wider mb-2
+          /* Mobile: small label */
+          text-2xs
+          /* Tablet: medium label */
+          sm:text-sm
+        ">{label}</p>
+        <p className="text-gray-300 opacity-90
+          /* Mobile: tiny description */
+          text-2xs hidden
+          /* Tablet: show description */
+          sm:block sm:text-xs
+        ">{description}</p>
         
         {animate && (
           <motion.div
-            className="absolute top-4 right-4 w-3 h-3 bg-red-500 rounded-full"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 w-2 h-2 sm:w-3 sm:h-3 bg-red-500 rounded-full"
             animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
             transition={{ duration: 1, repeat: Infinity }}
           />
@@ -184,43 +234,71 @@ const Home = () => {
     </motion.div>
   );
 
+  // Mobile-First AI Insight Card
   const AIInsightCard = ({ insight, index }) => (
     <motion.div
       initial={{ opacity: 0, x: -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.2, type: "spring", stiffness: 100 }}
       whileHover={{ scale: 1.02, y: -5 }}
-      className="group relative overflow-hidden rounded-2xl"
+      className="group relative overflow-hidden
+        /* Mobile: compact card */
+        rounded-xl
+        /* Desktop: larger card */
+        lg:rounded-2xl
+      "
     >
-      {/* Advanced glass effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.12] to-white/[0.03] backdrop-blur-2xl rounded-2xl border border-white/20 group-hover:border-neon-blue/40 transition-all duration-500"></div>
+      {/* Mobile-first glass effect */}
+      <div className="absolute inset-0 glass-mobile group-hover:border-neon-blue/40 transition-all duration-500 
+        rounded-xl lg:rounded-2xl
+      "></div>
       
-      <div className="relative p-6">
-        <div className="flex items-start space-x-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+      <div className="relative
+        /* Mobile: compact padding */
+        p-4
+        /* Desktop: spacious padding */
+        lg:p-6
+      ">
+        <div className="flex items-start space-x-3 sm:space-x-4">
+          <div className={`rounded-lg sm:rounded-xl flex items-center justify-center ${
             insight.type === 'tournament_prediction' ? 'bg-gradient-to-r from-blue-500 to-cyan-600' :
             insight.type === 'skill_analysis' ? 'bg-gradient-to-r from-green-500 to-emerald-600' :
             'bg-gradient-to-r from-purple-500 to-indigo-600'
-          } group-hover:shadow-glow transition-shadow duration-300`}>
-            {insight.type === 'tournament_prediction' && <Target className="h-6 w-6 text-white" />}
-            {insight.type === 'skill_analysis' && <TrendingUp className="h-6 w-6 text-white" />}
-            {insight.type === 'matchmaking' && <Users className="h-6 w-6 text-white" />}
+          } group-hover:shadow-glow transition-shadow duration-300
+            /* Mobile: smaller icon container */
+            w-10 h-10
+            /* Desktop: larger icon container */
+            sm:w-12 sm:h-12
+          `}>
+            {insight.type === 'tournament_prediction' && <Target className="h-5 w-5 sm:h-6 sm:w-6 text-white" />}
+            {insight.type === 'skill_analysis' && <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-white" />}
+            {insight.type === 'matchmaking' && <Users className="h-5 w-5 sm:h-6 sm:w-6 text-white" />}
           </div>
           
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-2">
-              <h4 className="text-white font-bold text-lg group-hover:text-neon-blue transition-colors">
+              <h4 className="text-white font-bold group-hover:text-neon-blue transition-colors
+                /* Mobile: compact title */
+                text-sm
+                /* Desktop: larger title */
+                lg:text-lg
+              ">
                 {insight.title}
               </h4>
               <div className="flex items-center space-x-1">
-                <Brain className="h-4 w-4 text-neon-purple" />
-                <span className="text-neon-purple text-sm font-bold">{insight.confidence}%</span>
+                <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-neon-purple" />
+                <span className="text-neon-purple font-bold text-2xs sm:text-sm">{insight.confidence}%</span>
               </div>
             </div>
-            <p className="text-gray-300 text-sm mb-3 leading-relaxed">{insight.description}</p>
+            <p className="text-gray-300 leading-relaxed mb-3
+              /* Mobile: small text */
+              text-2xs
+              /* Desktop: normal text */
+              sm:text-sm
+            ">{insight.description}</p>
             
             {/* Confidence bar */}
-            <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+            <div className="w-full h-1.5 sm:h-2 bg-gray-700 rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-gradient-to-r from-neon-blue to-electric-purple rounded-full"
                 initial={{ width: 0 }}
@@ -230,7 +308,7 @@ const Home = () => {
             </div>
             
             {insight.tournament && (
-              <p className="text-xs text-gray-400 mt-2">Tournament: {insight.tournament}</p>
+              <p className="text-gray-400 mt-2 text-2xs sm:text-xs">Tournament: {insight.tournament}</p>
             )}
           </div>
         </div>
@@ -238,6 +316,7 @@ const Home = () => {
     </motion.div>
   );
 
+  // Mobile-First Tournament Card with Dramatically Different Layouts
   const TournamentCard = ({ tournament, index }) => (
     <motion.div
       initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -249,13 +328,28 @@ const Home = () => {
         rotateX: 5,
         transition: { type: "spring", stiffness: 300, damping: 20 }
       }}
-      className="group relative overflow-hidden rounded-3xl"
+      className="group relative overflow-hidden
+        /* Mobile: compact card */
+        rounded-2xl
+        /* Desktop: larger rounded corners */
+        lg:rounded-3xl
+      "
     >
-      {/* Premium card background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.15] to-white/[0.05] backdrop-blur-2xl rounded-3xl border border-white/20 group-hover:border-white/40 transition-all duration-500"></div>
+      {/* Mobile-first card background */}
+      <div className="absolute inset-0 glass-mobile group-hover:border-white/40 transition-all duration-500
+        rounded-2xl lg:rounded-3xl
+      "></div>
       
       <div className="relative">
-        <div className="relative h-80 overflow-hidden rounded-t-3xl">
+        <div className="relative overflow-hidden
+          /* Mobile: shorter image for more compact layout */
+          h-48
+          /* Tablet: medium height */
+          sm:h-64
+          /* Desktop: tall image for cinematic effect */
+          lg:h-80
+          rounded-t-2xl lg:rounded-t-3xl
+        ">
           <motion.img
             src={heroImages[index % heroImages.length]}
             alt={tournament.name}
@@ -266,66 +360,93 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
           <div className="absolute inset-0 bg-gradient-to-tr from-neon-red/10 via-transparent to-neon-blue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           
-          {/* Premium badges */}
-          <div className="absolute top-6 left-6 flex flex-wrap gap-3">
+          {/* Mobile-optimized badges */}
+          <div className="absolute top-3 left-3 sm:top-6 sm:left-6 flex flex-wrap gap-2 sm:gap-3">
             <motion.div 
               whileHover={{ scale: 1.1 }}
-              className="px-4 py-2 rounded-full text-sm font-bold text-white shadow-2xl bg-gradient-to-r from-red-500 to-pink-600 backdrop-blur-sm border border-red-300/30"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-white shadow-2xl bg-gradient-to-r from-red-500 to-pink-600 backdrop-blur-sm border border-red-300/30
+                /* Mobile: smaller badge */
+                text-2xs
+                /* Desktop: larger badge */
+                sm:text-sm
+              "
             >
-              <div className="flex items-center space-x-2">
-                <Activity className="h-4 w-4 animate-pulse" />
-                <span className="uppercase tracking-wide">🔴 LIVE BATTLE</span>
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <Activity className="h-3 w-3 sm:h-4 sm:w-4 animate-pulse" />
+                <span className="uppercase tracking-wide">🔴 LIVE</span>
               </div>
             </motion.div>
           </div>
 
-          {/* Prize pool with enhanced styling */}
+          {/* Mobile-optimized prize pool */}
           <motion.div 
-            className="absolute top-6 right-6"
+            className="absolute top-3 right-3 sm:top-6 sm:right-6"
             whileHover={{ scale: 1.1, rotate: 5 }}
           >
-            <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-black px-5 py-2 rounded-xl text-sm font-black shadow-2xl flex items-center space-x-2 backdrop-blur-sm">
-              <Crown className="h-5 w-5" />
+            <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-black px-3 py-1.5 sm:px-5 sm:py-2 rounded-lg sm:rounded-xl font-black shadow-2xl flex items-center space-x-1 sm:space-x-2 backdrop-blur-sm
+              /* Mobile: smaller prize badge */
+              text-2xs
+              /* Desktop: larger prize badge */
+              sm:text-sm
+            ">
+              <Crown className="h-3 w-3 sm:h-5 sm:w-5" />
               <span>₹{tournament.prize_pool?.toLocaleString()}</span>
             </div>
           </motion.div>
           
-          {/* Title and info */}
-          <div className="absolute bottom-6 left-6 right-6">
-            <h3 className="text-white font-black text-2xl mb-4 drop-shadow-2xl leading-tight">
+          {/* Mobile-first title and info positioning */}
+          <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6">
+            <h3 className="text-white font-black drop-shadow-2xl leading-tight mb-3 sm:mb-4
+              /* Mobile: compact title */
+              text-lg
+              /* Desktop: large title */
+              lg:text-2xl
+            ">
               {tournament.name}
             </h3>
-            <div className="flex items-center justify-between">
+            
+            {/* Mobile: Stack info vertically for space efficiency */}
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:items-center sm:justify-between">
               <motion.div 
-                className="flex items-center space-x-2 bg-black/50 backdrop-blur-lg px-4 py-2 rounded-xl border border-white/30"
+                className="flex items-center space-x-2 bg-black/50 backdrop-blur-lg px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-white/30"
                 whileHover={{ scale: 1.05 }}
               >
-                <Users className="h-5 w-5 text-neon-blue" />
-                <span className="text-white font-bold">{tournament.current_participants}/{tournament.max_participants}</span>
+                <Users className="h-4 w-4 sm:h-5 sm:w-5 text-neon-blue" />
+                <span className="text-white font-bold text-xs sm:text-sm">{tournament.current_participants}/{tournament.max_participants}</span>
               </motion.div>
               <motion.div 
-                className="flex items-center space-x-2 bg-black/50 backdrop-blur-lg px-4 py-2 rounded-xl border border-white/30"
+                className="flex items-center space-x-2 bg-black/50 backdrop-blur-lg px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-white/30"
                 whileHover={{ scale: 1.05 }}
               >
-                <Crosshair className="h-5 w-5 text-neon-green" />
-                <span className="text-white font-bold">₹{tournament.entry_fee}</span>
+                <Crosshair className="h-4 w-4 sm:h-5 sm:w-5 text-neon-green" />
+                <span className="text-white font-bold text-xs sm:text-sm">₹{tournament.entry_fee}</span>
               </motion.div>
             </div>
           </div>
         </div>
 
-        <div className="p-8 space-y-6">
+        <div className="space-y-4 sm:space-y-6
+          /* Mobile: compact padding */
+          p-4
+          /* Desktop: spacious padding */
+          lg:p-8
+        ">
           <Link
             to={`/tournaments/${tournament.tournament_id}`}
-            className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 group overflow-hidden"
+            className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden
+              /* Mobile: smaller button */
+              py-3 px-4 text-sm
+              /* Desktop: larger button */
+              lg:py-4 lg:px-6 lg:text-base
+            "
           >
             <motion.div 
-              className="flex items-center justify-center space-x-4"
+              className="flex items-center justify-center space-x-2 sm:space-x-4"
               whileHover={{ scale: 1.02 }}
             >
-              <Gamepad2 className="h-6 w-6 group-hover:rotate-12 transition-transform" />
-              <span className="font-black text-lg tracking-wide">ENTER BATTLE</span>
-              <Flame className="h-6 w-6 group-hover:animate-pulse" />
+              <Gamepad2 className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-12 transition-transform" />
+              <span className="font-black tracking-wide">ENTER BATTLE</span>
+              <Flame className="h-5 w-5 sm:h-6 sm:w-6 group-hover:animate-pulse" />
             </motion.div>
           </Link>
         </div>
@@ -335,15 +456,30 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center px-4">
         <motion.div className="text-center">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 border-4 border-neon-blue border-t-transparent rounded-full mx-auto mb-8"
+            className="border-4 border-neon-blue border-t-transparent rounded-full mx-auto mb-6 sm:mb-8
+              /* Mobile: smaller spinner */
+              w-12 h-12
+              /* Desktop: larger spinner */
+              sm:w-16 sm:h-16
+            "
           />
-          <h2 className="text-3xl font-bold text-white mb-4 font-gaming">Loading Arena...</h2>
-          <p className="text-gray-400">Preparing the ultimate battle experience</p>
+          <h2 className="text-white mb-4 font-gaming font-bold
+            /* Mobile: compact loading text */
+            text-2xl
+            /* Desktop: large loading text */
+            sm:text-3xl
+          ">Loading Arena...</h2>
+          <p className="text-gray-400
+            /* Mobile: small description */
+            text-sm
+            /* Desktop: normal description */
+            sm:text-base
+          ">Preparing the ultimate battle experience</p>
         </motion.div>
       </div>
     );
@@ -356,17 +492,22 @@ const Home = () => {
       transition={{ duration: 1 }}
       className="w-full"
     >
-      {/* Full-Screen Hero Section */}
+      {/* Mobile-First Hero Section */}
       <motion.section
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, type: "spring", stiffness: 60 }}
-        className="relative min-h-screen w-full flex items-center justify-center overflow-hidden"
+        className="relative flex items-center justify-center overflow-hidden
+          /* Mobile: shorter hero for better mobile UX */
+          min-h-[80vh]
+          /* Desktop: full-screen hero */
+          lg:min-h-screen
+        "
       >
-        {/* Fixed full-screen background */}
+        {/* Mobile-optimized background */}
         <div className="absolute inset-0 w-full h-full">
           <motion.div
-            className="w-full h-full bg-center bg-cover bg-no-repeat bg-fixed"
+            className="w-full h-full bg-center bg-cover bg-no-repeat"
             style={{
               backgroundImage: `url('${heroImages[0]}')`
             }}
@@ -378,11 +519,18 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-neon-red/8 via-transparent to-electric-blue/8"></div>
         </div>
 
-        {/* Full-width main content */}
+        {/* Mobile-first hero content */}
         <div className="relative z-10 text-center w-full px-4 sm:px-6 lg:px-8">
-          {/* Main Title - No top banner */}
+          {/* Mobile-optimized main title */}
           <motion.h1 
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-12 font-gaming leading-none"
+            className="font-black font-gaming leading-none mb-8 sm:mb-12
+              /* Mobile: compact hero title */
+              text-4xl
+              /* Tablet: medium hero title */
+              sm:text-6xl md:text-7xl
+              /* Desktop: massive hero title */
+              lg:text-8xl xl:text-9xl
+            "
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 1 }}
@@ -405,7 +553,14 @@ const Home = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-xl sm:text-2xl md:text-4xl text-gray-200 mb-16 leading-relaxed drop-shadow-lg max-w-7xl mx-auto font-medium"
+            className="text-gray-200 leading-relaxed drop-shadow-lg max-w-7xl mx-auto font-medium mb-8 sm:mb-16
+              /* Mobile: compact description */
+              text-base
+              /* Tablet: medium description */
+              sm:text-xl md:text-2xl
+              /* Desktop: large description */
+              lg:text-4xl
+            "
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 1 }}
@@ -415,9 +570,16 @@ const Home = () => {
             real-time analytics, and massive prize pools!
           </motion.p>
           
-          {/* Enhanced Live battle stats - Full width grid */}
+          {/* Mobile-first live stats - Different layouts for mobile vs desktop */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-16 max-w-7xl mx-auto"
+            className="mb-8 sm:mb-16 max-w-7xl mx-auto
+              /* Mobile: single column stack */
+              grid grid-cols-1 gap-4
+              /* Tablet: 3 columns */
+              sm:grid-cols-3 sm:gap-6
+              /* Desktop: spacious 3 columns */
+              lg:gap-8
+            "
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 1 }}
@@ -429,7 +591,12 @@ const Home = () => {
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
-                className={`glass rounded-3xl p-6 md:p-8 text-center bg-gradient-to-br ${stat.gradient} border ${stat.border} relative overflow-hidden backdrop-blur-2xl`}
+                className={`glass bg-gradient-to-br ${stat.gradient} border ${stat.border} relative overflow-hidden backdrop-blur-2xl text-center
+                  /* Mobile: compact stat card */
+                  rounded-2xl p-4
+                  /* Desktop: spacious stat card */
+                  lg:rounded-3xl lg:p-6 xl:p-8
+                `}
                 whileHover={{ scale: 1.05, y: -10, rotateY: 5 }}
                 animate={{ y: [-3, 3, -3] }}
                 transition={{ 
@@ -443,180 +610,186 @@ const Home = () => {
                   transition={{ duration: 25, repeat: Infinity, ease: "linear", delay: index * 3 }}
                   className="relative z-10"
                 >
-                  <stat.icon className={`h-12 w-12 md:h-16 md:w-16 ${stat.color} mx-auto mb-4 drop-shadow-2xl`} />
+                  <stat.icon className={`${stat.color} mx-auto mb-3 sm:mb-4 drop-shadow-2xl
+                    /* Mobile: smaller icon */
+                    h-8 w-8
+                    /* Desktop: larger icon */
+                    sm:h-12 sm:w-12 lg:h-16 lg:w-16
+                  `} />
                 </motion.div>
                 <div className="relative z-10">
                   <motion.p 
-                    className={`text-3xl md:text-5xl font-black ${stat.color} mb-2 font-gaming drop-shadow-2xl`}
+                    className={`${stat.color} font-gaming font-black drop-shadow-2xl mb-2
+                      /* Mobile: compact stat value */
+                      text-2xl
+                      /* Desktop: large stat value */
+                      sm:text-3xl lg:text-5xl
+                    `}
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
                   >{stat.value}</motion.p>
-                  <p className="text-white font-semibold text-lg md:text-xl">{stat.label}</p>
+                  <p className="text-white font-semibold
+                    /* Mobile: small label */
+                    text-sm
+                    /* Desktop: larger label */
+                    sm:text-lg lg:text-xl
+                  ">{stat.label}</p>
                 </div>
               </motion.div>
             ))}
           </motion.div>
           
+          {/* Mobile-first CTA buttons - Stack on mobile, side-by-side on desktop */}
           <motion.div 
-            className="flex flex-col lg:flex-row gap-8 justify-center items-center mb-16"
+            className="flex justify-center items-center mb-8 sm:mb-16
+              /* Mobile: stack buttons vertically */
+              flex-col gap-4
+              /* Desktop: side-by-side buttons */
+              lg:flex-row lg:gap-8
+            "
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 1 }}
           >
             <Link
               to="/tournaments"
-              className="btn-premium text-xl md:text-2xl px-12 md:px-16 py-6 md:py-8 ripple mobile-friendly group relative overflow-hidden"
+              className="btn-premium ripple mobile-friendly group relative overflow-hidden w-full sm:w-auto
+                /* Mobile: compact button */
+                text-base px-8 py-4
+                /* Desktop: large button */
+                lg:text-xl xl:text-2xl lg:px-12 xl:px-16 lg:py-6 xl:py-8
+              "
             >
               <motion.div 
-                className="flex items-center justify-center space-x-4"
+                className="flex items-center justify-center space-x-3 sm:space-x-4"
                 whileHover={{ scale: 1.05 }}
               >
-                <Crosshair className="h-8 w-8 md:h-10 md:w-10 group-hover:animate-spin" />
+                <Crosshair className="group-hover:animate-spin
+                  /* Mobile: smaller icon */
+                  h-6 w-6
+                  /* Desktop: larger icon */
+                  lg:h-8 lg:w-8 xl:h-10 xl:w-10
+                " />
                 <span className="font-black tracking-wide">JOIN ELITE BATTLE</span>
-                <Flame className="h-8 w-8 md:h-10 md:w-10 group-hover:animate-bounce" />
+                <Flame className="group-hover:animate-bounce
+                  /* Mobile: smaller icon */
+                  h-6 w-6
+                  /* Desktop: larger icon */
+                  lg:h-8 lg:w-8 xl:h-10 xl:w-10
+                " />
               </motion.div>
             </Link>
             
             <Link
               to="/leaderboards"
-              className="glass px-12 md:px-16 py-6 md:py-8 rounded-3xl font-bold text-xl md:text-2xl border-2 border-neon-blue/50 hover:border-neon-blue hover:shadow-glow-lg transition-all duration-300 inline-flex items-center justify-center space-x-4 mobile-friendly group backdrop-blur-xl"
+              className="glass border-2 border-neon-blue/50 hover:border-neon-blue hover:shadow-glow-lg transition-all duration-300 inline-flex items-center justify-center space-x-3 sm:space-x-4 mobile-friendly group backdrop-blur-xl w-full sm:w-auto
+                /* Mobile: compact secondary button */
+                px-8 py-4 rounded-2xl font-bold text-base
+                /* Desktop: large secondary button */
+                lg:px-12 xl:px-16 lg:py-6 xl:py-8 lg:rounded-3xl lg:font-bold lg:text-xl xl:text-2xl
+              "
             >
-              <Trophy className="h-8 w-8 md:h-10 md:w-10 text-yellow-400 group-hover:animate-pulse" />
+              <Trophy className="text-yellow-400 group-hover:animate-pulse
+                /* Mobile: smaller icon */
+                h-6 w-6
+                /* Desktop: larger icon */
+                lg:h-8 lg:w-8 xl:h-10 xl:w-10
+              " />
               <span>VIEW CHAMPIONS</span>
-              <ArrowRight className="h-8 w-8 md:h-10 md:w-10 group-hover:translate-x-2 transition-transform" />
-            </Link>
-          </motion.div>
-        </div>
-      </motion.section>
-            <span className="text-white drop-shadow-2xl block">FREE FIRE</span>
-            <motion.span 
-              className="text-gradient bg-gradient-to-r from-neon-red via-electric-purple to-neon-blue block"
-              animate={{ 
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-              }}
-              transition={{ 
-                duration: 4, 
-                repeat: Infinity, 
-                ease: "easeInOut"
-              }}
-              style={{ backgroundSize: '200% 200%' }}
-            >
-              ULTIMATE ARENA
-            </motion.span>
-          </motion.h1>
-          
-          <motion.p 
-            className="text-2xl md:text-3xl text-gray-200 mb-12 leading-relaxed drop-shadow-lg max-w-4xl mx-auto font-medium"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0, duration: 1 }}
-          >
-            Experience the most intense Free Fire tournaments with{' '}
-            <span className="text-neon-blue font-bold">AI-powered matchmaking</span>, 
-            real-time analytics, and massive prize pools!
-          </motion.p>
-          
-          {/* Live battle stats */}
-          <motion.div
-            className="flex flex-wrap items-center justify-center gap-8 mb-12 text-lg font-bold"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 1 }}
-          >
-            {[
-              { icon: Activity, label: 'Live Battles', value: liveStats.liveMatches, color: 'text-neon-green' },
-              { icon: Users, label: 'Warriors', value: `${Math.floor(liveStats.activePlayers/1000)}K+`, color: 'text-neon-purple' },
-              { icon: Crown, label: 'Prize Pool', value: `₹${Math.floor(liveStats.totalPrizePool/100000)/10}M`, color: 'text-yellow-400' }
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                className="flex items-center space-x-3 bg-black/30 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20"
-                whileHover={{ scale: 1.05 }}
-                animate={{ y: [-2, 2, -2] }}
-                transition={{ 
-                  y: { duration: 3, repeat: Infinity, delay: index * 0.5 },
-                  scale: { duration: 0.3 }
-                }}
-              >
-                <stat.icon className={`h-6 w-6 ${stat.color} animate-pulse`} />
-                <span className={`${stat.color}`}>{stat.value}</span>
-                <span className="text-white">{stat.label}</span>
-              </motion.div>
-            ))}
-          </motion.div>
-          
-          <motion.div 
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.4, duration: 1 }}
-          >
-            <Link
-              to="/tournaments"
-              className="btn-premium text-xl px-12 py-6 ripple mobile-friendly group relative overflow-hidden"
-            >
-              <motion.div 
-                className="flex items-center justify-center space-x-4"
-                whileHover={{ scale: 1.05 }}
-              >
-                <Crosshair className="h-8 w-8 group-hover:animate-spin" />
-                <span className="font-black tracking-wide">JOIN BATTLE NOW</span>
-                <Flame className="h-8 w-8 group-hover:animate-bounce" />
-              </motion.div>
-            </Link>
-            
-            <Link
-              to="/leaderboards"
-              className="glass px-12 py-6 rounded-2xl font-bold text-xl border-2 border-neon-blue/50 hover:border-neon-blue hover:shadow-glow-lg transition-all duration-300 inline-flex items-center justify-center space-x-4 mobile-friendly group backdrop-blur-xl"
-            >
-              <Shield className="h-8 w-8 text-yellow-400 group-hover:animate-pulse" />
-              <span className="text-white">VIEW HALL OF FAME</span>
-              <Crown className="h-8 w-8 text-yellow-400 group-hover:rotate-12 transition-transform" />
+              <ArrowRight className="group-hover:translate-x-2 transition-transform
+                /* Mobile: smaller icon */
+                h-6 w-6
+                /* Desktop: larger icon */
+                lg:h-8 lg:w-8 xl:h-10 xl:w-10
+              " />
             </Link>
           </motion.div>
         </div>
       </motion.section>
 
-      <div className="space-y-20 px-8 py-20">
-        {/* AI-Powered Features Section */}
+      {/* Mobile-first content sections */}
+      <div className="
+        /* Mobile: compact spacing and padding */
+        space-y-12 px-4 py-12
+        /* Tablet: medium spacing */
+        sm:space-y-16 sm:px-6 sm:py-16
+        /* Desktop: spacious layout */
+        lg:space-y-20 lg:px-8 lg:py-20
+      ">
+        {/* AI-Powered Features Section - Mobile-First */}
         <section>
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-purple-500/20 to-indigo-600/20 backdrop-blur-sm border border-purple-500/30 rounded-full px-8 py-3 mb-8">
-              <Brain className="h-6 w-6 text-purple-400" />
+            <div className="inline-flex items-center space-x-2 sm:space-x-3 bg-gradient-to-r from-purple-500/20 to-indigo-600/20 backdrop-blur-sm border border-purple-500/30 rounded-full mb-6 sm:mb-8
+              /* Mobile: compact badge */
+              px-4 py-2 text-xs
+              /* Desktop: larger badge */
+              lg:px-8 lg:py-3 lg:text-sm
+            ">
+              <Brain className="h-4 w-4 sm:h-6 sm:w-6 text-purple-400" />
               <span className="text-purple-300 font-bold uppercase tracking-wide">AI-Powered Gaming</span>
-              <Zap className="h-6 w-6 text-yellow-400" />
+              <Zap className="h-4 w-4 sm:h-6 sm:w-6 text-yellow-400" />
             </div>
-            <h2 className="text-6xl font-black text-white mb-6 font-gaming">SMART BATTLE SYSTEM</h2>
-            <p className="text-gray-400 text-xl max-w-3xl mx-auto">
+            <h2 className="text-white font-gaming font-black mb-4 sm:mb-6
+              /* Mobile: compact section title */
+              text-3xl
+              /* Desktop: large section title */
+              lg:text-6xl
+            ">SMART BATTLE SYSTEM</h2>
+            <p className="text-gray-400 max-w-3xl mx-auto
+              /* Mobile: compact description */
+              text-sm
+              /* Desktop: larger description */
+              lg:text-xl
+            ">
               Experience next-generation gaming with AI-driven matchmaking, predictive analytics, and personalized insights
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto
+            /* Mobile: single column */
+            grid grid-cols-1 gap-4
+            /* Desktop: three columns */
+            lg:grid-cols-3 lg:gap-8
+          ">
             {aiPredictions.map((insight, index) => (
               <AIInsightCard key={insight.id} insight={insight} index={index} />
             ))}
           </div>
         </section>
 
-        {/* Enhanced Stats Section */}
+        {/* Enhanced Stats Section - Mobile-First Grid */}
         <section>
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h2 className="text-6xl font-black text-white mb-6 font-gaming">LIVE BATTLE STATS</h2>
-            <p className="text-gray-400 text-xl">Real-time battlefield intelligence</p>
+            <h2 className="text-white font-gaming font-black mb-4 sm:mb-6
+              /* Mobile: compact title */
+              text-3xl
+              /* Desktop: large title */
+              lg:text-6xl
+            ">LIVE BATTLE STATS</h2>
+            <p className="text-gray-400
+              /* Mobile: small description */
+              text-sm
+              /* Desktop: larger description */
+              lg:text-xl
+            ">Real-time battlefield intelligence</p>
           </motion.div>
           
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto
+            /* Mobile: 2 columns for better mobile layout */
+            grid grid-cols-2 gap-4
+            /* Desktop: 4 columns */
+            lg:grid-cols-4 lg:gap-8
+          ">
             <StatCard
               icon={Trophy}
               label="Active Tournaments"
@@ -652,55 +825,109 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Featured Tournaments */}
+        {/* Featured Tournaments - Mobile-First Layout */}
         <section>
           <motion.div 
-            className="flex items-center justify-between mb-16"
+            className="mb-8 sm:mb-12 lg:mb-16
+              /* Mobile: center everything */
+              text-center
+              /* Desktop: flex layout with space between */
+              lg:flex lg:items-center lg:justify-between lg:text-left
+            "
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
             <div>
-              <h2 className="text-6xl font-black text-white mb-4 font-gaming">FEATURED BATTLES</h2>
-              <p className="text-gray-400 text-xl">Elite tournaments for champions</p>
+              <h2 className="text-white font-gaming font-black mb-4
+                /* Mobile: compact title */
+                text-3xl
+                /* Desktop: large title */
+                lg:text-6xl lg:mb-4
+              ">FEATURED BATTLES</h2>
+              <p className="text-gray-400
+                /* Mobile: small description */
+                text-sm mb-4
+                /* Desktop: larger description, no bottom margin */
+                lg:text-xl lg:mb-0
+              ">Elite tournaments for champions</p>
             </div>
             <Link
               to="/tournaments"
-              className="text-neon-blue hover:text-electric-blue font-bold flex items-center space-x-3 transition-all duration-300 group text-xl"
+              className="text-neon-blue hover:text-electric-blue font-bold flex items-center justify-center space-x-2 sm:space-x-3 transition-all duration-300 group
+                /* Mobile: smaller link */
+                text-sm
+                /* Desktop: larger link */
+                lg:text-xl
+              "
             >
               <span>View All Tournaments</span>
-              <ArrowRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
+              <ArrowRight className="h-4 w-4 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform" />
             </Link>
           </motion.div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto
+            /* Mobile: single column for better mobile experience */
+            grid grid-cols-1 gap-6
+            /* Tablet: 2 columns */
+            md:grid-cols-2 md:gap-8
+            /* Desktop: 3 columns */
+            xl:grid-cols-3 xl:gap-10
+          ">
             {tournaments.slice(0, 6).map((tournament, index) => (
               <TournamentCard key={tournament.tournament_id} tournament={tournament} index={index} />
             ))}
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="text-center py-20">
+        {/* CTA Section - Mobile-First */}
+        <section className="text-center
+          /* Mobile: compact padding */
+          py-12
+          /* Desktop: spacious padding */
+          lg:py-20
+        ">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
             className="max-w-4xl mx-auto"
           >
-            <h2 className="text-6xl font-black text-white mb-8 font-gaming">
+            <h2 className="text-white font-gaming font-black mb-6 sm:mb-8
+              /* Mobile: compact CTA title */
+              text-3xl
+              /* Desktop: large CTA title */
+              lg:text-6xl
+            ">
               READY TO DOMINATE?
             </h2>
-            <p className="text-2xl text-gray-300 mb-12 leading-relaxed">
+            <p className="text-gray-300 leading-relaxed mb-8 sm:mb-12
+              /* Mobile: compact description */
+              text-base
+              /* Desktop: large description */
+              lg:text-2xl
+            ">
               Join thousands of elite warriors in the ultimate Free Fire tournament experience
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <div className="flex justify-center">
               <Link
                 to="/tournaments"
-                className="btn-premium text-2xl px-16 py-8 ripple mobile-friendly group"
+                className="btn-premium ripple mobile-friendly group
+                  /* Mobile: full-width button */
+                  w-full text-lg px-8 py-4
+                  /* Tablet: auto width */
+                  sm:w-auto
+                  /* Desktop: large button */
+                  lg:text-2xl lg:px-16 lg:py-8
+                "
               >
-                <div className="flex items-center space-x-4">
-                  <Target className="h-8 w-8 group-hover:rotate-45 transition-transform" />
+                <div className="flex items-center justify-center space-x-3 sm:space-x-4">
+                  <Target className="group-hover:rotate-45 transition-transform
+                    /* Mobile: smaller icon */
+                    h-6 w-6
+                    /* Desktop: larger icon */
+                    lg:h-8 lg:w-8
+                  " />
                   <span className="font-black">START BATTLING</span>
                 </div>
               </Link>
