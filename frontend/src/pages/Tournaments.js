@@ -439,21 +439,21 @@ const Tournaments = () => {
         </div>
       </motion.div>
 
-      {/* Enhanced Battle Filters with Advanced Toggle */}
+      {/* Enhanced Battle Filters with Advanced Toggle - Compact Version */}
       <motion.div 
-        className="glass rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-6 kinetic-waves border border-white/10"
+        className="glass rounded-xl p-3 sm:p-4 space-y-3 sm:space-y-4 kinetic-waves border border-white/10"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-neon-blue to-electric-purple rounded-xl flex items-center justify-center flex-shrink-0">
-              <Filter className="h-4 w-4 text-white" />
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center space-x-2">
+            <div className="w-6 h-6 bg-gradient-to-r from-neon-blue to-electric-purple rounded-lg flex items-center justify-center flex-shrink-0">
+              <Filter className="h-3 w-3 text-white" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-white font-bold text-lg">Battle Filters</h3>
-              <p className="text-gray-400 text-sm">Choose your battlefield</p>
+              <h3 className="text-white font-bold text-base">Battle Filters</h3>
+              <p className="text-gray-400 text-xs">Choose your battlefield</p>
             </div>
           </div>
           
