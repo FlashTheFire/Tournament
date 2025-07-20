@@ -282,24 +282,25 @@ const DemoAccess = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center">
-              <motion.a
-                href="/login"
+              <motion.button
+                onClick={handleDemoLogin}
                 whileHover={{ scale: 1.05, rotate: 1 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-3 px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-neon-blue to-electric-purple rounded-xl text-white font-bold text-lg md:text-xl shadow-glow w-full sm:w-auto justify-center"
+                className="flex items-center space-x-3 px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-neon-blue to-electric-purple rounded-xl text-white font-bold text-lg md:text-xl shadow-glow w-full sm:w-auto justify-center group hover:shadow-glow-lg transition-all duration-300"
               >
-                <Trophy className="h-5 w-5 md:h-6 md:w-6" />
-                <span>Start Gaming</span>
-              </motion.a>
+                <Rocket className="h-5 w-5 md:h-6 md:w-6 group-hover:animate-bounce" />
+                <span>🚀 Launch Demo</span>
+                <Zap className="h-5 w-5 md:h-6 md:w-6 group-hover:animate-pulse" />
+              </motion.button>
               
               <motion.a
-                href="/hamburger-demo"
+                href="/login"
                 whileHover={{ scale: 1.05, rotate: -1 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-3 px-8 md:px-12 py-3 md:py-4 glass border border-white/20 rounded-xl text-white font-bold text-lg md:text-xl hover:border-neon-purple/50 w-full sm:w-auto justify-center"
+                className="flex items-center space-x-3 px-8 md:px-12 py-3 md:py-4 glass border border-white/20 rounded-xl text-white font-bold text-lg md:text-xl hover:border-neon-purple/50 w-full sm:w-auto justify-center group"
               >
-                <Eye className="h-5 w-5 md:h-6 md:w-6" />
-                <span>View Demo</span>
+                <Eye className="h-5 w-5 md:h-6 md:w-6 group-hover:scale-110 transition-transform" />
+                <span>Manual Login</span>
               </motion.a>
             </div>
           </motion.div>
