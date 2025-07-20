@@ -313,24 +313,29 @@ const Navbar = ({ onMenuClick }) => {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9, y: -20 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  className="absolute right-0 top-full mt-3 w-80 glass rounded-2xl border border-white/20 shadow-2xl z-50 overflow-hidden"
+                  className="absolute right-0 top-full mt-3 w-80 bg-gradient-to-br from-cosmic-black/95 to-cosmic-dark/95 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-2xl z-50 overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(18, 18, 18, 0.95), rgba(30, 30, 30, 0.95))',
+                    backdropFilter: 'blur(24px)',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(139, 92, 246, 0.1)'
+                  }}
                 >
-                  <div className="p-6 border-b border-white/10 bg-gradient-to-br from-neon-purple/10 to-electric-blue/10">
+                  <div className="p-6 border-b border-white/10 bg-gradient-to-br from-cosmic-dark/50 to-cosmic-black/50">
                     <div className="flex items-center space-x-4">
                       <div className="relative">
-                        <div className="h-16 w-16 bg-gradient-to-br from-neon-purple to-electric-blue rounded-2xl flex items-center justify-center border-2 border-white/20">
+                        <div className="h-16 w-16 bg-gradient-to-br from-neon-purple to-electric-blue rounded-2xl flex items-center justify-center border-2 border-white/20 shadow-glow">
                           <span className="text-white font-bold text-xl">
                             {user?.full_name?.charAt(0) || user?.username?.charAt(0) || 'U'}
                           </span>
                         </div>
                         {user?.is_admin && (
-                          <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                          <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border-2 border-cosmic-black">
                             <Crown className="h-4 w-4 text-white" />
                           </div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-white font-bold text-lg truncate">
+                        <p className="text-white font-bold text-lg truncate font-gaming">
                           {user?.full_name || user?.username}
                         </p>
                         <p className="text-gray-300 text-sm truncate">
@@ -371,7 +376,7 @@ const Navbar = ({ onMenuClick }) => {
                     ))}
                   </div>
 
-                  <div className="border-t border-white/10 p-2">
+                  <div className="border-t border-white/10 p-2 bg-gradient-to-r from-cosmic-dark/30 to-cosmic-black/30">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
