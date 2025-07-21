@@ -413,7 +413,7 @@ const Dashboard = () => {
                     {tournament.result && (
                       <div className="mt-2">
                         <p className="text-white font-bold">#{tournament.result.place} Place</p>
-                        <p className="text-green-400">+₹{tournament.result.prize}</p>
+                        <p className="text-green-400">+{formatPrizePool(tournament.result.prize)}</p>
                       </div>
                     )}
                   </div>
