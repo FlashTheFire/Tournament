@@ -823,7 +823,7 @@ const Home = () => {
             </p>
           </motion.div>
           
-          {/* Professional Touch-Enabled AI Carousel - Fixed Sizing */}
+          {/* Professional Touch-Enabled AI Carousel - Mobile-First with Scroll Snap */}
           <div className="max-w-7xl mx-auto">
             {/* Mobile: Professional Touch-Enabled Carousel */}
             <div className="lg:hidden">
