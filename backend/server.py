@@ -21,6 +21,48 @@ import asyncio
 import numpy as np
 import random
 
+# Free Fire API configuration
+FREE_FIRE_API_BASE = "https://region-info-api.vercel.app"
+
+async def validate_free_fire_uid(uid: str, region: str) -> dict:
+    """
+    Validate Free Fire UID using the region info API
+    Returns player info if valid, raises HTTPException if invalid
+    """
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        try:
+            response = await client.get(
+                f"{FREE_FIRE_API_BASE}/player-info",
+                params={"uid": uid, "region": region.lower()}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "player_info" in data:
+                    player_info = data["player_info"]
+                    # Extract essential player information
+                    basic_info = player_info.get("basicInfo", {})
+                    return {
+                        "uid": uid,
+                        "region": region.upper(),
+                        "nickname": basic_info.get("nickname", "Unknown"),
+                        "level": basic_info.get("level", 0),
+                        "rank": basic_info.get("rank", 0),
+                        "account_id": basic_info.get("accountId", ""),
+                        "last_login": basic_info.get("lastLoginAt", ""),
+                        "validated_at": datetime.utcnow().isoformat(),
+                        "full_info": player_info  # Store complete info for admin use
+                    }
+                else:
+                    raise HTTPException(status_code=400, detail="Invalid Free Fire UID or region")
+            else:
+                raise HTTPException(status_code=400, detail="Free Fire UID validation failed")
+                
+        except httpx.TimeoutException:
+            raise HTTPException(status_code=408, detail="Free Fire API timeout - please try again")
+        except httpx.RequestError:
+            raise HTTPException(status_code=500, detail="Free Fire API connection error")
+
 # Perplexity AI Configuration
 PERPLEXITY_API_KEY = "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"
 PERPLEXITY_API_URL = "https://api.perplexity.ai/chat/completions"
