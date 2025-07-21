@@ -182,10 +182,14 @@ const Tournaments = () => {
   };
 
   const handleFilterChange = (key, value) => {
-    setFilters(prev => ({
-      ...prev,
+    const newFilters = {
+      ...filters,
       [key]: value
-    }));
+    };
+    setFilters(newFilters);
+    
+    // Manually reload tournaments when filters change (no auto-refresh)
+    loadTournamentsWithFilters(newFilters);
   };
 
   const getStatusBadge = (status) => {
