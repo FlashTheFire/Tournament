@@ -32,12 +32,24 @@ async def validate_free_fire_uid(uid: str, region: str) -> dict:
                     player_info = data["player_info"]
                     # Extract essential player information
                     basic_info = player_info.get("basicInfo", {})
+                    
+                    # Extract guild/clan information
+                    guild_info = player_info.get("guildInfo", {})
+                    clan_name = guild_info.get("guildName", "No Guild")
+                    clan_level = guild_info.get("guildLevel", 1)
+                    
+                    # Extract avatar/head picture information
+                    head_pic = basic_info.get("headPic", "1") # Default avatar ID
+                    
                     return {
                         "uid": uid,
                         "region": region.upper(),
                         "nickname": basic_info.get("nickname", "Unknown"),
                         "level": basic_info.get("level", 0),
                         "rank": basic_info.get("rank", 0),
+                        "clan_name": clan_name,
+                        "clan_level": clan_level,
+                        "head_pic": head_pic,
                         "account_id": basic_info.get("accountId", ""),
                         "last_login": basic_info.get("lastLoginAt", ""),
                         "validated_at": datetime.utcnow().isoformat(),
