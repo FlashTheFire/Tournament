@@ -106,10 +106,10 @@ const Tournaments = () => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []); // Removed filters dependency to prevent auto-refresh
 
-  const loadTournaments = async () => {
+  const loadTournamentsWithFilters = async (currentFilters = filters) => {
     try {
       setLoading(true);
-      const data = await apiService.getTournaments(filters);
+      const data = await apiService.getTournaments(currentFilters);
       
       // Enhanced Free Fire tournaments for demo
       const mockTournaments = [
