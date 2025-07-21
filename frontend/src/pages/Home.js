@@ -427,7 +427,7 @@ const Home = () => {
         transition: { type: "spring", stiffness: 300, damping: 20 }
       }}
     >
-      <div className="relative h-48 lg:h-64 overflow-hidden">
+      <div className="relative h-40 lg:h-48 overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxnYW1pbmclMjB0b3VybmFtZW50fGVufDB8fHx8MTc1Mjk5NTc2MXww&ixlib=rb-4.1.0&q=85"
           alt={tournament.name}
