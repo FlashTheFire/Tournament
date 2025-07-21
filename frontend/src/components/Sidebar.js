@@ -445,42 +445,15 @@ const Sidebar = ({ isOpen, onClose }) => {
         }}
       >
         <div className={`flex flex-col h-full relative z-10 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-          {/* Mobile-First Header - Close button on right, navigation title on left */}
-          <div className="flex items-center justify-between border-b border-white/10
-            /* Mobile: compact header */
-            p-4
+          {/* Mobile-First Header - Removed navigation text and close button */}
+          <div className="border-b border-white/10
+            /* Mobile: compact header with minimal padding */
+            p-2
             /* Desktop: spacious header */
-            lg:p-6
+            lg:p-4
           ">
-            {/* Left-aligned brand text */}
-            <div className="text-left">
-              <h2 className="text-white font-gaming font-bold
-                /* Mobile: compact title */
-                text-lg
-                /* Desktop: larger title */
-                lg:text-xl
-              ">Navigation</h2>
-              <p className="text-gray-400
-                /* Mobile: small subtitle */
-                text-xs
-                /* Desktop: normal subtitle */
-                lg:text-sm
-              ">Battle Arena Menu</p>
-            </div>
-
-            <motion.button
-              onClick={onClose}
-              whileHover={{ scale: 1.1, rotate: 90 }}
-              whileTap={{ scale: 0.9 }}
-              className="glass-mobile border border-white/20 text-gray-400 hover:text-white hover:border-neon-red/50 transition-all duration-300
-                /* Mobile: smaller close button */
-                p-2 rounded-lg
-                /* Tablet: larger close button */
-                sm:p-3 sm:rounded-xl
-              "
-            >
-              <X className="h-5 w-5 sm:h-6 sm:w-6" />
-            </motion.button>
+            {/* Empty header space for visual balance */}
+            <div className="h-2"></div>
           </div>
 
           {/* Mobile-First User Info */}
