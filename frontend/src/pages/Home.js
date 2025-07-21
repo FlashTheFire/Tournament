@@ -1223,9 +1223,7 @@ const Home = () => {
                             : 'w-3 h-3 bg-white/30 hover:bg-white/50'
                         }`}
                         onClick={() => {
-                          setIsTournamentAutoPlaying(false);
                           setTournamentCurrentIndex(index);
-                          setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
                         }}
                         whileHover={{ scale: 1.2 }}
                         whileTap={{ scale: 0.9 }}
