@@ -255,12 +255,12 @@ const Home = () => {
       });
     } catch (error) {
       console.error('Failed to load live stats:', error);
-      // Keep default stats as fallback
+      // Keep realistic default stats as fallback
       setLiveStats({
-        totalTournaments: 89,
-        totalPrizePool: 4800000,
-        activePlayers: 42000,
-        liveMatches: 156
+        totalTournaments: 150,
+        totalPrizePool: 5000000, // ₹5M
+        activePlayers: 45000,   // 45K
+        liveMatches: 200
       });
     }
   };
