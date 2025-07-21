@@ -70,22 +70,19 @@ PERPLEXITY_API_URL = "https://api.perplexity.ai/chat/completions"
 # Load environment variables
 load_dotenv()
 
-# Initialize FastAPI app with CORS middleware in constructor
-
-middleware = [
-    Middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-]
-
+# Initialize FastAPI app
 app = FastAPI(
     title="Tournament Platform API", 
-    version="1.0.0",
-    middleware=middleware
+    version="1.0.0"
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # MongoDB connection
