@@ -502,10 +502,15 @@ const Register = () => {
                 {/* Submit Button */}
                 <motion.button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || validationState.uidValidation !== 'valid' || validationState.passwordMatch !== 'match'}
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full btn-premium py-3 lg:py-4 text-lg lg:text-xl font-bold ripple mobile-friendly group relative overflow-hidden mt-4"
+                  className={`w-full py-3 lg:py-4 text-lg lg:text-xl font-bold ripple mobile-friendly group relative overflow-hidden mt-4 transition-all duration-300 ${
+                    loading || validationState.uidValidation !== 'valid' || validationState.passwordMatch !== 'match'
+                      ? 'bg-gray-600 cursor-not-allowed opacity-50'
+                      : 'btn-premium'
+                  }`}
+                >
                 >
                   <AnimatePresence mode="wait">
                     {loading ? (
