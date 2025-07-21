@@ -1407,7 +1407,22 @@ class TournamentAPITester:
         
         # Test sequence - Basic functionality first
         self.test_health_check()
+        
+        # FREE FIRE INTEGRATION TESTING - As requested in review
+        print("\n" + "=" * 60)
+        print("🔥 TESTING FREE FIRE REGISTRATION SYSTEM")
+        print("=" * 60)
+        
+        self.test_free_fire_validation_endpoint()
         self.test_user_registration()
+        self.test_registration_with_invalid_free_fire_data()
+        self.test_database_structure_verification()
+        self.test_free_fire_api_timeout_handling()
+        self.test_duplicate_free_fire_uid_registration()
+        self.test_demo_credentials_with_free_fire()
+        self.test_old_user_registration_format()
+        
+        # Continue with other tests
         self.test_user_login()
         self.test_get_current_user()
         self.test_free_fire_verification()
