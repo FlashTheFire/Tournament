@@ -672,7 +672,14 @@ const Tournaments = () => {
           </div>
         ) : (
           <AnimatePresence>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            <div className="
+              /* Mobile: single column with tight spacing */
+              grid grid-cols-1 gap-4
+              /* Tablet: 2 columns with normal spacing */
+              md:grid-cols-2 md:gap-6
+              /* Desktop: 3 columns with spacious layout */
+              xl:grid-cols-3 xl:gap-8
+            ">
               {tournaments.length > 0 ? (
                 tournaments.map((tournament, index) => (
                   <TournamentCard key={tournament.tournament_id} tournament={tournament} index={index} />
