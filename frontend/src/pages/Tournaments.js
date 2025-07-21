@@ -417,7 +417,15 @@ const Tournaments = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="space-y-8"
+      className="
+        /* Mobile: full-width container with minimal side padding */
+        px-2 py-4
+        /* Tablet: moderate padding */
+        sm:px-4 sm:py-6
+        /* Desktop: standard padding */
+        lg:px-8 lg:py-8
+        space-y-6 sm:space-y-8
+      "
     >
       {/* Compact Modern Header - Removed Battle Tournaments and Live Battles cards */}
       <motion.div 
