@@ -61,8 +61,43 @@ const Home = () => {
     // Removed auto-refresh interval as requested
   }, []);
 
-  // Auto-advance disabled as requested by user - no automatic refreshing
-  // AI Carousel and Tournament Carousel will only respond to manual navigation
+  // Auto-advance for mobile only as requested by user
+  // Desktop will remain manual navigation only
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Auto-advance functionality for mobile devices only
+  useEffect(() => {
+    // Check if we're on a mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Auto-advance carousel on mobile only
+  useEffect(() => {
+    if (!isMobile || aiPredictions.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setAiCurrentIndex((prev) => (prev + 1) % aiPredictions.length);
+    }, 4000); // 4 second interval for AI carousel
+    
+    return () => clearInterval(interval);
+  }, [isMobile, aiPredictions.length]);
+
+  useEffect(() => {
+    if (!isMobile || tournaments.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setTournamentCurrentIndex((prev) => (prev + 1) % Math.min(tournaments.length, 3));
+    }, 5000); // 5 second interval for tournament carousel
+    
+    return () => clearInterval(interval);
+  }, [isMobile, tournaments.length]);
 
   // Professional Touch Handlers
   const handleTouchStart = (e) => {
