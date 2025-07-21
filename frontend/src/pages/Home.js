@@ -60,11 +60,7 @@ const Home = () => {
 
   useEffect(() => {
     loadData();
-    const interval = setInterval(() => {
-      updateLiveStats();
-    }, 30000);
-
-    return () => clearInterval(interval);
+    // Removed auto-refresh interval as requested
   }, []);
 
   // Professional Auto-Advance for AI Carousel
