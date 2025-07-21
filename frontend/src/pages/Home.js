@@ -1121,10 +1121,10 @@ const Home = () => {
                           </motion.div>
 
                           {/* Enhanced Battle Map */}
-                          <div className="absolute bottom-16 left-4">
+                          <div className="absolute bottom-12 left-4">
                             <div className="flex items-center space-x-2 text-white/90 mb-2">
-                              <MapPin className="h-4 w-4 text-neon-green animate-pulse" />
-                              <span className="text-sm font-medium backdrop-blur-xl bg-black/40 px-3 py-1 rounded-xl border border-white/30 shadow-glow">
+                              <MapPin className="h-3 w-3 text-neon-green animate-pulse" />
+                              <span className="text-xs font-medium backdrop-blur-xl bg-black/40 px-2 py-0.5 rounded-lg border border-white/30 shadow-glow">
                                 {tournament.battle_map}
                               </span>
                             </div>
@@ -1132,23 +1132,23 @@ const Home = () => {
                           
                           {/* Enhanced Tournament Title */}
                           <div className="absolute bottom-4 left-4 right-4">
-                            <h3 className="text-white font-bold text-lg mb-3 drop-shadow-2xl leading-tight">
+                            <h3 className="text-white font-bold text-base mb-2 drop-shadow-2xl leading-tight">
                               {tournament.name}
                             </h3>
                             
                             <div className="flex items-center justify-between">
                               <motion.div 
-                                className="flex items-center space-x-2 backdrop-blur-xl bg-black/50 px-3 py-1.5 rounded-xl border border-white/30 shadow-glow-lg"
+                                className="flex items-center space-x-1 backdrop-blur-xl bg-black/50 px-2 py-1 rounded-lg border border-white/30 shadow-glow-lg"
                                 whileHover={{ scale: 1.05 }}
                               >
-                                <Users className="h-4 w-4 text-neon-blue animate-pulse" />
+                                <Users className="h-3 w-3 text-neon-blue animate-pulse" />
                                 <span className="text-white font-bold text-xs">{tournament.current_participants}/{tournament.max_participants}</span>
                               </motion.div>
                               <motion.div 
-                                className="flex items-center space-x-2 backdrop-blur-xl bg-black/50 px-3 py-1.5 rounded-xl border border-white/30 shadow-glow-lg"
+                                className="flex items-center space-x-1 backdrop-blur-xl bg-black/50 px-2 py-1 rounded-lg border border-white/30 shadow-glow-lg"
                                 whileHover={{ scale: 1.05 }}
                               >
-                                <Crosshair className="h-4 w-4 text-neon-green animate-pulse" />
+                                <Crosshair className="h-3 w-3 text-neon-green animate-pulse" />
                                 <span className="text-white font-bold text-xs">₹{tournament.entry_fee}</span>
                               </motion.div>
                             </div>
