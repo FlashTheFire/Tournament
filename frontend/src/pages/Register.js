@@ -27,21 +27,21 @@ const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  // Free Fire regions
+  // Free Fire regions with country flags
   const regions = [
-    { code: 'ind', name: 'India' },
-    { code: 'br', name: 'Brazil' },
-    { code: 'sg', name: 'Singapore' },
-    { code: 'ru', name: 'Russia' },
-    { code: 'id', name: 'Indonesia' },
-    { code: 'tw', name: 'Taiwan' },
-    { code: 'us', name: 'United States' },
-    { code: 'vn', name: 'Vietnam' },
-    { code: 'th', name: 'Thailand' },
-    { code: 'me', name: 'Middle East' },
-    { code: 'pk', name: 'Pakistan' },
-    { code: 'cis', name: 'CIS' },
-    { code: 'bd', name: 'Bangladesh' }
+    { code: 'ind', name: 'India', flag: '🇮🇳' },
+    { code: 'br', name: 'Brazil', flag: '🇧🇷' },
+    { code: 'sg', name: 'Singapore', flag: '🇸🇬' },
+    { code: 'ru', name: 'Russia', flag: '🇷🇺' },
+    { code: 'id', name: 'Indonesia', flag: '🇮🇩' },
+    { code: 'tw', name: 'Taiwan', flag: '🇹🇼' },
+    { code: 'us', name: 'United States', flag: '🇺🇸' },
+    { code: 'vn', name: 'Vietnam', flag: '🇻🇳' },
+    { code: 'th', name: 'Thailand', flag: '🇹🇭' },
+    { code: 'me', name: 'Middle East', flag: '🌍' },
+    { code: 'pk', name: 'Pakistan', flag: '🇵🇰' },
+    { code: 'cis', name: 'CIS', flag: '🌍' },
+    { code: 'bd', name: 'Bangladesh', flag: '🇧🇩' }
   ];
 
   // Debounced Free Fire UID validation
