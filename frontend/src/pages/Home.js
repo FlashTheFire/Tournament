@@ -1077,17 +1077,21 @@ const Home = () => {
             ">Join the most epic battles</p>
           </motion.div>
           
-          {/* Professional Touch-Enabled Tournament Carousel - Fixed Sizing */}
+          {/* Professional Touch-Enabled Tournament Carousel - Mobile-First with Scroll Snap */}
           <div className="max-w-7xl mx-auto">
-            {/* Mobile: Professional Touch-Enabled Tournament Carousel */}
+            {/* Mobile: Professional Touch-Enabled Tournament Carousel with Scroll Snap */}
             <div className="lg:hidden">
               <div 
                 className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl mx-2 sm:mx-4"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={() => handleTouchEnd('tournament')}
+                style={{
+                  scrollSnapType: 'x mandatory',
+                  scrollBehavior: 'smooth'
+                }}
               >
-                {/* Professional tournament carousel container - Better mobile alignment */}
+                {/* Professional tournament carousel container - 100% width cards with scroll snap */}
                 <motion.div
                   className="flex"
                   animate={{
@@ -1098,121 +1102,147 @@ const Home = () => {
                     stiffness: 300,
                     damping: 30,
                   }}
-                  style={{ width: `${Math.min(tournaments.length, 3) * 100}%` }}
+                  style={{ 
+                    width: `${Math.min(tournaments.length, 3) * 100}%`,
+                    scrollSnapAlign: 'start'
+                  }}
                 >
                   {tournaments.slice(0, 3).map((tournament, index) => (
-                    <div key={tournament.tournament_id} className="w-full flex-shrink-0 p-3 sm:p-4 lg:p-6">
-                      <motion.div
-                        className="tournament-card relative overflow-hidden border border-white/20 hover:border-neon-blue/50 group shadow-2xl backdrop-blur-xl rounded-2xl bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ 
-                          opacity: index === tournamentCurrentIndex ? 1 : 0.7,
-                          scale: index === tournamentCurrentIndex ? 1 : 0.95 
-                        }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        {/* Professional Tournament Shine Animation */}
-                        <div className="absolute inset-0 overflow-hidden rounded-2xl">
-                          <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12"
-                            animate={{
-                              x: ['-200%', '200%'],
-                            }}
-                            transition={{
-                              duration: 4,
-                              repeat: Infinity,
-                              repeatDelay: 6,
-                              ease: "easeInOut",
-                            }}
-                            style={{ width: '150%' }}
-                          />
-                        </div>
-
-                        <div className="relative h-44 sm:h-48 overflow-hidden rounded-t-2xl">
-                          <img
-                            src="https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxnYW1pbmclMjB0b3VybmFtZW50fGVufDB8fHx8MTc1Mjk5NTc2MXww&ixlib=rb-4.1.0&q=85"
-                            alt={tournament.name}
-                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                          />
-                          
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                          
-                          {/* Enhanced Status Badge */}
-                          <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
-                            <motion.div 
-                              whileHover={{ scale: 1.1 }}
-                              className={`px-2.5 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-white shadow-glow-lg border border-white/30 backdrop-blur-xl ${
-                                tournament.status === 'live' 
-                                  ? 'bg-gradient-to-r from-red-500 to-pink-600 animate-pulse-glow'
-                                  : 'bg-gradient-to-r from-blue-500 to-cyan-600'
-                              }`}
-                            >
-                              {tournament.status === 'live' ? 'LIVE BATTLE' : 'STARTING SOON'}
-                            </motion.div>
+                    <div 
+                      key={tournament.tournament_id} 
+                      className="w-full flex-shrink-0"
+                      style={{
+                        scrollSnapAlign: 'center'
+                      }}
+                    >
+                      {/* Mobile-First Tournament Card with 100% width and proper padding */}
+                      <div className="px-3 py-3 sm:px-4 sm:py-4">
+                        <motion.div
+                          className="tournament-card relative overflow-hidden border border-white/20 hover:border-neon-blue/50 group shadow-2xl backdrop-blur-xl rounded-2xl bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 w-full"
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ 
+                            opacity: index === tournamentCurrentIndex ? 1 : 0.7,
+                            scale: index === tournamentCurrentIndex ? 1 : 0.95 
+                          }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          {/* Professional Tournament Shine Animation */}
+                          <div className="absolute inset-0 overflow-hidden rounded-2xl">
+                            <motion.div
+                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12"
+                              animate={{
+                                x: ['-200%', '200%'],
+                              }}
+                              transition={{
+                                duration: 4,
+                                repeat: Infinity,
+                                repeatDelay: 6,
+                                ease: "easeInOut",
+                              }}
+                              style={{ width: '150%' }}
+                            />
                           </div>
 
-                          {/* Enhanced Prize Pool */}
-                          <motion.div 
-                            className="absolute top-3 right-3 sm:top-4 sm:right-4"
-                            whileHover={{ scale: 1.1, rotate: 5 }}
-                          >
-                            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-2.5 py-1 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold shadow-glow-lg flex items-center space-x-1 border border-white/30">
-                              <Crown className="h-3 w-3 sm:h-4 sm:w-4" />
-                              <span>₹{tournament.prize_pool?.toLocaleString()}</span>
-                            </div>
-                          </motion.div>
-
-                          {/* Enhanced Battle Map */}
-                          <div className="absolute bottom-10 left-3 sm:bottom-12 sm:left-4">
-                            <div className="flex items-center space-x-1 sm:space-x-2 text-white/90 mb-1 sm:mb-2">
-                              <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-neon-green animate-pulse" />
-                              <span className="text-2xs sm:text-xs font-medium backdrop-blur-xl bg-black/40 px-2 py-0.5 sm:px-3 sm:py-1 rounded-lg border border-white/30 shadow-glow">
-                                {tournament.battle_map}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          {/* Enhanced Tournament Title */}
-                          <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4">
-                            <h3 className="text-white font-bold text-sm sm:text-base mb-2 sm:mb-3 drop-shadow-2xl leading-tight">
-                              {tournament.name}
-                            </h3>
+                          {/* Tournament Image with Mobile-First Responsive Heights */}
+                          <div className="relative overflow-hidden rounded-t-2xl
+                            /* Mobile: Optimized image height */
+                            h-48
+                            /* Small phones: Slightly taller */
+                            xs:h-52
+                            /* Medium phones: Standard height */
+                            sm:h-56
+                          ">
+                            <img
+                              src="https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxnYW1pbmclMjB0b3VybmFtZW50fGVufDB8fHx8MTc1Mjk5NTc2MXww&ixlib=rb-4.1.0&q=85"
+                              alt={tournament.name}
+                              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                            />
                             
-                            <div className="flex items-center justify-between">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                            
+                            {/* Enhanced Status Badge - Mobile-First */}
+                            <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
                               <motion.div 
-                                className="flex items-center space-x-1 backdrop-blur-xl bg-black/50 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-white/30 shadow-glow-lg"
-                                whileHover={{ scale: 1.05 }}
+                                whileHover={{ scale: 1.1 }}
+                                className={`px-3 py-1.5 rounded-full text-sm font-bold text-white shadow-glow-lg border border-white/30 backdrop-blur-xl ${
+                                  tournament.status === 'live' 
+                                    ? 'bg-gradient-to-r from-red-500 to-pink-600 animate-pulse-glow'
+                                    : 'bg-gradient-to-r from-blue-500 to-cyan-600'
+                                }`}
                               >
-                                <Users className="h-3 w-3 sm:h-4 sm:w-4 text-neon-blue animate-pulse" />
-                                <span className="text-white font-bold text-2xs sm:text-xs">{tournament.current_participants}/{tournament.max_participants}</span>
-                              </motion.div>
-                              <motion.div 
-                                className="flex items-center space-x-1 backdrop-blur-xl bg-black/50 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-white/30 shadow-glow-lg"
-                                whileHover={{ scale: 1.05 }}
-                              >
-                                <Crosshair className="h-3 w-3 sm:h-4 sm:w-4 text-neon-green animate-pulse" />
-                                <span className="text-white font-bold text-2xs sm:text-xs">₹{tournament.entry_fee}</span>
+                                {tournament.status === 'live' ? 'LIVE' : 'SOON'}
                               </motion.div>
                             </div>
-                          </div>
-                        </div>
 
-                        <div className="relative z-10 p-3 sm:p-4">
-                          <Link
-                            to={`/tournaments/${tournament.tournament_id}`}
-                            className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden py-2.5 sm:py-3 px-4 sm:px-6 text-xs sm:text-sm shadow-glow-lg border border-white/30"
-                          >
+                            {/* Enhanced Prize Pool - Mobile-First */}
                             <motion.div 
-                              className="flex items-center justify-center space-x-2 sm:space-x-3"
-                              whileHover={{ scale: 1.02 }}
+                              className="absolute top-3 right-3 sm:top-4 sm:right-4"
+                              whileHover={{ scale: 1.1, rotate: 5 }}
                             >
-                              <Gamepad2 className="h-4 w-4 sm:h-5 sm:w-5 group-hover:rotate-12 transition-transform" />
-                              <span className="font-black tracking-wide">ENTER BATTLE</span>
-                              <Flame className="h-4 w-4 sm:h-5 sm:w-5 group-hover:animate-pulse" />
+                              <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-3 py-1.5 rounded-xl text-sm font-bold shadow-glow-lg flex items-center space-x-1 border border-white/30">
+                                <Crown className="h-4 w-4" />
+                                <span>₹{tournament.prize_pool?.toLocaleString()}</span>
+                              </div>
                             </motion.div>
-                          </Link>
-                        </div>
-                      </motion.div>
+
+                            {/* Tournament Content - Vertically Stacked on Mobile */}
+                            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/60 to-transparent">
+                              {/* Battle Map - Mobile-First */}
+                              <div className="flex items-center space-x-2 mb-3">
+                                <MapPin className="h-4 w-4 text-neon-green animate-pulse" />
+                                <span className="text-sm font-medium text-white/90 bg-black/40 px-2 py-1 rounded-lg border border-white/30">
+                                  {tournament.battle_map}
+                                </span>
+                              </div>
+                              
+                              {/* Tournament Title - Centered on Mobile */}
+                              <h3 className="text-white font-bold text-center mb-3 drop-shadow-2xl leading-tight
+                                /* Mobile: Compact title */
+                                text-base
+                                /* Medium phones: Larger title */
+                                sm:text-lg
+                              ">
+                                {tournament.name}
+                              </h3>
+                              
+                              {/* Stats Row - Mobile-Friendly Stacking */}
+                              <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:items-center sm:justify-between mb-2">
+                                <motion.div 
+                                  className="flex items-center justify-center space-x-2 backdrop-blur-xl bg-black/50 px-3 py-2 rounded-lg border border-white/30 shadow-glow-lg"
+                                  whileHover={{ scale: 1.02 }}
+                                >
+                                  <Users className="h-4 w-4 text-neon-blue animate-pulse" />
+                                  <span className="text-white font-bold text-sm">{tournament.current_participants}/{tournament.max_participants}</span>
+                                </motion.div>
+                                <motion.div 
+                                  className="flex items-center justify-center space-x-2 backdrop-blur-xl bg-black/50 px-3 py-2 rounded-lg border border-white/30 shadow-glow-lg"
+                                  whileHover={{ scale: 1.02 }}
+                                >
+                                  <Crosshair className="h-4 w-4 text-neon-green animate-pulse" />
+                                  <span className="text-white font-bold text-sm">₹{tournament.entry_fee}</span>
+                                </motion.div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Mobile-First Action Section - Centered Button */}
+                          <div className="relative z-10 p-4 flex justify-center">
+                            <Link
+                              to={`/tournaments/${tournament.tournament_id}`}
+                              className="w-full max-w-xs btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden py-3 px-6 text-sm shadow-glow-lg border border-white/30 rounded-xl"
+                            >
+                              <motion.div 
+                                className="flex items-center justify-center space-x-2"
+                                whileHover={{ scale: 1.02 }}
+                              >
+                                <Gamepad2 className="h-5 w-5 group-hover:rotate-12 transition-transform" />
+                                <span className="font-black tracking-wide">ENTER BATTLE</span>
+                                <Flame className="h-5 w-5 group-hover:animate-pulse" />
+                              </motion.div>
+                            </Link>
+                          </div>
+                        </motion.div>
+                      </div>
                     </div>
                   ))}
                 </motion.div>
