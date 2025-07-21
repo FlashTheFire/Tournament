@@ -847,7 +847,15 @@ const Home = () => {
                   style={{ width: `${aiPredictions.length * 100}%` }}
                 >
                   {aiPredictions.map((insight, index) => (
-                    <div key={insight.id} className="w-full flex-shrink-0 p-3 sm:p-4 lg:p-6">
+                    <div 
+                      key={insight.id} 
+                      className="w-full flex-shrink-0"
+                      style={{
+                        scrollSnapAlign: 'center'
+                      }}
+                    >
+                      {/* Mobile-First Card with 100% width and proper padding */}
+                      <div className="px-3 py-3 sm:px-4 sm:py-4">
                       <motion.div
                         className="relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl backdrop-blur-xl rounded-2xl
                           /* Mobile: Better proportioned card for all smartphones */
