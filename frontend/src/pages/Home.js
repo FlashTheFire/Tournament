@@ -995,6 +995,7 @@ const Home = () => {
               description="Epic battles ongoing"
               color="bg-gradient-to-br from-yellow-500 via-orange-600 to-red-600"
               trend="up"
+              index={0}
             />
             <StatCard
               icon={DollarSign}
@@ -1003,6 +1004,7 @@ const Home = () => {
               description="Battle rewards waiting"
               color="bg-gradient-to-br from-green-500 via-emerald-600 to-teal-600"
               trend="up"
+              index={1}
             />
             <StatCard
               icon={Users}
@@ -1011,6 +1013,7 @@ const Home = () => {
               description="Warriors online now"
               color="bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600"
               trend="up"
+              index={2}
             />
             <StatCard
               icon={Activity}
@@ -1019,6 +1022,7 @@ const Home = () => {
               description="Battles in progress"
               color="bg-gradient-to-br from-pink-500 via-red-600 to-rose-600"
               trend="down"
+              index={3}
             />
           </div>
         </section>
