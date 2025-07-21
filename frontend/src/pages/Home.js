@@ -843,7 +843,10 @@ const Home = () => {
                   {aiPredictions.map((insight, index) => (
                     <div key={insight.id} className="w-full flex-shrink-0 p-6">
                       <motion.div
-                        className="relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl backdrop-blur-xl rounded-2xl min-h-[280px]"
+                        className="relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl backdrop-blur-xl rounded-2xl
+                          /* Mobile: Horizontal landscape card layout - reduced height */
+                          min-h-[200px]
+                        "
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ 
                           opacity: index === aiCurrentIndex ? 1 : 0.7,
