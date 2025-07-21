@@ -94,6 +94,16 @@ const Tournaments = () => {
 
   useEffect(() => {
     loadTournaments();
+    
+    // Check if desktop view
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
   }, [filters]);
 
   const loadTournaments = async () => {
