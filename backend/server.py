@@ -1467,6 +1467,13 @@ async def login(user_data: UserLogin):
     if not user or not verify_password(user_data.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
+    # If this is demo@tournament.com, ensure they have admin privileges
+    if user_data.email == "demo@tournament.com" and not user.get("is_admin", False):
+        users_collection.update_one(
+            {"user_id": user["user_id"]},
+            {"$set": {"is_admin": True, "updated_at": datetime.utcnow()}}
+        )
+    
     access_token = create_access_token(data={"sub": user["user_id"]})
     
     return {
