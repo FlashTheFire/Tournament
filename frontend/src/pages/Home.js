@@ -825,7 +825,7 @@ const Home = () => {
           
           {/* Professional Touch-Enabled AI Carousel - Mobile-First with Scroll Snap */}
           <div className="max-w-7xl mx-auto">
-            {/* Mobile: Professional Touch-Enabled Carousel */}
+            {/* Mobile: Professional Touch-Enabled Carousel with Scroll Snap */}
             <div className="lg:hidden">
               <div 
                 className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl mx-2 sm:mx-4"
