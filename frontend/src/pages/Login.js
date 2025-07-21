@@ -5,6 +5,7 @@ import { Mail, Lock, Eye, EyeOff, Gamepad2, Trophy, Zap, Shield, Star, Crown } f
 import { useAuth } from '../context/AuthContext';
 import ErrorBoundary from '../components/ErrorBoundary';
 import safeToast from '../utils/safeToast';
+import { formatNumber, formatPrizePool } from '../utils/numberFormatter';
 
 const Login = () => {
   const [formData, setFormData] = useState({
