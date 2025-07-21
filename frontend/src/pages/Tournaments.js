@@ -548,7 +548,10 @@ const Tournaments = () => {
                       transition={{ delay: index * 0.1 }}
                       className="relative group"
                     >
-                      <div className="relative overflow-hidden rounded-lg border border-white/20 hover:border-neon-blue/50 transition-all duration-300">
+                      <div className="
+                        /* Mobile: compact filter card */
+                        relative overflow-hidden rounded-lg border border-white/20 hover:border-neon-blue/50 transition-all duration-300
+                      ">
                         {/* Background Image - Smaller for mobile */}
                         <div className="relative h-16 sm:h-20 md:h-24">
                           <img 
