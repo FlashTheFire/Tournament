@@ -33,6 +33,7 @@ const Tournaments = () => {
   const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false); // New state for mobile filter toggle
   const [filters, setFilters] = useState({
     game_type: '',
     country: '',
