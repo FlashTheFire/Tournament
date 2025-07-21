@@ -890,22 +890,22 @@ const Home = () => {
                             </motion.div>
                           </div>
                           
-                          {/* Middle Section - Content (Vertically Stacked) */}
+                          {/* Middle Section - Enhanced Content (Vertically Stacked) */}
                           <div className="flex-grow flex flex-col justify-center text-center mb-4">
-                            <h3 className="text-white font-bold text-lg mb-3 drop-shadow-lg leading-tight">
+                            <h3 className="text-white font-bold text-xl mb-3 drop-shadow-lg leading-tight">
                               {insight.title}
                             </h3>
-                            <p className="text-gray-300 text-sm leading-relaxed mx-auto max-w-full">
+                            <p className="text-gray-200 text-sm leading-relaxed mx-auto max-w-full">
                               {insight.prediction}
                             </p>
                           </div>
                           
-                          {/* Bottom Section - Centered Button */}
+                          {/* Bottom Section - Enhanced Centered Button */}
                           <div className="flex justify-center">
                             <motion.button
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className={`w-full bg-gradient-to-r ${insight.gradient} text-white font-bold py-3 rounded-xl text-sm transition-all duration-300 shadow-glow hover:shadow-glow-lg border border-white/20 max-w-xs`}
+                              className={`w-full bg-gradient-to-r ${insight.gradient} text-white font-bold py-3 px-6 rounded-xl text-sm transition-all duration-300 shadow-glow-lg hover:shadow-glow-xl border border-white/20 max-w-xs`}
                             >
                               {insight.action}
                             </motion.button>
