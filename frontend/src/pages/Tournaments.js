@@ -605,12 +605,26 @@ const Tournaments = () => {
                           </div>
                         </div>
                         
-                        {/* Dropdown - Compact */}
-                        <div className="p-1 sm:p-2 bg-gradient-to-br from-cosmic-dark/90 to-cosmic-black/90 backdrop-blur-sm">
+                        {/* Dropdown - Mobile optimized */}
+                        <div className="
+                          /* Mobile: minimal padding */
+                          p-1
+                          /* Tablet: normal padding */
+                          sm:p-2
+                          bg-gradient-to-br from-cosmic-dark/90 to-cosmic-black/90 backdrop-blur-sm
+                        ">
                           <select
                             value={filters[filter.key]}
                             onChange={(e) => handleFilterChange(filter.key, e.target.value)}
-                            className="w-full bg-white/10 border border-white/20 rounded px-1 py-1 sm:px-2 sm:py-1.5 text-white text-2xs sm:text-xs focus:outline-none focus:ring-1 focus:ring-neon-blue/50 focus:border-neon-blue/50 hover:border-neon-blue/30 transition-all duration-300"
+                            className="
+                              w-full bg-white/10 border border-white/20 rounded text-white focus:outline-none focus:ring-1 focus:ring-neon-blue/50 focus:border-neon-blue/50 hover:border-neon-blue/30 transition-all duration-300
+                              /* Mobile: compact select */
+                              px-1 py-0.5 text-3xs
+                              /* Tablet: normal select */
+                              sm:px-2 sm:py-1 sm:text-2xs
+                              /* Desktop: full select */
+                              md:text-xs
+                            "
                           >
                             {filter.options.map(option => (
                               <option key={option.value} value={option.value} className="bg-cosmic-dark text-white">
