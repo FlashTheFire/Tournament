@@ -43,54 +43,36 @@ const Dashboard = () => {
 
   const loadDashboardData = async () => {
     try {
-      // Mock dashboard data
+      const data = await apiService.getDashboardData();
+      setDashboardData(data);
+    } catch (error) {
+      console.error('Failed to load dashboard:', error);
+      // Fallback to mock data only if API fails
       const mockData = {
         stats: {
-          tournamentsJoined: 24,
-          totalWinnings: 15750,
-          currentRank: 47,
-          matchesWon: 18,
-          killsTotal: 342,
-          winRate: 75,
-          averageRank: 3.2,
+          tournamentsJoined: 12,
+          totalWinnings: 15600,
+          currentRank: 42,
+          winRate: 73.2,
+          killsTotal: 1847,
+          averageRank: 12.5,
           hoursPlayed: 156
         },
         recentTournaments: [
           {
-            id: 'ff-br-championship',
-            name: 'Battle Royale Championship',
-            status: 'upcoming',
-            prize: 50000,
-            participants: '178/200',
-            date: new Date(Date.now() + 86400000).toISOString(),
-            registered: true
-          },
-          {
-            id: 'ff-clash-masters',
-            name: 'Clash Squad Masters',
+            id: 'ff-championship',
+            name: 'Free Fire Championship 2025',
             status: 'live',
-            prize: 25000,
-            participants: '128/128',
+            prize: 50000,
+            participants: '89/100',
             date: new Date().toISOString(),
             registered: true
-          },
-          {
-            id: 'ff-weekly-battle',
-            name: 'Weekly Battle Royale',
-            status: 'completed',
-            prize: 8000,
-            participants: '64/64',
-            date: new Date(Date.now() - 86400000).toISOString(),
-            registered: true,
-            result: { place: 3, prize: 1200 }
           }
         ],
         achievements: [
-          { id: 1, name: 'First Victory', description: 'Win your first tournament', earned: true, rarity: 'common' },
-          { id: 2, name: 'Sharpshooter', description: 'Get 50+ eliminations in tournaments', earned: true, rarity: 'rare' },
-          { id: 3, name: 'Elite Warrior', description: 'Reach top 10 global ranking', earned: true, rarity: 'epic' },
-          { id: 4, name: 'Tournament Master', description: 'Win 10 tournaments', earned: false, rarity: 'legendary' },
-          { id: 5, name: 'Booyah Master', description: 'Win 25 matches in a row', earned: false, rarity: 'legendary' }
+          { id: 1, name: 'Tournament Warrior', description: 'Join your first tournament', earned: true, rarity: 'common' },
+          { id: 2, name: 'Elite Player', description: 'Reach top 50 in leaderboards', earned: true, rarity: 'rare' },
+          { id: 3, name: 'Prize Winner', description: 'Win tournament earnings', earned: false, rarity: 'epic' }
         ],
         weeklyProgress: [
           { day: 'Mon', matches: 3, wins: 2 },
@@ -102,10 +84,7 @@ const Dashboard = () => {
           { day: 'Sun', matches: 5, wins: 4 }
         ]
       };
-      
       setDashboardData(mockData);
-    } catch (error) {
-      console.error('Failed to load dashboard:', error);
     } finally {
       setLoading(false);
     }
