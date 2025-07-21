@@ -366,11 +366,11 @@ const Register = () => {
                       name="region"
                       value={formData.region}
                       onChange={handleChange}
-                      className="w-full px-4 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-neon-purple transition-all duration-300 text-sm lg:text-base bg-cosmic-dark"
+                      className="w-full px-3 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-neon-purple transition-all duration-300 text-sm lg:text-base bg-cosmic-dark"
                     >
                       {regions.map(region => (
                         <option key={region.code} value={region.code} className="bg-cosmic-dark text-white">
-                          {region.name}
+                          {region.flag} {region.name}
                         </option>
                       ))}
                     </select>
