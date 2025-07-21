@@ -95,11 +95,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
 
 # MongoDB connection
 MONGO_URL = os.getenv("MONGO_URL")
