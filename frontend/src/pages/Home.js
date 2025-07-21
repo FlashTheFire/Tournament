@@ -889,9 +889,9 @@ const Home = () => {
                   ))}
                 </div>
 
-                {/* Bottom-Aligned AI Progress Dots - Mobile-First */}
-                <div className="flex justify-center items-center pt-4 pb-6">
-                  <div className="flex items-center space-x-3 bg-black/20 backdrop-blur-xl border border-white/10 rounded-full px-4 py-2">
+                {/* Enhanced Carousel Dots - Bottom Aligned in Glassmorphic Container */}
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
+                  <div className="flex items-center space-x-2 px-4 py-2 bg-black/20 backdrop-blur-xl rounded-full border border-white/10">
                     {aiPredictions.map((_, index) => (
                       <motion.button
                         key={index}
