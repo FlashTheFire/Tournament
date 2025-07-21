@@ -93,7 +93,7 @@ const Tournaments = () => {
   ];
 
   useEffect(() => {
-    loadTournaments();
+    loadTournamentsWithFilters();
     
     // Check if desktop view (removed auto-refresh)
     const checkScreenSize = () => {
