@@ -592,9 +592,16 @@ const Tournaments = () => {
                             </div>
                           </div>
                           
-                          {/* Title - Smaller for mobile */}
+                          {/* Title - Mobile optimized text */}
                           <div className="absolute bottom-1 left-1 right-1 sm:bottom-2 sm:left-2 sm:right-2">
-                            <h4 className="text-white font-bold text-2xs sm:text-xs">{filter.title}</h4>
+                            <h4 className="text-white font-bold
+                              /* Mobile: very small text to fit better */
+                              text-3xs leading-tight
+                              /* Tablet: small text */
+                              sm:text-2xs
+                              /* Desktop: normal small text */
+                              md:text-xs
+                            ">{filter.title}</h4>
                           </div>
                         </div>
                         
