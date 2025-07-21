@@ -1182,11 +1182,11 @@ const Home = () => {
                           </div>
                         </div>
 
-                        {/* Mobile-First Action Section - Centered Button */}
-                        <div className="relative z-10 p-4 flex justify-center">
+                        {/* Mobile-First Action Section - Centered Button with Reduced Vertical Padding */}
+                        <div className="relative z-10 p-3 flex justify-center">
                           <Link
                             to={`/tournaments/${tournament.tournament_id}`}
-                            className="w-full max-w-xs btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden py-3 px-6 text-sm shadow-glow-lg border border-white/30 rounded-xl"
+                            className="w-full max-w-xs btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden py-1 px-2 text-sm shadow-glow-lg border border-white/30 rounded-xl"
                           >
                             <motion.div 
                               className="flex items-center justify-center space-x-2"
