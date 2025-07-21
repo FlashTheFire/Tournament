@@ -818,12 +818,12 @@ const Home = () => {
             {/* Mobile: Professional Touch-Enabled Carousel */}
             <div className="lg:hidden">
               <div 
-                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl mx-4"
+                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black/40 via-cosmic-dark/60 to-black/40 border border-white/10 backdrop-blur-xl mx-2 sm:mx-4"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={() => handleTouchEnd('ai')}
               >
-                {/* Professional carousel container - Full width cards */}
+                {/* Professional carousel container - Full width cards with better mobile alignment */}
                 <motion.div
                   className="flex"
                   animate={{
@@ -837,11 +837,15 @@ const Home = () => {
                   style={{ width: `${aiPredictions.length * 100}%` }}
                 >
                   {aiPredictions.map((insight, index) => (
-                    <div key={insight.id} className="w-full flex-shrink-0 p-6">
+                    <div key={insight.id} className="w-full flex-shrink-0 p-3 sm:p-4 lg:p-6">
                       <motion.div
                         className="relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl backdrop-blur-xl rounded-2xl
-                          /* Mobile: Horizontal landscape card layout - reduced height */
-                          min-h-[200px]
+                          /* Mobile: Better proportioned card for all smartphones */
+                          min-h-[180px] max-w-full
+                          /* Small phones: Optimized sizing */
+                          xs:min-h-[200px]
+                          /* Medium phones: Standard sizing */
+                          sm:min-h-[220px]
                         "
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ 
@@ -867,13 +871,13 @@ const Home = () => {
                           />
                         </div>
                         
-                        <div className="relative z-10 p-4 h-full flex flex-col">
-                          <div className="flex items-start justify-between mb-4">
-                            <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${insight.gradient} flex items-center justify-center shadow-glow-lg border border-white/30`}>
-                              <insight.icon className="h-6 w-6 text-white drop-shadow-lg" />
+                        <div className="relative z-10 p-3 sm:p-4 h-full flex flex-col">
+                          <div className="flex items-start justify-between mb-3 sm:mb-4">
+                            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-r ${insight.gradient} flex items-center justify-center shadow-glow-lg border border-white/30`}>
+                              <insight.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white drop-shadow-lg" />
                             </div>
                             <motion.div 
-                              className={`px-3 py-1.5 rounded-full bg-gradient-to-r ${insight.gradient} text-white font-bold text-sm shadow-glow-lg border border-white/30`}
+                              className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-gradient-to-r ${insight.gradient} text-white font-bold text-xs sm:text-sm shadow-glow-lg border border-white/30`}
                               animate={{ scale: [1, 1.1, 1] }}
                               transition={{ duration: 2, repeat: Infinity }}
                             >
@@ -881,13 +885,13 @@ const Home = () => {
                             </motion.div>
                           </div>
                           
-                          <h3 className="text-white font-bold text-lg mb-2 drop-shadow-lg">{insight.title}</h3>
-                          <p className="text-gray-300 mb-4 text-sm leading-relaxed flex-grow">{insight.prediction}</p>
+                          <h3 className="text-white font-bold text-base sm:text-lg mb-2 sm:mb-3 drop-shadow-lg leading-tight">{insight.title}</h3>
+                          <p className="text-gray-300 mb-3 sm:mb-4 text-xs sm:text-sm leading-relaxed flex-grow">{insight.prediction}</p>
                           
                           <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className={`w-full btn-premium bg-gradient-to-r ${insight.gradient} text-white font-bold py-3 rounded-xl text-sm transition-all duration-300 shadow-glow-lg border border-white/30`}
+                            className={`w-full btn-premium bg-gradient-to-r ${insight.gradient} text-white font-bold py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm transition-all duration-300 shadow-glow-lg border border-white/30`}
                           >
                             {insight.action}
                           </motion.button>
