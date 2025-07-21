@@ -445,9 +445,17 @@ const Tournaments = () => {
         </div>
       </motion.div>
 
-      {/* Enhanced Battle Filters with Mobile Horizontal Layout - Based on screenshot */}
+      {/* Enhanced Battle Filters with Mobile Horizontal Layout - Full Mobile Width */}
       <motion.div 
-        className="glass rounded-xl p-3 sm:p-4 border border-white/10"
+        className="
+          /* Mobile: full-width glass with minimal padding */
+          mx-0 rounded-xl p-3 border border-white/10
+          /* Tablet: add some margin and padding */
+          sm:mx-2 sm:rounded-2xl sm:p-4
+          /* Desktop: normal margins and padding */
+          lg:mx-0 lg:p-6
+          glass
+        "
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
