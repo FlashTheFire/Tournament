@@ -50,11 +50,9 @@ const Home = () => {
     liveMatches: 0
   });
 
-  // Professional Carousel State Management
+  // Professional Carousel State Management - Auto-play disabled
   const [aiCurrentIndex, setAiCurrentIndex] = useState(0);
   const [tournamentCurrentIndex, setTournamentCurrentIndex] = useState(0);
-  const [isAiAutoPlaying, setIsAiAutoPlaying] = useState(true);
-  const [isTournamentAutoPlaying, setIsTournamentAutoPlaying] = useState(true);
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchEndX, setTouchEndX] = useState(0);
 
