@@ -612,7 +612,7 @@ const Tournaments = () => {
           )}
         </AnimatePresence>
 
-        {/* Desktop - Collapsible Filter Cards (inline) */}
+        {/* Desktop - Collapsible Filter Cards (inline) - Updated for SINGLE ROW mobile layout */}
         <AnimatePresence>
           {showFilters && (
             <motion.div
@@ -710,6 +710,69 @@ const Tournaments = () => {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* MOBILE: Single Row Filter Layout - Responsive horizontal scrollable filters */}
+        <div className="md:hidden">
+          <div className="flex overflow-x-auto pb-4 scrollbar-hide space-x-3">
+            {[
+              {
+                key: 'game_type',
+                title: 'Game',
+                options: gameTypes,
+                icon: Target,
+                gradient: 'from-blue-500 to-cyan-600'
+              },
+              {
+                key: 'country',
+                title: 'Region',
+                options: countries,
+                icon: Shield,
+                gradient: 'from-green-500 to-emerald-600'
+              },
+              {
+                key: 'mode',
+                title: 'Mode',
+                options: modes,
+                icon: Users,
+                gradient: 'from-purple-500 to-pink-600'
+              },
+              {
+                key: 'status',
+                title: 'Status',
+                options: statuses,
+                icon: Activity,
+                gradient: 'from-red-500 to-orange-600'
+              }
+            ].map((filter, index) => {
+              const FilterIcon = filter.icon;
+              return (
+                <div key={filter.key} className="flex-shrink-0 min-w-[140px]">
+                  <div className="relative overflow-hidden rounded-lg border border-white/20 bg-gradient-to-br from-cosmic-dark/90 to-cosmic-black/90 backdrop-blur-sm">
+                    <div className="p-3">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <div className={`w-4 h-4 bg-gradient-to-r ${filter.gradient} rounded flex items-center justify-center`}>
+                          <FilterIcon className="h-2 w-2 text-white" />
+                        </div>
+                        <h4 className="text-white font-bold text-xs">{filter.title}</h4>
+                      </div>
+                      <select
+                        value={filters[filter.key]}
+                        onChange={(e) => handleFilterChange(filter.key, e.target.value)}
+                        className="w-full bg-white/10 border border-white/20 rounded px-2 py-1.5 text-white text-xs focus:outline-none focus:ring-1 focus:ring-neon-blue/50 focus:border-neon-blue/50"
+                      >
+                        {filter.options.map(option => (
+                          <option key={option.value} value={option.value} className="bg-cosmic-dark text-white">
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </motion.div>
 
       {/* Tournament Grid */}
