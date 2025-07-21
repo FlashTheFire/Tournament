@@ -115,7 +115,10 @@ const DemoAccess = () => {
       {/* Particle Background */}
       <div className="absolute inset-0 particle-effect opacity-20 pointer-events-none"></div>
       
-      <div className="relative z-10 p-4 md:p-8 overflow-y-auto">
+      <div className="relative z-10 p-4 md:p-8 overflow-y-auto scrollbar-visible" style={{
+        scrollbarWidth: 'thin',
+        scrollbarColor: '#00d4ff #1a1a2e'
+      }}>
         <div className="max-w-7xl mx-auto space-y-8">
           {/* Header */}
           <motion.div
