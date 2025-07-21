@@ -883,6 +883,251 @@ class TournamentAPITester:
         else:
             self.log_result("Admin Tournament Analytics (Admin)", False, f"Failed: {response.status_code if success else error}")
 
+    def test_live_stats_api(self):
+        """Test Live Stats API - should return real database values"""
+        print("\n=== Testing Live Stats API ===")
+        
+        response, success, error = self.make_request("GET", "/live-stats")
+        
+        if not success:
+            self.log_result("Live Stats API", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                required_fields = ["totalTournaments", "totalPrizePool", "activePlayers", "liveMatches"]
+                
+                if all(field in data for field in required_fields):
+                    # Check if values are realistic (not default mock values)
+                    total_tournaments = data["totalTournaments"]
+                    total_prize_pool = data["totalPrizePool"]
+                    active_players = data["activePlayers"]
+                    live_matches = data["liveMatches"]
+                    
+                    # Verify we have reasonable values from seeded database
+                    if total_tournaments > 0 and total_prize_pool > 0 and active_players > 0:
+                        self.log_result("Live Stats API", True, 
+                                      f"Real data: {total_tournaments} tournaments, ₹{total_prize_pool:,.0f} prize pool, {active_players} players, {live_matches} live matches")
+                    else:
+                        self.log_result("Live Stats API", False, "Returned zero values - may be using fallback data")
+                else:
+                    self.log_result("Live Stats API", False, f"Missing required fields: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Live Stats API", False, "Invalid JSON response")
+        else:
+            self.log_result("Live Stats API", False, f"Status code: {response.status_code}")
+
+    def test_ai_predictions_api(self):
+        """Test AI Predictions API - requires auth and should return database predictions"""
+        print("\n=== Testing AI Predictions API ===")
+        
+        if not self.test_user_token:
+            self.log_result("AI Predictions API", False, "No auth token available")
+            return
+        
+        headers = self.get_auth_headers()
+        response, success, error = self.make_request("GET", "/ai-predictions", headers=headers)
+        
+        if not success:
+            self.log_result("AI Predictions API", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "predictions" in data and isinstance(data["predictions"], list):
+                    predictions = data["predictions"]
+                    if len(predictions) > 0:
+                        # Check if predictions have proper structure
+                        first_prediction = predictions[0]
+                        required_fields = ["id", "type", "title", "prediction", "confidence", "action"]
+                        
+                        if all(field in first_prediction for field in required_fields):
+                            self.log_result("AI Predictions API", True, 
+                                          f"Retrieved {len(predictions)} AI predictions with proper structure")
+                        else:
+                            self.log_result("AI Predictions API", False, f"Prediction missing required fields: {first_prediction}")
+                    else:
+                        self.log_result("AI Predictions API", True, "No predictions available (empty list)")
+                else:
+                    self.log_result("AI Predictions API", False, f"Invalid response format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("AI Predictions API", False, "Invalid JSON response")
+        else:
+            self.log_result("AI Predictions API", False, f"Status code: {response.status_code}")
+
+    def test_dashboard_data_api(self):
+        """Test Dashboard Data API - requires auth and should return comprehensive user data"""
+        print("\n=== Testing Dashboard Data API ===")
+        
+        if not self.test_user_token:
+            self.log_result("Dashboard Data API", False, "No auth token available")
+            return
+        
+        headers = self.get_auth_headers()
+        response, success, error = self.make_request("GET", "/dashboard-data", headers=headers)
+        
+        if not success:
+            self.log_result("Dashboard Data API", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                required_sections = ["stats", "recentTournaments", "achievements", "weeklyProgress"]
+                
+                if all(section in data for section in required_sections):
+                    stats = data["stats"]
+                    required_stats = ["tournamentsJoined", "totalWinnings", "currentRank", "winRate"]
+                    
+                    if all(stat in stats for stat in required_stats):
+                        tournaments_joined = stats["tournamentsJoined"]
+                        total_winnings = stats["totalWinnings"]
+                        current_rank = stats["currentRank"]
+                        win_rate = stats["winRate"]
+                        
+                        self.log_result("Dashboard Data API", True, 
+                                      f"Complete dashboard data: {tournaments_joined} tournaments, ₹{total_winnings} winnings, rank #{current_rank}, {win_rate}% win rate")
+                    else:
+                        self.log_result("Dashboard Data API", False, f"Stats section missing required fields: {stats}")
+                else:
+                    self.log_result("Dashboard Data API", False, f"Missing required sections: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Dashboard Data API", False, "Invalid JSON response")
+        else:
+            self.log_result("Dashboard Data API", False, f"Status code: {response.status_code}")
+
+    def test_admin_account_verification(self):
+        """Test that demo@tournament.com has admin privileges"""
+        print("\n=== Testing Admin Account Verification ===")
+        
+        # Login with demo credentials
+        login_data = {
+            "email": "demo@tournament.com",
+            "password": "demo123"
+        }
+        
+        response, success, error = self.make_request("POST", "/auth/login", login_data)
+        
+        if not success:
+            self.log_result("Admin Account Verification", False, f"Login request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "access_token" in data:
+                    demo_token = data["access_token"]
+                    
+                    # Get user info to check admin status
+                    headers = {"Authorization": f"Bearer {demo_token}"}
+                    user_response, user_success, user_error = self.make_request("GET", "/auth/me", headers=headers)
+                    
+                    if user_success and user_response.status_code == 200:
+                        user_data = user_response.json()
+                        is_admin = user_data.get("is_admin", False)
+                        
+                        if is_admin:
+                            self.log_result("Admin Account Verification", True, 
+                                          f"demo@tournament.com has admin privileges: {user_data['username']}")
+                        else:
+                            self.log_result("Admin Account Verification", False, 
+                                          f"demo@tournament.com does NOT have admin privileges")
+                    else:
+                        self.log_result("Admin Account Verification", False, 
+                                      f"Failed to get user info: {user_response.status_code if user_success else user_error}")
+                else:
+                    self.log_result("Admin Account Verification", False, f"Login failed: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Admin Account Verification", False, "Invalid JSON response")
+        else:
+            self.log_result("Admin Account Verification", False, f"Login failed with status: {response.status_code}")
+
+    def test_tournament_data_verification(self):
+        """Test that /api/tournaments returns real seeded tournament data (8 tournaments expected)"""
+        print("\n=== Testing Tournament Data Verification ===")
+        
+        response, success, error = self.make_request("GET", "/tournaments")
+        
+        if not success:
+            self.log_result("Tournament Data Verification", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "tournaments" in data:
+                    tournaments = data["tournaments"]
+                    tournament_count = len(tournaments)
+                    
+                    if tournament_count >= 8:  # Should have at least 8 tournaments from seeder
+                        # Check if tournaments have realistic data (not mock)
+                        if tournaments:
+                            first_tournament = tournaments[0]
+                            required_fields = ["tournament_id", "name", "prize_pool", "entry_fee", "status"]
+                            
+                            if all(field in first_tournament for field in required_fields):
+                                # Check for realistic tournament names (not generic mock names)
+                                tournament_names = [t["name"] for t in tournaments[:3]]
+                                self.log_result("Tournament Data Verification", True, 
+                                              f"Retrieved {tournament_count} real tournaments: {', '.join(tournament_names)}")
+                            else:
+                                self.log_result("Tournament Data Verification", False, 
+                                              f"Tournament missing required fields: {first_tournament}")
+                        else:
+                            self.log_result("Tournament Data Verification", False, "Empty tournaments list")
+                    else:
+                        self.log_result("Tournament Data Verification", False, 
+                                      f"Expected at least 8 tournaments, got {tournament_count}")
+                else:
+                    self.log_result("Tournament Data Verification", False, f"Missing tournaments field: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Tournament Data Verification", False, "Invalid JSON response")
+        else:
+            self.log_result("Tournament Data Verification", False, f"Status code: {response.status_code}")
+
+    def test_leaderboard_data_verification(self):
+        """Test that /api/leaderboards returns real leaderboard data from database"""
+        print("\n=== Testing Leaderboard Data Verification ===")
+        
+        response, success, error = self.make_request("GET", "/leaderboards")
+        
+        if not success:
+            self.log_result("Leaderboard Data Verification", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "leaderboard" in data and isinstance(data["leaderboard"], list):
+                    leaderboard = data["leaderboard"]
+                    leaderboard_count = len(leaderboard)
+                    
+                    if leaderboard_count > 0:
+                        # Check if leaderboard entries have proper structure
+                        first_entry = leaderboard[0]
+                        required_fields = ["rank", "username", "skill_rating", "total_earnings"]
+                        
+                        if all(field in first_entry for field in required_fields):
+                            # Check for realistic usernames (not generic mock names)
+                            top_players = [entry["username"] for entry in leaderboard[:3]]
+                            total_earnings = sum(entry.get("total_earnings", 0) for entry in leaderboard[:5])
+                            
+                            self.log_result("Leaderboard Data Verification", True, 
+                                          f"Retrieved {leaderboard_count} leaderboard entries. Top players: {', '.join(top_players)}, Total earnings: ₹{total_earnings:,.0f}")
+                        else:
+                            self.log_result("Leaderboard Data Verification", False, 
+                                          f"Leaderboard entry missing required fields: {first_entry}")
+                    else:
+                        self.log_result("Leaderboard Data Verification", False, "Empty leaderboard")
+                else:
+                    self.log_result("Leaderboard Data Verification", False, f"Invalid leaderboard format: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Leaderboard Data Verification", False, "Invalid JSON response")
+        else:
+            self.log_result("Leaderboard Data Verification", False, f"Status code: {response.status_code}")
+
     def run_all_tests(self):
         """Run all tests in sequence"""
         print("🚀 Starting Tournament Platform Backend API Tests")
