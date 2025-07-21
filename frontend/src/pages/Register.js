@@ -44,6 +44,65 @@ const Register = () => {
     { code: 'bd', name: 'Bangladesh' }
   ];
 
+  // Debounced Free Fire UID validation
+  useEffect(() => {
+    const validateUID = async () => {
+      if (formData.free_fire_uid && formData.region && formData.free_fire_uid.length >= 8) {
+        setValidationState(prev => ({ ...prev, uidValidation: 'validating' }));
+        
+        try {
+          const response = await fetch(
+            `${process.env.REACT_APP_BACKEND_URL}/api/validate-freefire?uid=${formData.free_fire_uid}&region=${formData.region}`
+          );
+          const data = await response.json();
+          
+          if (data.valid) {
+            setValidationState(prev => ({
+              ...prev,
+              uidValidation: 'valid',
+              playerInfo: data.player_info
+            }));
+          } else {
+            setValidationState(prev => ({
+              ...prev,
+              uidValidation: 'invalid',
+              playerInfo: null
+            }));
+          }
+        } catch (error) {
+          console.error('UID validation error:', error);
+          setValidationState(prev => ({
+            ...prev,
+            uidValidation: 'invalid',
+            playerInfo: null
+          }));
+        }
+      } else {
+        setValidationState(prev => ({
+          ...prev,
+          uidValidation: 'initial',
+          playerInfo: null
+        }));
+      }
+    };
+
+    const timeout = setTimeout(validateUID, 500); // Debounce for 500ms
+    return () => clearTimeout(timeout);
+  }, [formData.free_fire_uid, formData.region]);
+
+  // Password match validation
+  useEffect(() => {
+    if (formData.password && formData.confirmPassword) {
+      if (formData.password === formData.confirmPassword) {
+        setValidationState(prev => ({ ...prev, passwordMatch: 'match' }));
+      } else {
+        setValidationState(prev => ({ ...prev, passwordMatch: 'no-match' }));
+      }
+    } else {
+      setValidationState(prev => ({ ...prev, passwordMatch: 'initial' }));
+    }
+  }, [formData.password, formData.confirmPassword]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
