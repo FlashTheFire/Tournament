@@ -569,10 +569,26 @@ const Tournaments = () => {
                           <div className="absolute inset-0 bg-black/50"></div>
                           <div className={`absolute inset-0 bg-gradient-to-t ${filter.gradient}/20`}></div>
                           
-                          {/* Filter Icon - Smaller for mobile */}
+                          {/* Filter Icon - Optimized for mobile */}
                           <div className="absolute top-1 left-1 sm:top-2 sm:left-2">
-                            <div className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-gradient-to-r ${filter.gradient} rounded flex items-center justify-center shadow-glow`}>
-                              <FilterIcon className="h-2 w-2 sm:h-2.5 sm:w-2.5 md:h-3 md:w-3 text-white" />
+                            <div className={`
+                              /* Mobile: small icon container */
+                              w-3 h-3
+                              /* Tablet: medium icon */  
+                              sm:w-4 sm:h-4
+                              /* Desktop: large icon */
+                              md:w-5 md:h-5
+                              bg-gradient-to-r ${filter.gradient} rounded flex items-center justify-center shadow-glow
+                            `}>
+                              <FilterIcon className="
+                                /* Mobile: tiny icon */
+                                h-2 w-2
+                                /* Tablet: small icon */
+                                sm:h-2.5 sm:w-2.5
+                                /* Desktop: normal icon */
+                                md:h-3 md:w-3
+                                text-white
+                              " />
                             </div>
                           </div>
                           
