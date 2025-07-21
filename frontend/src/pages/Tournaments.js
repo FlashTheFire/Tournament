@@ -287,7 +287,7 @@ const Tournaments = () => {
           >
             <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-xl text-xs sm:text-sm font-bold shadow-glow flex items-center space-x-1">
               <Crown className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span>{tournament.prize_pool?.toLocaleString()}</span>
+              <span>{formatPrizePool(tournament.prize_pool)}</span>
             </div>
           </motion.div>
 
