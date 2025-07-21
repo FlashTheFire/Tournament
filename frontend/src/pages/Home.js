@@ -83,23 +83,17 @@ const Home = () => {
     const isRightSwipe = distance < -50;
 
     if (type === 'ai') {
-      setIsAiAutoPlaying(false);
       if (isLeftSwipe) {
         setAiCurrentIndex((prev) => (prev + 1) % aiPredictions.length);
       } else if (isRightSwipe) {
         setAiCurrentIndex((prev) => (prev - 1 + aiPredictions.length) % aiPredictions.length);
       }
-      // Resume auto-play after 5 seconds
-      setTimeout(() => setIsAiAutoPlaying(true), 5000);
     } else if (type === 'tournament') {
-      setIsTournamentAutoPlaying(false);
       if (isLeftSwipe) {
         setTournamentCurrentIndex((prev) => (prev + 1) % Math.min(tournaments.length, 3));
       } else if (isRightSwipe) {
         setTournamentCurrentIndex((prev) => (prev - 1 + Math.min(tournaments.length, 3)) % Math.min(tournaments.length, 3));
       }
-      // Resume auto-play after 5 seconds
-      setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
     }
   };
 
