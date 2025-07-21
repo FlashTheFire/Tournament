@@ -1155,18 +1155,18 @@ const Home = () => {
                           </div>
                         </div>
 
-                        <div className="relative z-10 p-6">
+                        <div className="relative z-10 p-4">
                           <Link
                             to={`/tournaments/${tournament.tournament_id}`}
-                            className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden py-4 px-6 text-base shadow-glow-lg border border-white/30"
+                            className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden py-3 px-4 text-sm shadow-glow-lg border border-white/30"
                           >
                             <motion.div 
-                              className="flex items-center justify-center space-x-3"
+                              className="flex items-center justify-center space-x-2"
                               whileHover={{ scale: 1.02 }}
                             >
-                              <Gamepad2 className="h-6 w-6 group-hover:rotate-12 transition-transform" />
+                              <Gamepad2 className="h-4 w-4 group-hover:rotate-12 transition-transform" />
                               <span className="font-black tracking-wide">ENTER BATTLE</span>
-                              <Flame className="h-6 w-6 group-hover:animate-pulse" />
+                              <Flame className="h-4 w-4 group-hover:animate-pulse" />
                             </motion.div>
                           </Link>
                         </div>
