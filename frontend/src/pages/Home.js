@@ -1176,8 +1176,8 @@ const Home = () => {
                   ))}
                 </div>
 
-                {/* Enhanced Tournament Carousel Dots - Bottom Aligned */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
+                {/* Enhanced Tournament Carousel Dots - Moved Further Down */}
+                <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 z-20">
                   <div className="flex items-center space-x-2 px-4 py-2 bg-black/20 backdrop-blur-xl rounded-full border border-white/10">
                     {tournaments.slice(0, 3).map((_, index) => (
                       <motion.button
