@@ -848,7 +848,10 @@ const Home = () => {
                     stiffness: 300,
                     damping: 30,
                   }}
-                  style={{ width: `${aiPredictions.length * 100}%` }}
+                  style={{ 
+                    width: `${aiPredictions.length * 100}%`,
+                    scrollSnapAlign: 'start'
+                  }}
                 >
                   {aiPredictions.map((insight, index) => (
                     <div 
