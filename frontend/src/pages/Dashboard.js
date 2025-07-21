@@ -525,7 +525,7 @@ const Dashboard = () => {
               },
               {
                 title: 'Hours Played',
-                value: `${dashboardData.stats.hoursPlayed}h`,
+                value: `${formatNumber(dashboardData.stats.hoursPlayed)}h`,
                 icon: Clock,
                 color: 'from-orange-500 to-red-600'
               }
