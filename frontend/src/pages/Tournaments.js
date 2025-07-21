@@ -140,25 +140,6 @@ const Tournaments = () => {
           elimination_style: 'single'
         },
         {
-          tournament_id: 'ff-lone-wolf-hunt',
-          name: 'Lone Wolf Hunter Championship',
-          game_type: 'lone_wolf',
-          tournament_type: 'battle_royale',
-          entry_fee: 100,
-          prize_pool: 15000,
-          max_participants: 80,
-          current_participants: 67,
-          start_time: new Date(Date.now() + 172800000).toISOString(),
-          registration_deadline: new Date(Date.now() + 129600000).toISOString(),
-          mode: 'solo',
-          country: 'ID',
-          status: 'upcoming',
-          description: 'Solo survival tournament - only the strongest survive',
-          battle_map: battleMaps[2],
-          difficulty: 'Extreme',
-          weapons: 'Limited'
-        },
-        {
           tournament_id: 'ff-rush-hour-blitz',
           name: 'Rush Hour Blitz Tournament',
           game_type: 'rush_hour',
