@@ -63,27 +63,8 @@ const Home = () => {
     // Removed auto-refresh interval as requested
   }, []);
 
-  // Professional Auto-Advance for AI Carousel
-  useEffect(() => {
-    if (!isAiAutoPlaying || aiPredictions.length === 0) return;
-    
-    const interval = setInterval(() => {
-      setAiCurrentIndex((prev) => (prev + 1) % aiPredictions.length);
-    }, 3000); // 3 seconds per slide
-
-    return () => clearInterval(interval);
-  }, [isAiAutoPlaying, aiPredictions.length]);
-
-  // Professional Auto-Advance for Tournament Carousel
-  useEffect(() => {
-    if (!isTournamentAutoPlaying || tournaments.length === 0) return;
-    
-    const interval = setInterval(() => {
-      setTournamentCurrentIndex((prev) => (prev + 1) % Math.min(tournaments.length, 3));
-    }, 4000); // 4 seconds per slide
-
-    return () => clearInterval(interval);
-  }, [isTournamentAutoPlaying, tournaments.length]);
+  // Auto-advance disabled as requested by user - no automatic refreshing
+  // AI Carousel and Tournament Carousel will only respond to manual navigation
 
   // Professional Touch Handlers
   const handleTouchStart = (e) => {
