@@ -564,7 +564,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             )}
           </nav>
 
-          {/* Mobile-First Footer */}
+          {/* Mobile-First Footer with Settings */}
           <motion.div 
             className="border-t border-white/10
               /* Mobile: compact footer */
@@ -576,7 +576,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="glass-mobile rounded-xl lg:rounded-2xl p-3 lg:p-4 text-center border border-neon-blue/20">
+            <div className="glass-mobile rounded-xl lg:rounded-2xl p-3 lg:p-4 text-center border border-neon-blue/20 mb-3">
               <div className="flex items-center justify-center space-x-1 lg:space-x-2 mb-1 lg:mb-2">
                 <Flame className="h-3 w-3 lg:h-4 lg:w-4 text-neon-red animate-pulse" />
                 <span className="text-white font-bold
@@ -600,6 +600,38 @@ const Sidebar = ({ isOpen, onClose }) => {
                 lg:text-xs
               ">Ultimate Gaming Platform</p>
             </div>
+            
+            {/* Settings Button */}
+            <Link to="/settings" onClick={onClose}>
+              <motion.div
+                whileHover={{ scale: 1.02, x: 5 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center font-semibold transition-all duration-300 group relative overflow-hidden glass-mobile border border-white/10 text-gray-300 hover:border-neon-blue/30 hover:text-white
+                  /* Mobile: extra compact settings button */
+                  space-x-2 px-3 py-2 rounded-lg text-xs
+                  /* Small mobile: slightly larger */
+                  xs:space-x-3 xs:px-4 xs:py-2.5 xs:rounded-xl xs:text-sm
+                  /* Desktop: compact settings button */
+                  lg:space-x-3 lg:px-4 lg:py-2.5 lg:rounded-xl lg:text-sm
+                "
+              >
+                {/* Background gradient on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-neon-blue/0 via-neon-blue/5 to-electric-purple/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="rounded-xl flex items-center justify-center transition-all duration-300 bg-white/10 group-hover:bg-neon-blue/20
+                    w-8 h-8 lg:w-10 lg:h-10
+                  "
+                >
+                  <Settings className="text-gray-400 group-hover:text-white transition-colors h-4 w-4 lg:h-5 lg:w-5" />
+                </motion.div>
+                <div className="flex-1 relative z-10">
+                  <p className="font-bold leading-tight text-xs xs:text-sm lg:text-base">Settings</p>
+                  <p className="text-gray-400 mt-0.5 leading-tight text-2xs hidden xs:block lg:text-xs">Preferences</p>
+                </div>
+              </motion.div>
+            </Link>
           </motion.div>
         </div>
       </motion.aside>
