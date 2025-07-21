@@ -210,7 +210,7 @@ const Dashboard = () => {
               },
               {
                 title: 'Current Rank',
-                value: `#${dashboardData.stats.currentRank}`,
+                value: `#${formatNumber(dashboardData.stats.currentRank)}`,
                 icon: Crown,
                 color: 'from-purple-500 to-indigo-600',
                 change: '↑5 positions'
