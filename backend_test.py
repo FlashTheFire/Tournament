@@ -352,15 +352,15 @@ class TournamentAPITester:
                     if user_success and user_response.status_code == 200:
                         user_data = user_response.json()
                         ff_uid = user_data.get("free_fire_uid")
-                        username = user_data.get("username")
+                        email = user_data.get("email")
                         is_admin = user_data.get("is_admin", False)
                         
-                        if ff_uid and username and is_admin:
+                        if ff_uid and email and is_admin:
                             self.log_result("Demo Credentials Free Fire", True, 
-                                          f"Demo user has Free Fire integration: UID {ff_uid}, username '{username}', admin: {is_admin}")
+                                          f"Demo user has Free Fire integration: UID {ff_uid}, email '{email}', admin: {is_admin}")
                         else:
                             self.log_result("Demo Credentials Free Fire", False, 
-                                          f"Demo user missing Free Fire data: UID={ff_uid}, username={username}, admin={is_admin}")
+                                          f"Demo user missing Free Fire data: UID={ff_uid}, email={email}, admin={is_admin}")
                     else:
                         self.log_result("Demo Credentials Free Fire", False, 
                                       f"Failed to get demo user info: {user_response.status_code if user_success else user_error}")
