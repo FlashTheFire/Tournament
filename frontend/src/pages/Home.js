@@ -1241,12 +1241,10 @@ const Home = () => {
                   </div>
                 </div>
 
-                {/* Tournament Auto-play indicator - repositioned */}
+                {/* Manual navigation indicator */}
                 <div className="absolute top-6 right-6 z-20">
                   <motion.div
-                    className={`w-2 h-2 rounded-full ${isTournamentAutoPlaying ? 'bg-orange-400' : 'bg-gray-400'}`}
-                    animate={{ opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 1, repeat: Infinity }}
+                    className="w-2 h-2 rounded-full bg-orange-400 opacity-80"
                   />
                 </div>
               </div>
