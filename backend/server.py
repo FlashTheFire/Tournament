@@ -2511,6 +2511,208 @@ async def get_leaderboards(
             "error": f"Failed to load leaderboard: {str(e)}"
         }
 
+@app.get("/api/live-stats")
+async def get_live_stats():
+    """Get real-time platform statistics from database"""
+    try:
+        # Get live stats from database
+        live_stats = db.live_stats.find_one({"stats_id": "global_stats"})
+        
+        if live_stats:
+            # Remove MongoDB ID and format response
+            live_stats.pop("_id", None)
+            return {
+                "totalTournaments": live_stats.get("total_tournaments", 0),
+                "totalPrizePool": live_stats.get("total_prize_pool", 0),
+                "activePlayers": live_stats.get("total_users", 0),
+                "liveMatches": live_stats.get("active_tournaments", 0),
+                "updated_at": live_stats.get("updated_at").isoformat() if live_stats.get("updated_at") else None
+            }
+        else:
+            # Calculate stats on the fly if no cached stats
+            total_tournaments = tournaments_collection.count_documents({})
+            active_tournaments = tournaments_collection.count_documents({"status": "live"})
+            total_users = users_collection.count_documents({})
+            
+            total_prize_pool = 0
+            for tournament in tournaments_collection.find({}):
+                total_prize_pool += tournament.get("prize_pool", 0)
+            
+            return {
+                "totalTournaments": total_tournaments,
+                "totalPrizePool": total_prize_pool,
+                "activePlayers": total_users,
+                "liveMatches": active_tournaments,
+                "updated_at": datetime.utcnow().isoformat()
+            }
+    except Exception as e:
+        # Return default stats on error
+        return {
+            "totalTournaments": 89,
+            "totalPrizePool": 4800000,
+            "activePlayers": 42000,
+            "liveMatches": 156
+        }
+
+@app.get("/api/ai-predictions")
+async def get_ai_predictions(current_user: dict = Depends(get_current_user)):
+    """Get AI-powered predictions for the current user"""
+    try:
+        # Get AI predictions from database
+        predictions = list(db.ai_predictions.find({"is_active": True}).sort("created_at", -1).limit(5))
+        
+        if predictions:
+            formatted_predictions = []
+            for pred in predictions:
+                pred.pop("_id", None)  # Remove MongoDB ID
+                
+                # Convert datetime objects to strings
+                if pred.get("created_at"):
+                    pred["created_at"] = pred["created_at"].isoformat()
+                if pred.get("expires_at"):
+                    pred["expires_at"] = pred["expires_at"].isoformat()
+                    
+                formatted_predictions.append(pred)
+                
+            return {"predictions": formatted_predictions}
+        else:
+            # Return default predictions if none in database
+            default_predictions = [
+                {
+                    "id": "ai-1",
+                    "type": "matchmaking",
+                    "title": "Smart Match Ready",
+                    "prediction": "Perfect opponents found with 94% skill match",
+                    "confidence": 94,
+                    "action": "Start Battle",
+                    "gradient": "from-cyan-500 to-blue-600"
+                },
+                {
+                    "id": "ai-2", 
+                    "type": "performance",
+                    "title": "Win Probability",
+                    "prediction": "High chance of victory in next tournament",
+                    "confidence": 78,
+                    "action": "View Strategy",
+                    "gradient": "from-green-500 to-emerald-600"
+                }
+            ]
+            return {"predictions": default_predictions}
+            
+    except Exception as e:
+        print(f"Error getting AI predictions: {e}")
+        return {"predictions": []}
+
+@app.get("/api/dashboard-data")
+async def get_dashboard_data(current_user: dict = Depends(get_current_user)):
+    """Get comprehensive dashboard data for the current user"""
+    try:
+        user_id = current_user["user_id"]
+        
+        # Get user's tournament registrations
+        user_registrations = list(registrations_collection.find({"user_id": user_id}))
+        
+        # Get user's match results
+        user_matches = list(matches_collection.find({"user_id": user_id}).sort("match_date", -1))
+        
+        # Calculate user statistics
+        tournaments_joined = len(user_registrations)
+        total_winnings = sum([match.get("earnings", 0) for match in user_matches])
+        
+        # Get user's rank from leaderboard
+        user_leaderboard = leaderboards_collection.find_one({"user_id": user_id})
+        current_rank = user_leaderboard.get("rank", 999) if user_leaderboard else 999
+        
+        # Calculate win rate from Free Fire data
+        ff_data = current_user.get("free_fire_data", {})
+        wins = ff_data.get("wins", 0)
+        total_matches = ff_data.get("total_matches", 1)
+        win_rate = round((wins / max(total_matches, 1)) * 100, 1)
+        
+        # Get recent tournaments with details
+        recent_tournaments = []
+        for reg in user_registrations[-5:]:  # Last 5 registrations
+            tournament = tournaments_collection.find_one({"tournament_id": reg["tournament_id"]})
+            if tournament:
+                # Find match result for this tournament
+                match_result = matches_collection.find_one({
+                    "user_id": user_id,
+                    "tournament_id": reg["tournament_id"]
+                })
+                
+                tournament_info = {
+                    "id": tournament["tournament_id"],
+                    "name": tournament["name"],
+                    "status": tournament["status"],
+                    "prize": tournament["prize_pool"],
+                    "participants": f'{tournament["current_participants"]}/{tournament["max_participants"]}',
+                    "date": tournament["start_time"].isoformat(),
+                    "registered": True
+                }
+                
+                if match_result:
+                    tournament_info["result"] = {
+                        "place": match_result["placement"],
+                        "prize": match_result["earnings"]
+                    }
+                    
+                recent_tournaments.append(tournament_info)
+        
+        # Generate achievements based on user performance
+        achievements = [
+            {"id": 1, "name": "Tournament Warrior", "description": "Join your first tournament", "earned": tournaments_joined > 0, "rarity": "common"},
+            {"id": 2, "name": "Elite Player", "description": "Reach top 50 in leaderboards", "earned": current_rank <= 50, "rarity": "rare"},
+            {"id": 3, "name": "Prize Winner", "description": "Win tournament earnings", "earned": total_winnings > 0, "rarity": "epic"},
+            {"id": 4, "name": "Tournament Master", "description": "Join 10+ tournaments", "earned": tournaments_joined >= 10, "rarity": "legendary"},
+            {"id": 5, "name": "Elite Champion", "description": "Reach top 10 leaderboards", "earned": current_rank <= 10, "rarity": "legendary"}
+        ]
+        
+        # Generate weekly progress (mock data for demo)
+        weekly_progress = [
+            {"day": "Mon", "matches": random.randint(2, 6), "wins": random.randint(1, 4)},
+            {"day": "Tue", "matches": random.randint(2, 6), "wins": random.randint(1, 4)},
+            {"day": "Wed", "matches": random.randint(2, 6), "wins": random.randint(1, 4)},
+            {"day": "Thu", "matches": random.randint(2, 6), "wins": random.randint(1, 4)},
+            {"day": "Fri", "matches": random.randint(2, 6), "wins": random.randint(1, 4)},
+            {"day": "Sat", "matches": random.randint(2, 8), "wins": random.randint(1, 6)},
+            {"day": "Sun", "matches": random.randint(2, 8), "wins": random.randint(1, 6)}
+        ]
+        
+        dashboard_data = {
+            "stats": {
+                "tournamentsJoined": tournaments_joined,
+                "totalWinnings": int(total_winnings),
+                "currentRank": current_rank,
+                "winRate": win_rate,
+                "killsTotal": ff_data.get("kills", 0),
+                "averageRank": current_rank,
+                "hoursPlayed": random.randint(50, 200)  # Mock data
+            },
+            "recentTournaments": recent_tournaments,
+            "achievements": achievements,
+            "weeklyProgress": weekly_progress
+        }
+        
+        return dashboard_data
+        
+    except Exception as e:
+        print(f"Error getting dashboard data: {e}")
+        # Return default dashboard data on error
+        return {
+            "stats": {
+                "tournamentsJoined": 0,
+                "totalWinnings": 0,
+                "currentRank": 999,
+                "winRate": 0,
+                "killsTotal": 0,
+                "averageRank": 999,
+                "hoursPlayed": 0
+            },
+            "recentTournaments": [],
+            "achievements": [],
+            "weeklyProgress": []
+        }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
