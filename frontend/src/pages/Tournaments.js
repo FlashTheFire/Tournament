@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { apiService } from '../services/api';
 import safeToast from '../utils/safeToast';
+import { formatNumber, formatCurrency, formatPrizePool } from '../utils/numberFormatter';
 
 const Tournaments = () => {
   const [tournaments, setTournaments] = useState([]);
