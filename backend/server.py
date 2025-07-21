@@ -18,6 +18,7 @@ import qrcode
 from io import BytesIO
 import asyncio
 import numpy as np
+import random
 
 # Perplexity AI Configuration
 PERPLEXITY_API_KEY = "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"
