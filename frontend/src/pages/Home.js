@@ -664,9 +664,17 @@ const Home = () => {
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></div>
                 <motion.div
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 25, repeat: Infinity, ease: "linear", delay: index * 3 }}
                   className="relative z-10"
+                  animate={{ 
+                    y: [0, -8, 0],
+                    scale: [1, 1.05, 1]
+                  }}
+                  transition={{ 
+                    duration: 3, 
+                    repeat: Infinity, 
+                    ease: "easeInOut", 
+                    delay: index * 0.5 
+                  }}
                 >
                   <stat.icon className={`${stat.color} mx-auto mb-2 drop-shadow-2xl
                     /* Mobile: smaller icon */
