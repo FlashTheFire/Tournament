@@ -314,76 +314,75 @@ const Register = () => {
                   />
                 </div>
 
-                {/* Free Fire UID and Region Row - Equal column widths */}
-                <div className="grid grid-cols-2 gap-3 lg:gap-4">
-                  <div>
-                    <label htmlFor="free_fire_uid" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
-                      <User className="h-3 w-3 text-neon-blue" />
-                      <span>Free Fire UID</span>
-                    </label>
-                    <div className="relative">
-                      <input
-                        id="free_fire_uid"
-                        name="free_fire_uid"
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        required
-                        value={formData.free_fire_uid}
-                        onChange={(e) => {
-                          // Only allow numeric input
-                          const numericValue = e.target.value.replace(/[^0-9]/g, '');
-                          setFormData(prev => ({
-                            ...prev,
-                            free_fire_uid: numericValue
-                          }));
-                        }}
-                        className={`w-full px-4 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-300 text-sm lg:text-base ${
-                          validationState.uidValidation === 'valid' ? 'focus:ring-green-500 border-green-500' :
-                          validationState.uidValidation === 'invalid' ? 'focus:ring-red-500 border-red-500' :
-                          'focus:ring-neon-blue'
-                        }`}
-                        placeholder="Enter Free Fire UID"
-                      />
-                      
-                      {/* Validation Icon */}
-                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        {validationState.uidValidation === 'validating' && (
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                            className="w-4 h-4 border-2 border-yellow-400 border-t-transparent rounded-full"
-                          />
-                        )}
-                        {validationState.uidValidation === 'valid' && (
-                          <CheckCircle className="h-4 w-4 text-green-400" />
-                        )}
-                        {validationState.uidValidation === 'invalid' && (
-                          <AlertCircle className="h-4 w-4 text-red-400" />
-                        )}
-                      </div>
+                {/* Free Fire UID Field - Full Width */}
+                <div>
+                  <label htmlFor="free_fire_uid" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
+                    <User className="h-3 w-3 text-neon-blue" />
+                    <span>Free Fire UID</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="free_fire_uid"
+                      name="free_fire_uid"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      required
+                      value={formData.free_fire_uid}
+                      onChange={(e) => {
+                        // Only allow numeric input
+                        const numericValue = e.target.value.replace(/[^0-9]/g, '');
+                        setFormData(prev => ({
+                          ...prev,
+                          free_fire_uid: numericValue
+                        }));
+                      }}
+                      className={`w-full px-4 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-300 text-sm lg:text-base ${
+                        validationState.uidValidation === 'valid' ? 'focus:ring-green-500 border-green-500' :
+                        validationState.uidValidation === 'invalid' ? 'focus:ring-red-500 border-red-500' :
+                        'focus:ring-neon-blue'
+                      }`}
+                      placeholder="Enter Free Fire UID"
+                    />
+                    
+                    {/* Validation Icon */}
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      {validationState.uidValidation === 'validating' && (
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          className="w-4 h-4 border-2 border-yellow-400 border-t-transparent rounded-full"
+                        />
+                      )}
+                      {validationState.uidValidation === 'valid' && (
+                        <CheckCircle className="h-4 w-4 text-green-400" />
+                      )}
+                      {validationState.uidValidation === 'invalid' && (
+                        <AlertCircle className="h-4 w-4 text-red-400" />
+                      )}
                     </div>
                   </div>
+                </div>
 
-                  <div>
-                    <label htmlFor="region" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
-                      <MapPin className="h-3 w-3 text-neon-purple" />
-                      <span>Region</span>
-                    </label>
-                    <select
-                      id="region"
-                      name="region"
-                      value={formData.region}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-neon-purple transition-all duration-300 text-sm lg:text-base bg-cosmic-dark"
-                    >
-                      {regions.map(region => (
-                        <option key={region.code} value={region.code} className="bg-cosmic-dark text-white">
-                          {region.flag} {region.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                {/* Region Field - Full Width */}
+                <div>
+                  <label htmlFor="region" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
+                    <MapPin className="h-3 w-3 text-neon-purple" />
+                    <span>Region</span>
+                  </label>
+                  <select
+                    id="region"
+                    name="region"
+                    value={formData.region}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-neon-purple transition-all duration-300 text-sm lg:text-base bg-cosmic-dark"
+                  >
+                    {regions.map(region => (
+                      <option key={region.code} value={region.code} className="bg-cosmic-dark text-white">
+                        {region.flag} {region.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 {/* UID Validation Error Display */}
