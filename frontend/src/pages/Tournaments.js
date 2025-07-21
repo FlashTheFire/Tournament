@@ -240,7 +240,7 @@ const Tournaments = () => {
           rotateY: 3,
           transition: { type: "spring", stiffness: 300, damping: 20 }
         }}
-        className="tournament-card glass rounded-3xl overflow-hidden border border-white/10 hover:border-neon-blue/50 group min-h-[640px]"
+        className="tournament-card glass rounded-3xl overflow-hidden border border-white/10 hover:border-neon-blue/50 group w-full max-w-[640px] min-h-[640px] mx-auto"
       >
         <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
           <motion.img
