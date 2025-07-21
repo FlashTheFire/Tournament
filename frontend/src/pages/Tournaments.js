@@ -451,12 +451,12 @@ const Tournaments = () => {
             </div>
           </div>
           
-          {/* Mobile Toggle Button */}
+          {/* Toggle Button for ALL DEVICES (not just mobile) */}
           <motion.button
             onClick={() => setFiltersOpen(!filtersOpen)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="md:hidden flex items-center justify-center w-8 h-8 bg-gradient-to-r from-neon-blue/20 to-electric-purple/20 rounded-lg border border-neon-blue/30 hover:border-neon-blue/50 transition-all duration-300"
+            className="flex items-center justify-center w-8 h-8 bg-gradient-to-r from-neon-blue/20 to-electric-purple/20 rounded-lg border border-neon-blue/30 hover:border-neon-blue/50 transition-all duration-300"
           >
             <motion.div
               animate={{ rotate: filtersOpen ? 180 : 0 }}
