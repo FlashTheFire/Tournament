@@ -497,7 +497,14 @@ const Tournaments = () => {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="overflow-hidden"
             >
-              <div className="grid grid-cols-4 gap-2 md:gap-3">
+              <div className="
+                /* Mobile: tight 4-column grid with minimal gaps */
+                grid grid-cols-4 gap-1.5
+                /* Tablet: slightly larger gaps */
+                sm:gap-2
+                /* Desktop: normal gaps */
+                md:gap-3
+              ">
                 {[
                   {
                     key: 'game_type',
