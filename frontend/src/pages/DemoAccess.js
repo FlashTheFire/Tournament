@@ -107,8 +107,8 @@ const DemoAccess = () => {
   ];
 
   const quickStats = [
-    { label: 'Total Players', value: '45,000', icon: Users },
-    { label: 'Prize Pools', value: '₹500K', icon: Crown }
+    { label: 'Total Players', value: formatNumber(45000), icon: Users },
+    { label: 'Prize Pools', value: formatPrizePool(500000), icon: Crown }
   ];
 
   return (
