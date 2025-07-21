@@ -74,9 +74,9 @@ JWT_ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_ACCESS_TOKEN_EXPIRE_MINUTES
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
-    username: str
-    full_name: str
-    free_fire_uid: Optional[str] = None
+    free_fire_uid: str
+    region: str  # Free Fire region code
+    player_info: Optional[Dict] = None  # Store validated Free Fire player info
 
 class UserLogin(BaseModel):
     email: EmailStr
