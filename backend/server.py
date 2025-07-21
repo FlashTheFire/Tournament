@@ -71,7 +71,6 @@ PERPLEXITY_API_URL = "https://api.perplexity.ai/chat/completions"
 load_dotenv()
 
 # Initialize FastAPI app with CORS middleware in constructor
-from fastapi.middleware import Middleware
 
 middleware = [
     Middleware(
