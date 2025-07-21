@@ -120,7 +120,7 @@ const DemoAccess = () => {
         scrollbarColor: '#00d4ff #1a1a2e',
         WebkitOverflowScrolling: 'touch'
       }}>
-        <div className="max-w-7xl mx-auto space-y-8">
+        <div className="max-w-7xl mx-auto space-y-8 pb-8">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -30 }}
