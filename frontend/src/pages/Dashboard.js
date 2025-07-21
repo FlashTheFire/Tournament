@@ -519,7 +519,7 @@ const Dashboard = () => {
               },
               {
                 title: 'Average Rank',
-                value: `#${dashboardData.stats.averageRank}`,
+                value: `#${formatNumber(dashboardData.stats.averageRank)}`,
                 icon: Medal,
                 color: 'from-purple-500 to-indigo-600'
               },
