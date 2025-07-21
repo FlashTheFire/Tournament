@@ -1520,6 +1520,35 @@ async def register(user_data: UserCreate):
         }
     }
 
+@app.get("/api/validate-freefire")
+async def validate_freefire_uid(uid: str, region: str):
+    """
+    Real-time validation endpoint for Free Fire UID and region
+    Used by frontend for instant validation feedback
+    """
+    try:
+        player_info = await validate_free_fire_uid(uid, region)
+        return {
+            "valid": True,
+            "player_info": {
+                "nickname": player_info["nickname"],
+                "level": player_info["level"],
+                "rank": player_info["rank"],
+                "region": player_info["region"],
+                "account_id": player_info["account_id"]
+            }
+        }
+    except HTTPException as e:
+        return {
+            "valid": False,
+            "error": e.detail
+        }
+    except Exception as e:
+        return {
+            "valid": False,
+            "error": str(e)
+        }
+
 @app.post("/api/auth/login")
 async def login(user_data: UserLogin):
     user = users_collection.find_one({"email": user_data.email})
