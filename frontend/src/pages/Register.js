@@ -441,16 +441,16 @@ const Register = () => {
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400"></div>
                       
                       {/* Main Content */}
-                      <div className="relative p-4 lg:p-5">
+                      <div className="relative p-3 lg:p-4">
                         {/* Header with Verified Badge */}
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center space-x-3">
                             <motion.div
                               initial={{ scale: 0, rotate: -180 }}
                               animate={{ scale: 1, rotate: 0 }}
-                              className="w-8 h-8 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg shadow-green-400/30"
+                              className="w-7 h-7 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg shadow-green-400/30"
                             >
-                              <CheckCircle className="h-5 w-5 text-white" />
+                              <CheckCircle className="h-4 w-4 text-white" />
                             </motion.div>
                             <div>
                               <h4 className="text-green-400 font-bold text-sm lg:text-base">Player Verified</h4>
