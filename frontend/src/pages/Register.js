@@ -511,6 +511,37 @@ const Register = () => {
                       : 'btn-premium'
                   }`}
                 >
+                  <AnimatePresence mode="wait">
+                    {loading ? (
+                      <motion.div
+                        key="loading"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center justify-center space-x-3"
+                      >
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                        />
+                        <span>Creating Account...</span>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="register"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center justify-center space-x-3"
+                      >
+                        <UserPlus className="h-5 w-5 group-hover:animate-pulse" />
+                        <span>JOIN ARENA</span>
+                        <Zap className="h-5 w-5 group-hover:animate-bounce" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
                 >
                   <AnimatePresence mode="wait">
                     {loading ? (
