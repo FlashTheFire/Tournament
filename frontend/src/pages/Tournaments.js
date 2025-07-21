@@ -552,8 +552,15 @@ const Tournaments = () => {
                         /* Mobile: compact filter card */
                         relative overflow-hidden rounded-lg border border-white/20 hover:border-neon-blue/50 transition-all duration-300
                       ">
-                        {/* Background Image - Smaller for mobile */}
-                        <div className="relative h-16 sm:h-20 md:h-24">
+                        {/* Background Image - Optimized for mobile */}
+                        <div className="
+                          /* Mobile: compact height */
+                          relative h-14
+                          /* Tablet: medium height */
+                          sm:h-16
+                          /* Desktop: full height */
+                          md:h-20
+                        ">
                           <img 
                             src={filter.image} 
                             alt={filter.title}
