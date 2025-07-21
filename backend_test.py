@@ -245,19 +245,18 @@ class TournamentAPITester:
                 data = response.json()
                 # Check for new Free Fire fields
                 required_fields = ["user_id", "email", "free_fire_uid"]
-                optional_fields = ["username", "full_name"]  # These should now be derived from Free Fire data
+                optional_fields = ["full_name"]  # This should now be derived from Free Fire data
                 
                 missing_fields = [field for field in required_fields if field not in data]
                 if missing_fields:
                     self.log_result("Database Structure Verification", False, f"Missing required fields: {missing_fields}")
                 else:
-                    # Check if username/full_name are derived from Free Fire nickname
+                    # Check if full_name is derived from Free Fire nickname
                     ff_uid = data.get("free_fire_uid")
-                    username = data.get("username")
                     full_name = data.get("full_name")
                     
                     self.log_result("Database Structure Verification", True, 
-                                  f"User document structure correct: FF UID {ff_uid}, username '{username}', full_name '{full_name}'")
+                                  f"User document structure correct: FF UID {ff_uid}, full_name '{full_name}'")
             except json.JSONDecodeError:
                 self.log_result("Database Structure Verification", False, "Invalid JSON response")
         else:
