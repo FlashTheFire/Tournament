@@ -469,7 +469,7 @@ const Tournaments = () => {
 
         {/* MOBILE: Collapsible Single Row Filter Layout - Horizontal cards like screenshot */}
         <AnimatePresence>
-          {(filtersOpen || window.innerWidth >= 768) && (
+          {(filtersOpen || isDesktop) && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
