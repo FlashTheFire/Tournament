@@ -292,20 +292,22 @@ const Home = () => {
         hover: { duration: 0.3 }
       }}
     >
-      {/* Professional Shine Animation Effect */}
+      {/* Professional Pulse Animation Effect instead of round effect */}
       <div className="absolute inset-0 overflow-hidden rounded-2xl lg:rounded-3xl">
         <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12"
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
           animate={{
-            x: ['-200%', '200%'],
+            x: ['-100%', '100%'],
+            opacity: [0, 1, 0]
           }}
           transition={{
-            duration: 3,
+            duration: 2,
             repeat: Infinity,
-            repeatDelay: 5,
+            repeatDelay: 3,
             ease: "easeInOut",
+            delay: index * 0.5
           }}
-          style={{ width: '150%' }}
+          style={{ width: '120%' }}
         />
       </div>
       
