@@ -377,36 +377,125 @@ const Register = () => {
                   </div>
                 </div>
 
-                {/* Player Info Display */}
+                {/* Advanced Player Info Display */}
                 <AnimatePresence>
                   {validationState.uidValidation === 'valid' && validationState.playerInfo && (
                     <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="glass rounded-lg p-3 bg-green-500/10 border border-green-500/30"
+                      initial={{ opacity: 0, height: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, height: 'auto', scale: 1 }}
+                      exit={{ opacity: 0, height: 0, scale: 0.95 }}
+                      className="relative overflow-hidden rounded-xl bg-gradient-to-r from-green-500/10 via-blue-500/10 to-purple-500/10 border border-green-500/30 backdrop-blur-xl"
                     >
-                      <div className="flex items-center space-x-2 mb-2">
-                        <CheckCircle className="h-4 w-4 text-green-400" />
-                        <span className="text-green-400 font-semibold text-sm">Player Verified</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                          <span className="text-gray-400">Nickname:</span>
-                          <span className="text-white font-semibold ml-2">{validationState.playerInfo.nickname}</span>
+                      {/* Animated Background Elements */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-green-400/5 via-blue-400/5 to-purple-400/5"></div>
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400"></div>
+                      
+                      {/* Main Content */}
+                      <div className="relative p-4 lg:p-5">
+                        {/* Header with Verified Badge */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center space-x-3">
+                            <motion.div
+                              initial={{ scale: 0, rotate: -180 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              className="w-8 h-8 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg shadow-green-400/30"
+                            >
+                              <CheckCircle className="h-5 w-5 text-white" />
+                            </motion.div>
+                            <div>
+                              <h4 className="text-green-400 font-bold text-sm lg:text-base">Player Verified</h4>
+                              <p className="text-gray-400 text-xs">Free Fire account authenticated</p>
+                            </div>
+                          </div>
+                          <motion.div
+                            animate={{ rotate: [0, 10, -10, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                            className="text-2xl"
+                          >
+                            🎮
+                          </motion.div>
                         </div>
-                        <div>
-                          <span className="text-gray-400">Level:</span>
-                          <span className="text-white font-semibold ml-2">{validationState.playerInfo.level}</span>
+                        
+                        {/* Player Stats Grid */}
+                        <div className="grid grid-cols-2 gap-3 lg:gap-4">
+                          {/* Nickname Card */}
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="glass rounded-lg p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20"
+                          >
+                            <div className="flex items-center space-x-2 mb-1">
+                              <User className="h-3 w-3 text-blue-400" />
+                              <span className="text-gray-400 text-xs font-medium">Nickname</span>
+                            </div>
+                            <p className="text-white font-bold text-sm truncate">{validationState.playerInfo.nickname}</p>
+                          </motion.div>
+                          
+                          {/* Level Card */}
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="glass rounded-lg p-3 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-400/20"
+                          >
+                            <div className="flex items-center space-x-2 mb-1">
+                              <Star className="h-3 w-3 text-yellow-400" />
+                              <span className="text-gray-400 text-xs font-medium">Level</span>
+                            </div>
+                            <p className="text-white font-bold text-sm">{validationState.playerInfo.level}</p>
+                          </motion.div>
+                          
+                          {/* Rank Card */}
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="glass rounded-lg p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-400/20"
+                          >
+                            <div className="flex items-center space-x-2 mb-1">
+                              <Crown className="h-3 w-3 text-purple-400" />
+                              <span className="text-gray-400 text-xs font-medium">Rank</span>
+                            </div>
+                            <p className="text-white font-bold text-sm">#{validationState.playerInfo.rank}</p>
+                          </motion.div>
+                          
+                          {/* Region Card */}
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="glass rounded-lg p-3 bg-gradient-to-br from-green-500/10 to-teal-500/10 border border-green-400/20"
+                          >
+                            <div className="flex items-center space-x-2 mb-1">
+                              <MapPin className="h-3 w-3 text-green-400" />
+                              <span className="text-gray-400 text-xs font-medium">Region</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-white font-bold text-sm">{validationState.playerInfo.region}</span>
+                              <span className="text-lg">
+                                {regions.find(r => r.code === formData.region)?.flag}
+                              </span>
+                            </div>
+                          </motion.div>
                         </div>
-                        <div>
-                          <span className="text-gray-400">Rank:</span>
-                          <span className="text-white font-semibold ml-2">#{validationState.playerInfo.rank}</span>
-                        </div>
-                        <div>
-                          <span className="text-gray-400">Region:</span>
-                          <span className="text-white font-semibold ml-2">{validationState.playerInfo.region}</span>
-                        </div>
+                        
+                        {/* Success Message */}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.5 }}
+                          className="mt-4 text-center"
+                        >
+                          <p className="text-green-400 text-xs font-medium">
+                            🎉 Ready to join the elite warriors! 🔥
+                          </p>
+                        </motion.div>
+                        
+                        {/* Floating Particles */}
+                        <div className="absolute top-2 right-4 w-1 h-1 bg-green-400 rounded-full animate-ping"></div>
+                        <div className="absolute bottom-3 left-6 w-1 h-1 bg-blue-400 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
+                        <div className="absolute top-1/2 right-8 w-0.5 h-0.5 bg-purple-400 rounded-full animate-ping" style={{animationDelay: '2s'}}></div>
                       </div>
                     </motion.div>
                   )}
