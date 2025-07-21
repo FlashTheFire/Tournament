@@ -665,7 +665,7 @@ const Tournaments = () => {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8 place-items-center max-w-[2000px] mx-auto">
             {[...Array(6)].map((_, i) => (
               <div key={i} className="skeleton w-full max-w-[640px] h-[640px] rounded-3xl kinetic-waves mx-auto"></div>
             ))}
