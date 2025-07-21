@@ -538,18 +538,6 @@ const Register = () => {
                           </motion.div>
                         </div>
                         
-                        {/* Success Message */}
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.5 }}
-                          className="mt-4 text-center"
-                        >
-                          <p className="text-green-400 text-xs font-medium">
-                            🎉 Ready to join the elite warriors! 🔥
-                          </p>
-                        </motion.div>
-                        
                         {/* Floating Particles */}
                         <div className="absolute top-2 right-4 w-1 h-1 bg-green-400 rounded-full animate-ping"></div>
                         <div className="absolute bottom-3 left-6 w-1 h-1 bg-blue-400 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
