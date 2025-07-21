@@ -411,13 +411,13 @@ class TournamentAPITester:
             self.log_result("Old Registration Format", False, f"Should return 422, got {response.status_code}")
 
     def test_user_registration_old(self):
-        """Test user login"""
+        """Test user login - kept for compatibility"""
         print("\n=== Testing User Login ===")
         
-        # Use existing user credentials
+        # Use demo credentials that should work with Free Fire integration
         login_data = {
-            "email": "testgamer@example.com",
-            "password": "SecurePass123!"
+            "email": "demo@tournament.com",
+            "password": "demo123"
         }
         
         response, success, error = self.make_request("POST", "/auth/login", login_data)
@@ -441,7 +441,7 @@ class TournamentAPITester:
         else:
             self.log_result("User Login", False, f"Status code: {response.status_code}, Response: {response.text}")
 
-    def test_get_current_user(self):
+    def test_user_login(self):
         """Test get current user info"""
         print("\n=== Testing Get Current User ===")
         
