@@ -11,15 +11,38 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    username: '',
-    full_name: '',
-    free_fire_uid: ''
+    free_fire_uid: '',
+    region: 'ind' // default to India
   });
+  
+  const [validationState, setValidationState] = useState({
+    passwordMatch: 'initial', // 'initial', 'match', 'no-match'
+    uidValidation: 'initial', // 'initial', 'validating', 'valid', 'invalid'
+    playerInfo: null
+  });
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  // Free Fire regions
+  const regions = [
+    { code: 'ind', name: 'India' },
+    { code: 'br', name: 'Brazil' },
+    { code: 'sg', name: 'Singapore' },
+    { code: 'ru', name: 'Russia' },
+    { code: 'id', name: 'Indonesia' },
+    { code: 'tw', name: 'Taiwan' },
+    { code: 'us', name: 'United States' },
+    { code: 'vn', name: 'Vietnam' },
+    { code: 'th', name: 'Thailand' },
+    { code: 'me', name: 'Middle East' },
+    { code: 'pk', name: 'Pakistan' },
+    { code: 'cis', name: 'CIS' },
+    { code: 'bd', name: 'Bangladesh' }
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
