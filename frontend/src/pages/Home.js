@@ -1247,33 +1247,36 @@ const Home = () => {
                   ))}
                 </motion.div>
 
-                {/* Fixed Tournament Progress Dots */}
-                <div className="flex justify-center space-x-3 py-6">
-                  {tournaments.slice(0, 3).map((_, index) => (
-                    <motion.button
-                      key={index}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                        index === tournamentCurrentIndex 
-                          ? 'bg-gradient-to-r from-yellow-400 to-orange-500 scale-125' 
-                          : 'bg-white/30 hover:bg-white/50'
-                      }`}
-                      onClick={() => {
-                        setIsTournamentAutoPlaying(false);
-                        setTournamentCurrentIndex(index);
-                        setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
-                      }}
-                      whileHover={{ scale: 1.2 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      {index === tournamentCurrentIndex && (
-                        <motion.div
-                          className="absolute inset-0 w-3 h-3 rounded-full bg-white/40"
-                          animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
-                          transition={{ duration: 1, repeat: Infinity }}
-                        />
-                      )}
-                    </motion.button>
-                  ))}
+                {/* Bottom-Aligned Tournament Progress Dots - Mobile-First */}
+                <div className="flex justify-center items-center pt-4 pb-6">
+                  <div className="flex items-center space-x-3 bg-black/20 backdrop-blur-xl border border-white/10 rounded-full px-4 py-2">
+                    {tournaments.slice(0, 3).map((_, index) => (
+                      <motion.button
+                        key={index}
+                        className={`relative overflow-hidden rounded-full transition-all duration-300 ${
+                          index === tournamentCurrentIndex 
+                            ? 'w-4 h-4 bg-gradient-to-r from-yellow-400 to-orange-500 shadow-glow' 
+                            : 'w-3 h-3 bg-white/30 hover:bg-white/50'
+                        }`}
+                        onClick={() => {
+                          setIsTournamentAutoPlaying(false);
+                          setTournamentCurrentIndex(index);
+                          setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
+                        }}
+                        whileHover={{ scale: 1.2 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        {/* Active dot pulse animation */}
+                        {index === tournamentCurrentIndex && (
+                          <motion.div
+                            className="absolute inset-0 rounded-full bg-white/40"
+                            animate={{ scale: [1, 1.8, 1], opacity: [0.8, 0.2, 0.8] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          />
+                        )}
+                      </motion.button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Tournament Auto-play indicator - repositioned */}
