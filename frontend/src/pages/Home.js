@@ -798,107 +798,96 @@ const Home = () => {
                 onTouchMove={handleTouchMove}
                 onTouchEnd={() => handleTouchEnd('ai')}
               >
-                {/* Professional carousel container - 100% width cards with proper padding and snap alignment */}
-                <motion.div
-                  className="flex"
-                  animate={{
-                    x: `${-aiCurrentIndex * 100}%`,
-                  }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 30,
-                  }}
-                  style={{ 
-                    width: `${aiPredictions.length * 100}%`,
-                    scrollSnapAlign: 'start'
-                  }}
-                >
+                {/* Single card display - only show current card */}
+                <div className="relative min-h-[240px]">
                   {aiPredictions.map((insight, index) => (
-                    <div 
-                      key={insight.id} 
-                      className="w-full flex-shrink-0"
+                    <motion.div
+                      key={insight.id}
+                      className="absolute inset-0 px-4 py-4"
+                      initial={{ opacity: 0, x: index === aiCurrentIndex ? 0 : 100 }}
+                      animate={{ 
+                        opacity: index === aiCurrentIndex ? 1 : 0,
+                        x: index === aiCurrentIndex ? 0 : (index > aiCurrentIndex ? 100 : -100),
+                        scale: index === aiCurrentIndex ? 1 : 0.95 
+                      }}
+                      transition={{ 
+                        duration: 0.4,
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30
+                      }}
                       style={{
-                        scrollSnapAlign: 'center'
+                        visibility: index === aiCurrentIndex ? 'visible' : 'hidden'
                       }}
                     >
-                      {/* Mobile-First Card with 100% width and proper padding */}
-                      <div className="px-3 py-3 sm:px-4 sm:py-4">
-                        <motion.div
-                          className="relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl backdrop-blur-xl rounded-2xl w-full
-                            /* Mobile: Optimized height and full width */
-                            min-h-[200px] max-w-full
-                            /* Small phones: Better proportions */
-                            xs:min-h-[220px]
-                            /* Medium phones: Standard sizing */
-                            sm:min-h-[240px]
-                          "
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ 
-                            opacity: index === aiCurrentIndex ? 1 : 0.7,
-                            scale: index === aiCurrentIndex ? 1 : 0.95 
-                          }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          {/* Professional Shine Animation */}
-                          <div className="absolute inset-0 overflow-hidden rounded-2xl">
-                            <motion.div
-                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent transform -skew-x-12"
-                              animate={{
-                                x: ['-200%', '200%'],
-                              }}
-                              transition={{
-                                duration: 3,
-                                repeat: Infinity,
-                                repeatDelay: 4,
-                                ease: "easeInOut",
-                              }}
-                              style={{ width: '150%' }}
-                            />
+                      <motion.div
+                        className="relative overflow-hidden border border-white/20 bg-gradient-to-br from-black/60 via-cosmic-dark/40 to-black/60 shadow-2xl backdrop-blur-xl rounded-2xl w-full h-full"
+                        whileHover={{ scale: 1.02 }}
+                        animate={{
+                          rotateY: [0, 2, -2, 0],
+                        }}
+                        transition={{
+                          rotateY: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                        }}
+                      >
+                        {/* Professional Shine Animation */}
+                        <div className="absolute inset-0 overflow-hidden rounded-2xl">
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent transform -skew-x-12"
+                            animate={{
+                              x: ['-200%', '200%'],
+                            }}
+                            transition={{
+                              duration: 4,
+                              repeat: Infinity,
+                              repeatDelay: 6,
+                              ease: "easeInOut",
+                            }}
+                            style={{ width: '150%' }}
+                          />
+                        </div>
+                        
+                        {/* Mobile-First Content Layout - Vertical Stacking */}
+                        <div className="relative z-10 p-4 h-full flex flex-col justify-between min-h-[200px]">
+                          {/* Top Section - Icon and Badge */}
+                          <div className="flex items-start justify-between mb-4">
+                            <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${insight.gradient} flex items-center justify-center shadow-glow-lg border border-white/30 flex-shrink-0`}>
+                              <insight.icon className="h-6 w-6 text-white drop-shadow-lg" />
+                            </div>
+                            <motion.div 
+                              className={`px-3 py-1.5 rounded-full bg-gradient-to-r ${insight.gradient} text-white font-bold text-sm shadow-glow-lg border border-white/30 flex-shrink-0`}
+                              animate={{ scale: [1, 1.08, 1] }}
+                              transition={{ duration: 3, repeat: Infinity }}
+                            >
+                              {insight.confidence}%
+                            </motion.div>
                           </div>
                           
-                          {/* Mobile-First Content Layout - Vertical Stacking */}
-                          <div className="relative z-10 p-4 h-full flex flex-col justify-between">
-                            {/* Top Section - Icon and Badge */}
-                            <div className="flex items-start justify-between mb-4">
-                              <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${insight.gradient} flex items-center justify-center shadow-glow-lg border border-white/30 flex-shrink-0`}>
-                                <insight.icon className="h-6 w-6 text-white drop-shadow-lg" />
-                              </div>
-                              <motion.div 
-                                className={`px-3 py-1.5 rounded-full bg-gradient-to-r ${insight.gradient} text-white font-bold text-sm shadow-glow-lg border border-white/30 flex-shrink-0`}
-                                animate={{ scale: [1, 1.1, 1] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                              >
-                                {insight.confidence}%
-                              </motion.div>
-                            </div>
-                            
-                            {/* Middle Section - Content (Vertically Stacked) */}
-                            <div className="flex-grow flex flex-col justify-center text-center mb-4">
-                              <h3 className="text-white font-bold text-lg mb-3 drop-shadow-lg leading-tight">
-                                {insight.title}
-                              </h3>
-                              <p className="text-gray-300 text-sm leading-relaxed mx-auto max-w-full">
-                                {insight.prediction}
-                              </p>
-                            </div>
-                            
-                            {/* Bottom Section - Centered Button */}
-                            <div className="flex justify-center">
-                              <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className={`w-full bg-gradient-to-r ${insight.gradient} text-white font-bold py-3 rounded-xl text-sm transition-all duration-300 shadow-glow hover:shadow-glow-lg border border-white/20 max-w-xs`}
-                              >
-                                {insight.action}
-                              </motion.button>
-                            </div>
+                          {/* Middle Section - Content (Vertically Stacked) */}
+                          <div className="flex-grow flex flex-col justify-center text-center mb-4">
+                            <h3 className="text-white font-bold text-lg mb-3 drop-shadow-lg leading-tight">
+                              {insight.title}
+                            </h3>
+                            <p className="text-gray-300 text-sm leading-relaxed mx-auto max-w-full">
+                              {insight.prediction}
+                            </p>
                           </div>
-                        </motion.div>
-                      </div>
-                    </div>
+                          
+                          {/* Bottom Section - Centered Button */}
+                          <div className="flex justify-center">
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              className={`w-full bg-gradient-to-r ${insight.gradient} text-white font-bold py-3 rounded-xl text-sm transition-all duration-300 shadow-glow hover:shadow-glow-lg border border-white/20 max-w-xs`}
+                            >
+                              {insight.action}
+                            </motion.button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </motion.div>
                   ))}
-                </motion.div>
+                </div>
 
                 {/* Bottom-Aligned AI Progress Dots - Mobile-First */}
                 <div className="flex justify-center items-center pt-4 pb-6">
