@@ -460,9 +460,17 @@ const Register = () => {
                           <motion.div
                             animate={{ rotate: [0, 10, -10, 0] }}
                             transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                            className="text-2xl"
+                            className="w-8 h-8 rounded-full overflow-hidden border-2 border-green-400/30"
                           >
-                            🎮
+                            <img
+                              src={`https://freefireinfo.vercel.app/icon?id=${validationState.playerInfo.head_pic || '1'}`}
+                              alt="Player Avatar"
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                // Fallback to emoji if image fails to load
+                                e.target.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center text-lg">🎮</div>';
+                              }}
+                            />
                           </motion.div>
                         </div>
                         
