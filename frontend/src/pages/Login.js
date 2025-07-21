@@ -136,9 +136,9 @@ const Login = () => {
               {/* Stats Cards */}
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { icon: Trophy, label: 'Tournaments', value: '89+', color: 'text-yellow-400' },
-                  { icon: Gamepad2, label: 'Players', value: '42K+', color: 'text-neon-blue' },
-                  { icon: Crown, label: 'Prize Pool', value: '₹4.8M', color: 'text-neon-green' }
+                  { icon: Trophy, label: 'Tournaments', value: '150+', color: 'text-yellow-400' },
+                  { icon: Gamepad2, label: 'Players', value: '45K+', color: 'text-neon-blue' },
+                  { icon: Crown, label: 'Prize Pool', value: '₹5M', color: 'text-neon-green' }
                 ].map((stat, index) => (
                   <motion.div
                     key={stat.label}
