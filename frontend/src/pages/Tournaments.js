@@ -95,7 +95,7 @@ const Tournaments = () => {
   useEffect(() => {
     loadTournaments();
     
-    // Check if desktop view
+    // Check if desktop view (removed auto-refresh)
     const checkScreenSize = () => {
       setIsDesktop(window.innerWidth >= 768);
     };
@@ -104,7 +104,7 @@ const Tournaments = () => {
     window.addEventListener('resize', checkScreenSize);
     
     return () => window.removeEventListener('resize', checkScreenSize);
-  }, [filters]);
+  }, []); // Removed filters dependency to prevent auto-refresh
 
   const loadTournaments = async () => {
     try {
