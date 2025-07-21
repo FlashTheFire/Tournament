@@ -54,7 +54,7 @@ const HamburgerDemo = () => {
               {/* Right: Mock Navigation */}
               <div className="flex items-center space-x-4">
                 <div className="glass rounded-xl px-4 py-2 border border-neon-green/30">
-                  <span className="text-neon-green font-semibold">₹25,000</span>
+                  <span className="text-neon-green font-semibold">₹50,000</span>
                 </div>
                 <div className="h-10 w-10 bg-gradient-to-br from-neon-purple to-electric-blue rounded-xl flex items-center justify-center">
                   <span className="text-white font-bold text-sm">U</span>
