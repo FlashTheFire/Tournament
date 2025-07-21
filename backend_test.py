@@ -108,9 +108,57 @@ class TournamentAPITester:
         else:
             self.log_result("Health Check", False, f"Status code: {response.status_code}")
 
+    def test_free_fire_validation_endpoint(self):
+        """Test Free Fire UID validation endpoint - NEW ENDPOINT"""
+        print("\n=== Testing Free Fire Validation Endpoint ===")
+        
+        # Test valid Free Fire UID with region
+        test_cases = [
+            {"uid": "4474991975", "region": "ind", "should_pass": True, "description": "Valid UID from review request"},
+            {"uid": "123456789", "region": "ind", "should_pass": True, "description": "Valid demo UID"},
+            {"uid": "invalid123", "region": "ind", "should_pass": False, "description": "Invalid UID"},
+            {"uid": "123456789", "region": "invalid", "should_pass": False, "description": "Invalid region"},
+        ]
+        
+        for test_case in test_cases:
+            params = {"uid": test_case["uid"], "region": test_case["region"]}
+            response, success, error = self.make_request("GET", "/validate-freefire", params=params)
+            
+            if not success:
+                self.log_result(f"Free Fire Validation ({test_case['description']})", False, f"Request failed: {error}")
+                continue
+            
+            if test_case["should_pass"]:
+                if response.status_code == 200:
+                    try:
+                        data = response.json()
+                        if data.get("valid") == True and "player_info" in data:
+                            player_info = data["player_info"]
+                            self.log_result(f"Free Fire Validation ({test_case['description']})", True, 
+                                          f"Valid UID: {player_info.get('nickname', 'Unknown')} (Level {player_info.get('level', 0)})")
+                        else:
+                            self.log_result(f"Free Fire Validation ({test_case['description']})", False, f"Invalid response format: {data}")
+                    except json.JSONDecodeError:
+                        self.log_result(f"Free Fire Validation ({test_case['description']})", False, "Invalid JSON response")
+                else:
+                    self.log_result(f"Free Fire Validation ({test_case['description']})", False, f"Expected 200, got {response.status_code}")
+            else:
+                # Should fail for invalid UIDs/regions
+                if response.status_code == 200:
+                    try:
+                        data = response.json()
+                        if data.get("valid") == False:
+                            self.log_result(f"Free Fire Validation ({test_case['description']})", True, f"Correctly rejected: {data.get('error', 'Unknown error')}")
+                        else:
+                            self.log_result(f"Free Fire Validation ({test_case['description']})", False, "Should have been rejected but was accepted")
+                    except json.JSONDecodeError:
+                        self.log_result(f"Free Fire Validation ({test_case['description']})", False, "Invalid JSON response")
+                else:
+                    self.log_result(f"Free Fire Validation ({test_case['description']})", True, f"Correctly rejected with status {response.status_code}")
+
     def test_user_registration(self):
-        """Test user registration"""
-        print("\n=== Testing User Registration ===")
+        """Test user registration with NEW Free Fire format"""
+        print("\n=== Testing User Registration (New Free Fire Format) ===")
         
         # Test data with unique email to avoid conflicts
         import time
@@ -118,9 +166,8 @@ class TournamentAPITester:
         user_data = {
             "email": f"testgamer{unique_id}@example.com",
             "password": "SecurePass123!",
-            "username": f"ProGamer{unique_id}",
-            "full_name": "Test Gamer",
-            "free_fire_uid": "123456789"
+            "free_fire_uid": "123456789",
+            "region": "ind"
         }
         
         response, success, error = self.make_request("POST", "/auth/register", user_data)
