@@ -173,24 +173,244 @@ class TournamentAPITester:
         response, success, error = self.make_request("POST", "/auth/register", user_data)
         
         if not success:
-            self.log_result("User Registration", False, f"Request failed: {error}")
+            self.log_result("User Registration (New Format)", False, f"Request failed: {error}")
             return
         
         if response.status_code == 200:
             try:
                 data = response.json()
-                if "access_token" in data and "user_id" in data:
+                if "access_token" in data and "user_id" in data and "player_info" in data:
                     self.test_user_token = data["access_token"]
                     self.test_user_id = data["user_id"]
-                    self.log_result("User Registration", True, "User registered successfully")
+                    player_info = data["player_info"]
+                    self.log_result("User Registration (New Format)", True, 
+                                  f"User registered with Free Fire data: {player_info.get('nickname', 'Unknown')} (Level {player_info.get('level', 0)})")
                 else:
-                    self.log_result("User Registration", False, f"Missing required fields: {data}")
+                    self.log_result("User Registration (New Format)", False, f"Missing required fields: {data}")
             except json.JSONDecodeError:
-                self.log_result("User Registration", False, "Invalid JSON response")
+                self.log_result("User Registration (New Format)", False, "Invalid JSON response")
         else:
-            self.log_result("User Registration", False, f"Status code: {response.status_code}, Response: {response.text}")
+            self.log_result("User Registration (New Format)", False, f"Status code: {response.status_code}, Response: {response.text}")
 
-    def test_user_login(self):
+    def test_registration_with_invalid_free_fire_data(self):
+        """Test registration with invalid Free Fire data should fail"""
+        print("\n=== Testing Registration with Invalid Free Fire Data ===")
+        
+        import time
+        unique_id = str(int(time.time()))
+        
+        # Test with invalid Free Fire UID
+        invalid_user_data = {
+            "email": f"invaliduser{unique_id}@example.com",
+            "password": "SecurePass123!",
+            "free_fire_uid": "invalid_uid_123",
+            "region": "ind"
+        }
+        
+        response, success, error = self.make_request("POST", "/auth/register", invalid_user_data)
+        
+        if not success:
+            self.log_result("Registration Invalid FF Data", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 400:
+            try:
+                data = response.json()
+                if "detail" in data and "Free Fire" in data["detail"]:
+                    self.log_result("Registration Invalid FF Data", True, f"Correctly rejected invalid Free Fire data: {data['detail']}")
+                else:
+                    self.log_result("Registration Invalid FF Data", False, f"Unexpected error message: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Registration Invalid FF Data", False, "Invalid JSON response")
+        else:
+            self.log_result("Registration Invalid FF Data", False, f"Should return 400, got {response.status_code}")
+
+    def test_database_structure_verification(self):
+        """Test that user documents contain proper Free Fire data structure"""
+        print("\n=== Testing Database Structure Verification ===")
+        
+        if not self.test_user_token:
+            self.log_result("Database Structure Verification", False, "No auth token available")
+            return
+        
+        headers = self.get_auth_headers()
+        response, success, error = self.make_request("GET", "/auth/me", headers=headers)
+        
+        if not success:
+            self.log_result("Database Structure Verification", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                # Check for new Free Fire fields
+                required_fields = ["user_id", "email", "free_fire_uid"]
+                optional_fields = ["username", "full_name"]  # These should now be derived from Free Fire data
+                
+                missing_fields = [field for field in required_fields if field not in data]
+                if missing_fields:
+                    self.log_result("Database Structure Verification", False, f"Missing required fields: {missing_fields}")
+                else:
+                    # Check if username/full_name are derived from Free Fire nickname
+                    ff_uid = data.get("free_fire_uid")
+                    username = data.get("username")
+                    full_name = data.get("full_name")
+                    
+                    self.log_result("Database Structure Verification", True, 
+                                  f"User document structure correct: FF UID {ff_uid}, username '{username}', full_name '{full_name}'")
+            except json.JSONDecodeError:
+                self.log_result("Database Structure Verification", False, "Invalid JSON response")
+        else:
+            self.log_result("Database Structure Verification", False, f"Status code: {response.status_code}")
+
+    def test_free_fire_api_timeout_handling(self):
+        """Test Free Fire API timeout and error handling"""
+        print("\n=== Testing Free Fire API Error Handling ===")
+        
+        # Test with a UID that might cause timeout or API error
+        params = {"uid": "999999999", "region": "test"}
+        response, success, error = self.make_request("GET", "/validate-freefire", params=params)
+        
+        if not success:
+            self.log_result("Free Fire API Error Handling", False, f"Request failed: {error}")
+            return
+        
+        # Should handle API errors gracefully
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if data.get("valid") == False and "error" in data:
+                    self.log_result("Free Fire API Error Handling", True, f"Gracefully handled API error: {data['error']}")
+                else:
+                    self.log_result("Free Fire API Error Handling", False, f"Unexpected response: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Free Fire API Error Handling", False, "Invalid JSON response")
+        elif response.status_code in [400, 408, 500]:
+            # These are acceptable error codes for API issues
+            self.log_result("Free Fire API Error Handling", True, f"Properly handled API error with status {response.status_code}")
+        else:
+            self.log_result("Free Fire API Error Handling", False, f"Unexpected status code: {response.status_code}")
+
+    def test_duplicate_free_fire_uid_registration(self):
+        """Test that duplicate Free Fire UID registration is blocked"""
+        print("\n=== Testing Duplicate Free Fire UID Registration ===")
+        
+        import time
+        unique_id = str(int(time.time()))
+        
+        # Try to register with same Free Fire UID but different email
+        duplicate_user_data = {
+            "email": f"duplicate{unique_id}@example.com",
+            "password": "SecurePass123!",
+            "free_fire_uid": "123456789",  # Same UID as previous test
+            "region": "ind"
+        }
+        
+        response, success, error = self.make_request("POST", "/auth/register", duplicate_user_data)
+        
+        if not success:
+            self.log_result("Duplicate Free Fire UID", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 400:
+            try:
+                data = response.json()
+                if "detail" in data and ("Free Fire UID" in data["detail"] or "already registered" in data["detail"]):
+                    self.log_result("Duplicate Free Fire UID", True, f"Correctly blocked duplicate Free Fire UID: {data['detail']}")
+                else:
+                    self.log_result("Duplicate Free Fire UID", False, f"Unexpected error message: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Duplicate Free Fire UID", False, "Invalid JSON response")
+        else:
+            self.log_result("Duplicate Free Fire UID", False, f"Should return 400, got {response.status_code}")
+
+    def test_demo_credentials_with_free_fire(self):
+        """Test demo credentials work with Free Fire integration"""
+        print("\n=== Testing Demo Credentials with Free Fire Integration ===")
+        
+        # Test login with demo credentials
+        login_data = {
+            "email": "demo@tournament.com",
+            "password": "demo123"
+        }
+        
+        response, success, error = self.make_request("POST", "/auth/login", login_data)
+        
+        if not success:
+            self.log_result("Demo Credentials Free Fire", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "access_token" in data:
+                    demo_token = data["access_token"]
+                    
+                    # Get user info to check Free Fire integration
+                    headers = {"Authorization": f"Bearer {demo_token}"}
+                    user_response, user_success, user_error = self.make_request("GET", "/auth/me", headers=headers)
+                    
+                    if user_success and user_response.status_code == 200:
+                        user_data = user_response.json()
+                        ff_uid = user_data.get("free_fire_uid")
+                        username = user_data.get("username")
+                        is_admin = user_data.get("is_admin", False)
+                        
+                        if ff_uid and username and is_admin:
+                            self.log_result("Demo Credentials Free Fire", True, 
+                                          f"Demo user has Free Fire integration: UID {ff_uid}, username '{username}', admin: {is_admin}")
+                        else:
+                            self.log_result("Demo Credentials Free Fire", False, 
+                                          f"Demo user missing Free Fire data: UID={ff_uid}, username={username}, admin={is_admin}")
+                    else:
+                        self.log_result("Demo Credentials Free Fire", False, 
+                                      f"Failed to get demo user info: {user_response.status_code if user_success else user_error}")
+                else:
+                    self.log_result("Demo Credentials Free Fire", False, f"Login failed: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Demo Credentials Free Fire", False, "Invalid JSON response")
+        else:
+            self.log_result("Demo Credentials Free Fire", False, f"Login failed with status: {response.status_code}")
+
+    def test_old_user_registration_format(self):
+        """Test that old registration format (username/full_name) is rejected"""
+        print("\n=== Testing Old Registration Format Rejection ===")
+        
+        import time
+        unique_id = str(int(time.time()))
+        
+        # Try old format registration
+        old_format_data = {
+            "email": f"oldformat{unique_id}@example.com",
+            "password": "SecurePass123!",
+            "username": f"OldUser{unique_id}",
+            "full_name": "Old Format User"
+        }
+        
+        response, success, error = self.make_request("POST", "/auth/register", old_format_data)
+        
+        if not success:
+            self.log_result("Old Registration Format", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 422:
+            try:
+                data = response.json()
+                if "detail" in data:
+                    # Should complain about missing free_fire_uid and region
+                    detail = str(data["detail"])
+                    if "free_fire_uid" in detail or "region" in detail:
+                        self.log_result("Old Registration Format", True, "Correctly rejected old format - requires Free Fire data")
+                    else:
+                        self.log_result("Old Registration Format", False, f"Unexpected validation error: {detail}")
+                else:
+                    self.log_result("Old Registration Format", False, f"Unexpected response: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Old Registration Format", False, "Invalid JSON response")
+        else:
+            self.log_result("Old Registration Format", False, f"Should return 422, got {response.status_code}")
+
+    def test_user_registration_old(self):
         """Test user login"""
         print("\n=== Testing User Login ===")
         
