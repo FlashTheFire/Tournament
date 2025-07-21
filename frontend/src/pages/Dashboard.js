@@ -205,7 +205,7 @@ const Dashboard = () => {
                 value: `₹${dashboardData.stats.totalWinnings.toLocaleString()}`,
                 icon: DollarSign,
                 color: 'from-green-500 to-emerald-600',
-                change: '+₹2,500 this week'
+                change: '+₹5,000 this week'
               },
               {
                 title: 'Current Rank',
