@@ -1461,16 +1461,24 @@ async def health_check():
 
 @app.post("/api/auth/register")
 async def register(user_data: UserCreate):
-    # Check if user exists
+    # Validate Free Fire UID and region first
+    try:
+        player_info = await validate_free_fire_uid(user_data.free_fire_uid, user_data.region)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Free Fire validation error: {str(e)}")
+    
+    # Check if user exists (by email or Free Fire UID)
     existing_user = users_collection.find_one({"email": user_data.email})
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     
-    existing_username = users_collection.find_one({"username": user_data.username})
-    if existing_username:
-        raise HTTPException(status_code=400, detail="Username already taken")
+    existing_ff_user = users_collection.find_one({"free_fire_uid": user_data.free_fire_uid})
+    if existing_ff_user:
+        raise HTTPException(status_code=400, detail="Free Fire UID already registered")
     
-    # Create new user
+    # Create new user with validated Free Fire data
     user_id = str(uuid.uuid4())
     hashed_password = hash_password(user_data.password)
     
@@ -1480,13 +1488,16 @@ async def register(user_data: UserCreate):
     user_doc = {
         "user_id": user_id,
         "email": user_data.email,
-        "username": user_data.username,
-        "full_name": user_data.full_name,
         "password_hash": hashed_password,
         "free_fire_uid": user_data.free_fire_uid,
+        "region": user_data.region.upper(),
+        # Use Free Fire nickname as username and full_name
+        "username": player_info["nickname"],
+        "full_name": player_info["nickname"],
+        "player_info": player_info,
         "wallet_balance": 0.0,
-        "is_verified": False,
-        "is_admin": is_admin,  # Make demo@tournament.com admin automatically
+        "is_verified": True,  # Auto-verified since Free Fire UID is validated
+        "is_admin": is_admin,
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
     }
@@ -1500,7 +1511,13 @@ async def register(user_data: UserCreate):
         "message": "User registered successfully",
         "access_token": access_token,
         "user_id": user_id,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "player_info": {
+            "nickname": player_info["nickname"],
+            "level": player_info["level"],
+            "rank": player_info["rank"],
+            "region": player_info["region"]
+        }
     }
 
 @app.post("/api/auth/login")
