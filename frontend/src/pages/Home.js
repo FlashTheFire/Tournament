@@ -150,7 +150,26 @@ const Home = () => {
   const loadAIPredictions = async () => {
     try {
       const data = await apiService.getAIPredictions();
-      setAiPredictions(data.predictions || []);
+      const predictions = data.predictions || [];
+      
+      // Map icon strings to React components
+      const iconMap = {
+        'Brain': Brain,
+        'Target': Target,
+        'Trophy': Trophy,
+        'Zap': Zap,
+        'Crown': Crown,
+        'Shield': Shield,
+        'Star': Star
+      };
+      
+      // Process predictions and add React icon components
+      const processedPredictions = predictions.map(prediction => ({
+        ...prediction,
+        icon: iconMap[prediction.icon] || Brain // Default to Brain if icon not found
+      }));
+      
+      setAiPredictions(processedPredictions);
     } catch (error) {
       console.error('Failed to load AI predictions:', error);
       // Fallback to default predictions
