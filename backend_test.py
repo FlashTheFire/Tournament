@@ -1155,6 +1155,18 @@ class TournamentAPITester:
         self.test_invalid_credentials()
         self.test_duplicate_registration()
         
+        # NEW ENDPOINTS TESTING - As requested in review
+        print("\n" + "=" * 60)
+        print("🎯 TESTING NEW DATABASE-DRIVEN ENDPOINTS")
+        print("=" * 60)
+        
+        self.test_live_stats_api()
+        self.test_ai_predictions_api()
+        self.test_dashboard_data_api()
+        self.test_admin_account_verification()
+        self.test_tournament_data_verification()
+        self.test_leaderboard_data_verification()
+        
         # AI-powered features testing
         print("\n" + "=" * 60)
         print("🤖 TESTING AI-POWERED FEATURES")
