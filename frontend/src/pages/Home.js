@@ -464,9 +464,9 @@ const Home = () => {
 
         {/* Battle Map */}
         <div className="absolute bottom-4 lg:bottom-6 left-4 lg:left-6">
-          <div className="flex items-center space-x-2 text-white/90 mb-2">
-            <MapPin className="h-4 w-4 text-neon-green" />
-            <span className="text-sm lg:text-base font-medium backdrop-blur-sm px-2 py-1 rounded">
+          <div className="flex items-center space-x-2 text-white/90 mb-1">
+            <MapPin className="h-3 w-3 text-neon-green" />
+            <span className="text-xs lg:text-sm font-medium backdrop-blur-sm px-2 py-0.5 rounded">
               {tournament.battle_map}
             </span>
           </div>
@@ -474,24 +474,24 @@ const Home = () => {
         
         {/* Tournament Title */}
         <div className="absolute bottom-4 lg:bottom-6 left-4 lg:left-6 right-4 lg:right-6">
-          <h3 className="text-white font-bold text-lg lg:text-xl xl:text-2xl mb-4 drop-shadow-2xl leading-tight">
+          <h3 className="text-white font-bold text-base lg:text-lg xl:text-xl mb-2 drop-shadow-2xl leading-tight">
             {tournament.name}
           </h3>
           
           {/* Mobile: Stack info vertically for space efficiency */}
-          <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:items-center sm:justify-between">
+          <div className="flex flex-col space-y-1 sm:flex-row sm:space-y-0 sm:items-center sm:justify-between">
             <motion.div 
-              className="flex items-center space-x-2 backdrop-blur-lg px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-white/30"
+              className="flex items-center space-x-2 backdrop-blur-lg px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-white/30"
               whileHover={{ scale: 1.05 }}
             >
-              <Users className="h-4 w-4 sm:h-5 sm:w-5 text-neon-blue" />
+              <Users className="h-3 w-3 sm:h-4 sm:w-4 text-neon-blue" />
               <span className="text-white font-bold text-xs sm:text-sm">{tournament.current_participants}/{tournament.max_participants}</span>
             </motion.div>
             <motion.div 
-              className="flex items-center space-x-2 backdrop-blur-lg px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-white/30"
+              className="flex items-center space-x-2 backdrop-blur-lg px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-white/30"
               whileHover={{ scale: 1.05 }}
             >
-              <Crosshair className="h-4 w-4 sm:h-5 sm:w-5 text-neon-green" />
+              <Crosshair className="h-3 w-3 sm:h-4 sm:w-4 text-neon-green" />
               <span className="text-white font-bold text-xs sm:text-sm">₹{tournament.entry_fee}</span>
             </motion.div>
           </div>
