@@ -314,9 +314,9 @@ const Register = () => {
                   />
                 </div>
 
-                {/* Free Fire UID and Region Row */}
-                <div className="grid grid-cols-3 gap-3 lg:gap-4">
-                  <div className="col-span-2">
+                {/* Free Fire UID and Region Row - Equal column widths */}
+                <div className="grid grid-cols-2 gap-3 lg:gap-4">
+                  <div>
                     <label htmlFor="free_fire_uid" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
                       <User className="h-3 w-3 text-neon-blue" />
                       <span>Free Fire UID</span>
@@ -326,9 +326,18 @@ const Register = () => {
                         id="free_fire_uid"
                         name="free_fire_uid"
                         type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                         required
                         value={formData.free_fire_uid}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          // Only allow numeric input
+                          const numericValue = e.target.value.replace(/[^0-9]/g, '');
+                          setFormData(prev => ({
+                            ...prev,
+                            free_fire_uid: numericValue
+                          }));
+                        }}
                         className={`w-full px-4 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-300 text-sm lg:text-base ${
                           validationState.uidValidation === 'valid' ? 'focus:ring-green-500 border-green-500' :
                           validationState.uidValidation === 'invalid' ? 'focus:ring-red-500 border-red-500' :
@@ -366,7 +375,7 @@ const Register = () => {
                       name="region"
                       value={formData.region}
                       onChange={handleChange}
-                      className="w-full px-3 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-neon-purple transition-all duration-300 text-sm lg:text-base bg-cosmic-dark"
+                      className="w-full px-4 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-neon-purple transition-all duration-300 text-sm lg:text-base bg-cosmic-dark"
                     >
                       {regions.map(region => (
                         <option key={region.code} value={region.code} className="bg-cosmic-dark text-white">
