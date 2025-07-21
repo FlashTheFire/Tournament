@@ -103,29 +103,21 @@ const Home = () => {
     }
   };
 
-  // Manual Navigation Functions
+  // Manual Navigation Functions - Auto-play disabled
   const nextAiSlide = () => {
-    setIsAiAutoPlaying(false);
     setAiCurrentIndex((prev) => (prev + 1) % aiPredictions.length);
-    setTimeout(() => setIsAiAutoPlaying(true), 5000);
   };
 
   const prevAiSlide = () => {
-    setIsAiAutoPlaying(false);
     setAiCurrentIndex((prev) => (prev - 1 + aiPredictions.length) % aiPredictions.length);
-    setTimeout(() => setIsAiAutoPlaying(true), 5000);
   };
 
   const nextTournamentSlide = () => {
-    setIsTournamentAutoPlaying(false);
     setTournamentCurrentIndex((prev) => (prev + 1) % Math.min(tournaments.length, 3));
-    setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
   };
 
   const prevTournamentSlide = () => {
-    setIsTournamentAutoPlaying(false);
     setTournamentCurrentIndex((prev) => (prev - 1 + Math.min(tournaments.length, 3)) % Math.min(tournaments.length, 3));
-    setTimeout(() => setIsTournamentAutoPlaying(true), 5000);
   };
 
   const loadData = async () => {
