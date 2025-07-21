@@ -132,45 +132,7 @@ const Home = () => {
   const loadTournaments = async () => {
     try {
       const data = await apiService.getTournaments();
-      const mockTournaments = [
-        {
-          tournament_id: 'ff-legends-cup',
-          name: 'Free Fire Legends Cup 2025',
-          prize_pool: 100000,
-          current_participants: 1240,
-          max_participants: 2000,
-          entry_fee: 500,
-          status: 'live',
-          start_time: new Date().toISOString(),
-          battle_map: 'Bermuda Remastered',
-          game_type: 'battle_royale'
-        },
-        {
-          tournament_id: 'clash-masters',
-          name: 'Clash Squad Masters',
-          prize_pool: 50000,
-          current_participants: 856,
-          max_participants: 1000,
-          entry_fee: 250,
-          status: 'upcoming',
-          start_time: new Date(Date.now() + 86400000).toISOString(),
-          battle_map: 'Purgatory',
-          game_type: 'clash_squad'
-        },
-        {
-          tournament_id: 'weekly-warriors',
-          name: 'Weekly Warriors Challenge',
-          prize_pool: 25000,
-          current_participants: 445,
-          max_participants: 500,
-          entry_fee: 150,
-          status: 'upcoming',
-          start_time: new Date(Date.now() + 172800000).toISOString(),
-          battle_map: 'Kalahari',
-          game_type: 'solo'
-        }
-      ];
-      setTournaments([...mockTournaments, ...(data.tournaments || [])]);
+      setTournaments(data.tournaments || []);
     } catch (error) {
       console.error('Failed to load tournaments:', error);
     }
@@ -179,63 +141,74 @@ const Home = () => {
   const loadLeaderboard = async () => {
     try {
       const data = await apiService.getLeaderboard();
-      const mockLeaderboard = [
-        { rank: 1, username: 'FF_LEGEND_2025', points: 24500, matches: 156, wins: 124 },
-        { rank: 2, username: 'BOOYAH_MASTER', points: 23800, matches: 142, wins: 118 },
-        { rank: 3, username: 'HEADSHOT_KING', points: 22950, matches: 134, wins: 109 },
-        { rank: 4, username: 'ELITE_SNIPER', points: 22100, matches: 128, wins: 102 },
-        { rank: 5, username: 'SQUAD_LEADER', points: 21650, matches: 125, wins: 98 }
-      ];
-      setLeaderboard([...mockLeaderboard, ...(data.leaderboard || [])]);
+      setLeaderboard(data.leaderboard || []);
     } catch (error) {
       console.error('Failed to load leaderboard:', error);
     }
   };
 
   const loadAIPredictions = async () => {
-    const mockPredictions = [
-      {
-        id: 'ai-1',
-        type: 'matchmaking',
-        title: 'Smart Match Ready',
-        prediction: 'Perfect opponents found with 94% skill match',
-        confidence: 94,
-        action: 'Start Battle',
-        icon: Brain,
-        gradient: 'from-cyan-500 to-blue-600'
-      },
-      {
-        id: 'ai-2',
-        type: 'performance',
-        title: 'Win Probability',
-        prediction: 'High chance of victory in next tournament',
-        confidence: 78,
-        action: 'View Strategy',
-        icon: Target,
-        gradient: 'from-green-500 to-emerald-600'
-      },
-      {
-        id: 'ai-3',
-        type: 'tournament',
-        title: 'Tournament Alert',
-        prediction: 'New high-prize tournament in 2 hours',
-        confidence: 100,
-        action: 'Register Now',
-        icon: Trophy,
-        gradient: 'from-yellow-500 to-orange-600'
-      }
-    ];
-    setAiPredictions(mockPredictions);
+    try {
+      const data = await apiService.getAIPredictions();
+      setAiPredictions(data.predictions || []);
+    } catch (error) {
+      console.error('Failed to load AI predictions:', error);
+      // Fallback to default predictions
+      const defaultPredictions = [
+        {
+          id: 'ai-1',
+          type: 'matchmaking',
+          title: 'Smart Match Ready',
+          prediction: 'Perfect opponents found with 94% skill match',
+          confidence: 94,
+          action: 'Start Battle',
+          icon: Brain,
+          gradient: 'from-cyan-500 to-blue-600'
+        },
+        {
+          id: 'ai-2',
+          type: 'performance',
+          title: 'Win Probability',
+          prediction: 'High chance of victory in next tournament',
+          confidence: 78,
+          action: 'View Strategy',
+          icon: Target,
+          gradient: 'from-green-500 to-emerald-600'
+        },
+        {
+          id: 'ai-3',
+          type: 'tournament',
+          title: 'Tournament Alert',
+          prediction: 'New high-prize tournament in 2 hours',
+          confidence: 100,
+          action: 'Register Now',
+          icon: Trophy,
+          gradient: 'from-yellow-500 to-orange-600'
+        }
+      ];
+      setAiPredictions(defaultPredictions);
+    }
   };
 
   const loadLiveStats = async () => {
-    const stats = {
-      totalTournaments: 89,
-      totalPrizePool: 4800000,
-      activePlayers: 42000,
-      liveMatches: 156
-    };
-    setLiveStats(stats);
+    try {
+      const data = await apiService.getLiveStats();
+      setLiveStats({
+        totalTournaments: data.totalTournaments,
+        totalPrizePool: data.totalPrizePool,
+        activePlayers: data.activePlayers,
+        liveMatches: data.liveMatches
+      });
+    } catch (error) {
+      console.error('Failed to load live stats:', error);
+      // Keep default stats as fallback
+      setLiveStats({
+        totalTournaments: 89,
+        totalPrizePool: 4800000,
+        activePlayers: 42000,
+        liveMatches: 156
+      });
+    }
   };
 
   const updateLiveStats = () => {
