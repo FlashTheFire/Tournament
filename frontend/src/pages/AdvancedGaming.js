@@ -83,7 +83,7 @@ const AdvancedGaming = () => {
     totalPlayers: 12847,
     activeTournaments: 23,
     liveMatches: 67,
-    prizePools: '₹2,45,000',
+    prizePools: '₹500K',
     winRateImprovement: '23%',
     avgSkillIncrease: '+156'
   };
