@@ -217,7 +217,7 @@ const Dashboard = () => {
               },
               {
                 title: 'Win Rate',
-                value: `${dashboardData.stats.winRate}%`,
+                value: formatPercentage(dashboardData.stats.winRate),
                 icon: Target,
                 color: 'from-red-500 to-pink-600',
                 change: '+5% this month'
