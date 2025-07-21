@@ -398,7 +398,7 @@ const Dashboard = () => {
                         {new Date(tournament.date).toLocaleDateString()}
                       </span>
                       <span className="text-gray-400">{tournament.participants} participants</span>
-                      <span className="text-yellow-400">₹{tournament.prize.toLocaleString()} prize pool</span>
+                      <span className="text-yellow-400">{formatPrizePool(tournament.prize)} prize pool</span>
                     </div>
                   </div>
                   
