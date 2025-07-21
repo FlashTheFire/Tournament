@@ -673,12 +673,14 @@ const Tournaments = () => {
         ) : (
           <AnimatePresence>
             <div className="
-              /* Mobile: single column with tight spacing */
-              grid grid-cols-1 gap-4
+              /* Mobile: single column with tight spacing, centered cards */
+              grid grid-cols-1 gap-4 place-items-center
               /* Tablet: 2 columns with normal spacing */
               md:grid-cols-2 md:gap-6
               /* Desktop: 3 columns with spacious layout */
               xl:grid-cols-3 xl:gap-8
+              /* Container constraints */
+              max-w-[2000px] mx-auto
             ">
               {tournaments.length > 0 ? (
                 tournaments.map((tournament, index) => (
