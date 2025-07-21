@@ -107,8 +107,15 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
 
+    // Validate Free Fire UID is valid
+    if (validationState.uidValidation !== 'valid') {
+      safeToast.error('Please enter a valid Free Fire UID and region');
+      setLoading(false);
+      return;
+    }
+
     // Validate passwords match
-    if (formData.password !== formData.confirmPassword) {
+    if (validationState.passwordMatch !== 'match') {
       safeToast.error('Passwords do not match');
       setLoading(false);
       return;
@@ -125,18 +132,21 @@ const Register = () => {
       const userData = {
         email: formData.email,
         password: formData.password,
-        username: formData.username,
-        full_name: formData.full_name,
-        free_fire_uid: formData.free_fire_uid || null
+        free_fire_uid: formData.free_fire_uid,
+        region: formData.region
       };
 
       const result = await register(userData);
       if (result.success) {
-        safeToast.success('Welcome to the Arena! Account created successfully! 🎉🔥');
-        // Navigate to home page after successful registration
+        safeToast.success(`Welcome to the Arena, ${validationState.playerInfo?.nickname}! 🎉🔥`);
         navigate('/');
       } else {
-        safeToast.error(result.error || 'Registration failed. Please try again.');
+        // Check if it's a validation error from backend
+        if (result.error && result.error.includes('Free Fire')) {
+          safeToast.error(result.error);
+        } else {
+          safeToast.error(result.error || 'Registration failed. Please try again.');
+        }
       }
     } catch (error) {
       console.error('Registration error:', error);
