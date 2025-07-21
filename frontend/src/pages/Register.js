@@ -377,6 +377,48 @@ const Register = () => {
                   </div>
                 </div>
 
+                {/* UID Validation Error Display */}
+                <AnimatePresence>
+                  {validationState.uidValidation === 'invalid' && formData.free_fire_uid && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, height: 'auto', scale: 1 }}
+                      exit={{ opacity: 0, height: 0, scale: 0.95 }}
+                      className="relative overflow-hidden rounded-xl bg-gradient-to-r from-red-500/10 via-orange-500/10 to-red-500/10 border border-red-500/30 backdrop-blur-xl"
+                    >
+                      {/* Animated Background Elements */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-red-400/5 via-orange-400/5 to-red-400/5"></div>
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-400 via-orange-400 to-red-400"></div>
+                      
+                      {/* Main Content */}
+                      <div className="relative p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <motion.div
+                              initial={{ scale: 0, rotate: 180 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              className="w-6 h-6 bg-gradient-to-r from-red-400 to-red-600 rounded-full flex items-center justify-center shadow-lg shadow-red-400/30"
+                            >
+                              <AlertCircle className="h-4 w-4 text-white" />
+                            </motion.div>
+                            <div>
+                              <h4 className="text-red-400 font-bold text-sm">Invalid UID or Region</h4>
+                              <p className="text-gray-400 text-xs">Please check your Free Fire UID and region</p>
+                            </div>
+                          </div>
+                          <motion.div
+                            animate={{ rotate: [0, -10, 10, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                            className="text-xl"
+                          >
+                            ⚠️
+                          </motion.div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {/* Advanced Player Info Display */}
                 <AnimatePresence>
                   {validationState.uidValidation === 'valid' && validationState.playerInfo && (
