@@ -460,8 +460,8 @@ class TournamentAPITester:
             try:
                 data = response.json()
                 if "user_id" in data and "email" in data:
-                    username = data.get("username", "Unknown")
-                    self.log_result("Get Current User", True, f"User info retrieved: {username}")
+                    email = data.get("email", "Unknown")
+                    self.log_result("Get Current User", True, f"User info retrieved: {email}")
                 else:
                     self.log_result("Get Current User", False, f"Missing required fields: {data}")
             except json.JSONDecodeError:
