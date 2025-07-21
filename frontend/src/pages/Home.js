@@ -281,7 +281,7 @@ const Home = () => {
     }));
   };
 
-  const StatCard = ({ icon: Icon, label, value, description, color, trend }) => (
+  const StatCard = ({ icon: Icon, label, value, description, color, trend, index }) => (
     <motion.div
       className={`relative overflow-hidden rounded-2xl lg:rounded-3xl p-6 lg:p-8 text-center border border-white/10 ${color} shadow-2xl backdrop-blur-xl`}
       whileHover={{ scale: 1.05, y: -10 }}
@@ -305,7 +305,7 @@ const Home = () => {
             repeat: Infinity,
             repeatDelay: 3,
             ease: "easeInOut",
-            delay: index * 0.5
+            delay: (index || 0) * 0.5
           }}
           style={{ width: '120%' }}
         />
