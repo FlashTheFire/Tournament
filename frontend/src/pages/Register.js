@@ -474,14 +474,14 @@ const Register = () => {
                           </motion.div>
                         </div>
                         
-                        {/* Player Stats Grid */}
-                        <div className="grid grid-cols-2 gap-3 lg:gap-4">
+                        {/* Player Stats Grid with reduced spacing */}
+                        <div className="grid grid-cols-2 gap-2 lg:gap-3">
                           {/* Nickname Card */}
                           <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="glass rounded-lg p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20"
+                            className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20"
                           >
                             <div className="flex items-center space-x-2 mb-1">
                               <User className="h-3 w-3 text-blue-400" />
@@ -492,10 +492,10 @@ const Register = () => {
                           
                           {/* Level Card */}
                           <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="glass rounded-lg p-3 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-400/20"
+                            className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-400/20"
                           >
                             <div className="flex items-center space-x-2 mb-1">
                               <Star className="h-3 w-3 text-yellow-400" />
@@ -504,26 +504,26 @@ const Register = () => {
                             <p className="text-white font-bold text-sm">{validationState.playerInfo.level}</p>
                           </motion.div>
                           
-                          {/* Rank Card */}
+                          {/* Guild Card */}
                           <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="glass rounded-lg p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-400/20"
+                            className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-400/20"
                           >
                             <div className="flex items-center space-x-2 mb-1">
                               <Crown className="h-3 w-3 text-purple-400" />
-                              <span className="text-gray-400 text-xs font-medium">Rank</span>
+                              <span className="text-gray-400 text-xs font-medium">Guild</span>
                             </div>
-                            <p className="text-white font-bold text-sm">#{validationState.playerInfo.rank}</p>
+                            <p className="text-white font-bold text-sm">{validationState.playerInfo.clan_name} {validationState.playerInfo.clan_level} level</p>
                           </motion.div>
                           
                           {/* Region Card */}
                           <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}
-                            className="glass rounded-lg p-3 bg-gradient-to-br from-green-500/10 to-teal-500/10 border border-green-400/20"
+                            className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-green-500/10 to-teal-500/10 border border-green-400/20"
                           >
                             <div className="flex items-center space-x-2 mb-1">
                               <MapPin className="h-3 w-3 text-green-400" />
