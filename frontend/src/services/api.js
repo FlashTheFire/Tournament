@@ -212,6 +212,38 @@ export const apiService = {
     return response;
   },
 
+  // Alias for consistency with Home.js
+  async getLeaderboard(gameType = 'free_fire', tournamentId = null, limit = 50) {
+    return this.getLeaderboards(gameType, tournamentId, limit);
+  },
+
+  // =====================
+  // Live Stats APIs
+  // =====================
+
+  async getLiveStats() {
+    const response = await api.get('/api/live-stats');
+    return response;
+  },
+
+  // =====================
+  // AI Predictions APIs
+  // =====================
+
+  async getAIPredictions() {
+    const response = await api.get('/api/ai-predictions');
+    return response;
+  },
+
+  // =====================
+  // Dashboard APIs
+  // =====================
+
+  async getDashboardData() {
+    const response = await api.get('/api/dashboard-data');
+    return response;
+  },
+
   // =====================
   // AI Analytics APIs
   // =====================
