@@ -22,6 +22,7 @@ import {
   Shield
 } from 'lucide-react';
 import safeToast from '../utils/safeToast';
+import { formatNumber, formatCurrency, formatPrizePool } from '../utils/numberFormatter';
 
 const DemoAccess = () => {
   const { login } = useAuth();
