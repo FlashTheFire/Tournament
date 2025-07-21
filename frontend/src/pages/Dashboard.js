@@ -203,7 +203,7 @@ const Dashboard = () => {
               },
               {
                 title: 'Total Winnings',
-                value: `₹${dashboardData.stats.totalWinnings.toLocaleString()}`,
+                value: formatPrizePool(dashboardData.stats.totalWinnings),
                 icon: DollarSign,
                 color: 'from-green-500 to-emerald-600',
                 change: '+₹5,000 this week'
