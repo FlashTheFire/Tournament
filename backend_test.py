@@ -410,7 +410,7 @@ class TournamentAPITester:
         else:
             self.log_result("Old Registration Format", False, f"Should return 422, got {response.status_code}")
 
-    def test_user_registration_old(self):
+    def test_user_login(self):
         """Test user login - kept for compatibility"""
         print("\n=== Testing User Login ===")
         
@@ -441,13 +441,35 @@ class TournamentAPITester:
         else:
             self.log_result("User Login", False, f"Status code: {response.status_code}, Response: {response.text}")
 
-    def test_user_login(self):
+    def test_get_current_user(self):
         """Test get current user info"""
         print("\n=== Testing Get Current User ===")
         
         if not self.test_user_token:
             self.log_result("Get Current User", False, "No auth token available")
             return
+        
+        headers = self.get_auth_headers()
+        response, success, error = self.make_request("GET", "/auth/me", headers=headers)
+        
+        if not success:
+            self.log_result("Get Current User", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "user_id" in data and "email" in data:
+                    username = data.get("username", "Unknown")
+                    self.log_result("Get Current User", True, f"User info retrieved: {username}")
+                else:
+                    self.log_result("Get Current User", False, f"Missing required fields: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Get Current User", False, "Invalid JSON response")
+        else:
+            self.log_result("Get Current User", False, f"Status code: {response.status_code}")
+
+    def test_free_fire_verification(self):
         
         headers = self.get_auth_headers()
         response, success, error = self.make_request("GET", "/auth/me", headers=headers)
