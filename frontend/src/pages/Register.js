@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, User, Eye, EyeOff, UserPlus, Trophy, Gamepad2, Zap, Crown, Shield, Star } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, UserPlus, Trophy, Gamepad2, Zap, Crown, Shield, Star, User, MapPin, CheckCircle, AlertCircle, Clock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import safeToast from '../utils/safeToast';
+import { apiService } from '../services/api';
 
 const Register = () => {
   const [formData, setFormData] = useState({
