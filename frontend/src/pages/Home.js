@@ -498,28 +498,28 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="space-y-4 sm:space-y-6
+      <div className="space-y-3 sm:space-y-4
         /* Mobile: compact padding */
         p-4
         /* Desktop: spacious padding */
-        lg:p-8
+        lg:p-6
       ">
         <Link
           to={`/tournaments/${tournament.tournament_id}`}
           className="block w-full btn-premium text-center ripple mobile-friendly group relative z-10 overflow-hidden
             /* Mobile: smaller button */
-            py-3 px-4 text-sm
+            py-2.5 px-4 text-sm
             /* Desktop: larger button */
-            lg:py-4 lg:px-6 lg:text-base
+            lg:py-3 lg:px-6 lg:text-base
           "
         >
           <motion.div 
-            className="flex items-center justify-center space-x-2 sm:space-x-4"
+            className="flex items-center justify-center space-x-2 sm:space-x-3"
             whileHover={{ scale: 1.02 }}
           >
-            <Gamepad2 className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-12 transition-transform" />
+            <Gamepad2 className="h-4 w-4 sm:h-5 sm:w-5 group-hover:rotate-12 transition-transform" />
             <span className="font-black tracking-wide">ENTER BATTLE</span>
-            <Flame className="h-5 w-5 sm:h-6 sm:w-6 group-hover:animate-pulse" />
+            <Flame className="h-4 w-4 sm:h-5 sm:w-5 group-hover:animate-pulse" />
           </motion.div>
         </Link>
       </div>
