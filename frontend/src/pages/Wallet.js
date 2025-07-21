@@ -200,7 +200,7 @@ const Wallet = () => {
             {[
               {
                 title: 'Total Earnings',
-                value: '₹47,250',
+                value: '₹85,500',
                 icon: TrendingUp,
                 color: 'from-neon-blue to-electric-blue',
                 description: 'Tournament winnings'
