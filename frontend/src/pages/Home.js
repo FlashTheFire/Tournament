@@ -797,10 +797,6 @@ const Home = () => {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={() => handleTouchEnd('ai')}
-                style={{
-                  scrollSnapType: 'x mandatory',
-                  scrollBehavior: 'smooth'
-                }}
               >
                 {/* Professional carousel container - 100% width cards with proper padding and snap alignment */}
                 <motion.div
