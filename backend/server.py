@@ -1432,6 +1432,9 @@ async def register(user_data: UserCreate):
     user_id = str(uuid.uuid4())
     hashed_password = hash_password(user_data.password)
     
+    # Check if this is the demo admin user
+    is_admin = user_data.email == "demo@tournament.com"
+    
     user_doc = {
         "user_id": user_id,
         "email": user_data.email,
@@ -1441,7 +1444,7 @@ async def register(user_data: UserCreate):
         "free_fire_uid": user_data.free_fire_uid,
         "wallet_balance": 0.0,
         "is_verified": False,
-        "is_admin": False,
+        "is_admin": is_admin,  # Make demo@tournament.com admin automatically
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
     }
