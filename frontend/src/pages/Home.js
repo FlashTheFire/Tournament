@@ -837,7 +837,7 @@ const Home = () => {
                   scrollBehavior: 'smooth'
                 }}
               >
-                {/* Professional carousel container - Full width cards with better mobile alignment */}
+                {/* Professional carousel container - 100% width cards with proper padding and snap alignment */}
                 <motion.div
                   className="flex"
                   animate={{
