@@ -513,7 +513,7 @@ const Dashboard = () => {
             {[
               {
                 title: 'Total Eliminations',
-                value: dashboardData.stats.killsTotal,
+                value: formatNumber(dashboardData.stats.killsTotal),
                 icon: Crosshair,
                 color: 'from-red-500 to-pink-600'
               },
