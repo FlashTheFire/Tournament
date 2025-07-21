@@ -288,7 +288,7 @@ const Dashboard = () => {
                             {tournament.status.toUpperCase()}
                           </span>
                           <span className="text-gray-400">{tournament.participants}</span>
-                          <span className="text-yellow-400">₹{tournament.prize.toLocaleString()}</span>
+                          <span className="text-yellow-400">{formatPrizePool(tournament.prize)}</span>
                         </div>
                       </div>
                       
