@@ -470,33 +470,36 @@ class TournamentAPITester:
             self.log_result("Get Current User", False, f"Status code: {response.status_code}")
 
     def test_free_fire_verification(self):
-        
-        headers = self.get_auth_headers()
-        response, success, error = self.make_request("GET", "/auth/me", headers=headers)
-        
-        if not success:
-            self.log_result("Get Current User", False, f"Request failed: {error}")
-            return
-        
-        if response.status_code == 200:
-            try:
-                data = response.json()
-                if "user_id" in data and "email" in data:
-                    self.log_result("Get Current User", True, f"User info retrieved: {data['username']}")
-                else:
-                    self.log_result("Get Current User", False, f"Missing required fields: {data}")
-            except json.JSONDecodeError:
-                self.log_result("Get Current User", False, "Invalid JSON response")
-        else:
-            self.log_result("Get Current User", False, f"Status code: {response.status_code}")
-
-    def test_free_fire_verification(self):
         """Test Free Fire UID verification"""
         print("\n=== Testing Free Fire Verification ===")
         
         if not self.test_user_token:
             self.log_result("Free Fire Verification", False, "No auth token available")
             return
+        
+        # Test with valid UID
+        verify_data = {"free_fire_uid": "123456789"}
+        headers = self.get_auth_headers()
+        
+        response, success, error = self.make_request("POST", "/auth/verify-freefire", verify_data, headers)
+        
+        if not success:
+            self.log_result("Free Fire Verification", False, f"Request failed: {error}")
+            return
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "user_data" in data and "message" in data:
+                    self.log_result("Free Fire Verification", True, f"UID verified: {data['user_data']['username']}")
+                else:
+                    self.log_result("Free Fire Verification", False, f"Unexpected response: {data}")
+            except json.JSONDecodeError:
+                self.log_result("Free Fire Verification", False, "Invalid JSON response")
+        else:
+            self.log_result("Free Fire Verification", False, f"Status code: {response.status_code}")
+
+    def test_tournaments_listing(self):
         
         # Test with valid UID
         verify_data = {"free_fire_uid": "123456789"}
