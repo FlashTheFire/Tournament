@@ -34,6 +34,7 @@ const Tournaments = () => {
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false); // New state for mobile filter toggle
+  const [isDesktop, setIsDesktop] = useState(false); // Track if desktop view
   const [filters, setFilters] = useState({
     game_type: '',
     country: '',
