@@ -12,6 +12,15 @@ load_dotenv()
 # Initialize FastAPI app
 app = FastAPI(title="Tournament Platform API", version="1.0.0")
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Free Fire API configuration
 FREE_FIRE_API_BASE = "https://region-info-api.vercel.app"
 
