@@ -432,16 +432,22 @@ const Register = () => {
                         )}
                       </div>
 
-                      {/* UID Length Helper Text - only show when input is 6+ digits */}
-                      {formData.free_fire_uid && formData.free_fire_uid.length >= 6 && (
+                      {/* UID Length Helper Text and Validation Messages */}
+                      {formData.free_fire_uid && (
                         <div className="absolute -bottom-5 left-0 text-xs">
-                          <span className={`${
-                            formData.free_fire_uid.length >= 6 && formData.free_fire_uid.length <= 12 
-                              ? 'text-green-400' 
-                              : 'text-yellow-400'
-                          }`}>
-                            {formData.free_fire_uid.length}/12 digits
-                          </span>
+                          {formData.free_fire_uid.length < 8 ? (
+                            <span className="text-red-400">
+                              UID too short (minimum 8 digits)
+                            </span>
+                          ) : formData.free_fire_uid.length > 12 ? (
+                            <span className="text-red-400">
+                              UID too long (maximum 12 digits)
+                            </span>
+                          ) : (
+                            <span className="text-green-400">
+                              {formData.free_fire_uid.length}/12 digits
+                            </span>
+                          )}
                         </div>
                       )}
                     </div>
