@@ -1,11 +1,12 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { apiService } from '../services/api';
+import safeToast from '../utils/safeToast';
 
 const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
@@ -14,192 +15,93 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem('token'));
 
   useEffect(() => {
-    if (token) {
-      loadUser();
-    } else {
-      setLoading(false);
-    }
-  }, [token]);
+    initializeAuth();
+  }, []);
 
-  const loadUser = async () => {
+  const initializeAuth = async () => {
     try {
-      apiService.setAuthToken(token);
-      const userData = await apiService.getCurrentUser();
-      setUser(userData);
+      const token = localStorage.getItem('authToken');
+      const storedUser = localStorage.getItem('user');
+      
+      if (token && storedUser) {
+        // Verify token is still valid
+        try {
+          const currentUser = await apiService.getCurrentUser();
+          setUser(currentUser);
+        } catch (error) {
+          console.error('Token validation failed:', error);
+          // Token is invalid, clear storage
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('user');
+          setUser(null);
+        }
+      }
     } catch (error) {
-      console.error('Failed to load user:', error);
-      logout();
+      console.error('Auth initialization error:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const login = async (email, password) => {
-    try {
-      console.log('🔵 Starting login with:', { email });
-      const response = await apiService.login({ email, password });
-      console.log('🔵 Login response received:', response);
-      
-      // Handle different response formats
-      let accessToken, userId;
-      
-      if (response.access_token) {
-        accessToken = response.access_token;
-        userId = response.user_id;
-      } else if (response.data?.access_token) {
-        accessToken = response.data.access_token;
-        userId = response.data.user_id;
-      } else {
-        throw new Error('Invalid response format');
-      }
-      
-      if (!accessToken) {
-        throw new Error('No access token received');
-      }
-      
-      console.log('🔵 Access token received:', accessToken);
-      
-      localStorage.setItem('token', accessToken);
-      setToken(accessToken);
-      apiService.setAuthToken(accessToken);
-      
-      // Load user data
-      const userData = await apiService.getCurrentUser();
-      console.log('🔵 User data loaded:', userData);
-      setUser(userData);
-      
-      return { success: true };
-    } catch (error) {
-      console.error('🔴 Login error details:', error);
-      
-      // Extract clean error message with multiple fallbacks
-      let errorMessage = 'Login failed';
-      
-      if (error.cleanMessage) {
-        errorMessage = error.cleanMessage;
-      } else if (error.response?.data?.detail) {
-        const detail = error.response.data.detail;
-        if (Array.isArray(detail)) {
-          errorMessage = detail.map(err => {
-            if (typeof err === 'object' && err.msg) {
-              return err.msg;
-            }
-            return typeof err === 'string' ? err : 'Validation error';
-          }).join(', ');
-        } else if (typeof detail === 'string') {
-          errorMessage = detail;
-        } else if (typeof detail === 'object' && detail.msg) {
-          errorMessage = detail.msg;
-        }
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      // Additional safety check to ensure we only pass strings to toast
-      if (typeof errorMessage !== 'string') {
-        console.error('🔴 Error message is not a string:', errorMessage);
-        errorMessage = 'Login failed. Please try again.';
-      }
-      
-      return { 
-        success: false, 
-        error: errorMessage
-      };
     }
   };
 
   const register = async (userData) => {
     try {
       const response = await apiService.register(userData);
-      const { access_token } = response;
       
-      localStorage.setItem('token', access_token);
-      setToken(access_token);
-      apiService.setAuthToken(access_token);
+      if (response.access_token) {
+        setUser(response.user);
+        return { success: true, user: response.user };
+      }
       
-      // Load user data
-      const userInfo = await apiService.getCurrentUser();
-      setUser(userInfo);
-      
-      return { success: true };
+      return { success: false, error: 'Registration failed' };
     } catch (error) {
-      console.error('Register error details:', error);
-      
-      // Extract clean error message with multiple fallbacks
-      let errorMessage = 'Registration failed';
-      
-      if (error.cleanMessage) {
-        errorMessage = error.cleanMessage;
-      } else if (error.response?.data?.detail) {
-        const detail = error.response.data.detail;
-        if (Array.isArray(detail)) {
-          errorMessage = detail.map(err => {
-            if (typeof err === 'object' && err.msg) {
-              return err.msg;
-            }
-            return typeof err === 'string' ? err : 'Validation error';
-          }).join(', ');
-        } else if (typeof detail === 'string') {
-          errorMessage = detail;
-        } else if (typeof detail === 'object' && detail.msg) {
-          errorMessage = detail.msg;
-        }
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      // Additional safety check to ensure we only pass strings to toast
-      if (typeof errorMessage !== 'string') {
-        console.error('Error message is not a string:', errorMessage);
-        errorMessage = 'Registration failed. Please try again.';
-      }
-      
+      console.error('Registration error:', error);
       return { 
         success: false, 
-        error: errorMessage
+        error: error.message || 'Registration failed. Please try again.' 
+      };
+    }
+  };
+
+  const login = async (identifier, password) => {
+    try {
+      const response = await apiService.login(identifier, password);
+      
+      if (response.access_token) {
+        setUser(response.user);
+        return { success: true, user: response.user };
+      }
+      
+      return { success: false, error: 'Invalid credentials' };
+    } catch (error) {
+      console.error('Login error:', error);
+      return { 
+        success: false, 
+        error: error.message || 'Login failed. Please check your credentials.' 
       };
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    setToken(null);
+    apiService.logout();
     setUser(null);
-    apiService.setAuthToken(null);
+    safeToast.success('Logged out successfully');
   };
 
-  const verifyFreeFire = async (uid) => {
-    try {
-      const response = await apiService.verifyFreeFire(uid);
-      // Update user data with Free Fire info
-      const userData = await apiService.getCurrentUser();
-      setUser(userData);
-      return { success: true, data: response.user_data };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.detail || 'Free Fire verification failed'
-      };
-    }
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
   };
 
   const value = {
     user,
     loading,
-    login,
     register,
+    login,
     logout,
-    verifyFreeFire,
-    isAuthenticated: !!user,
-    isAdmin: user?.is_admin || false
+    updateUser,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
