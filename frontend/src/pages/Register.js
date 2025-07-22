@@ -221,6 +221,25 @@ const Register = () => {
     }));
   };
 
+  // Premium interaction handler - collapses verification when user interacts with other fields
+  const handleFormInteraction = (fieldName) => {
+    if (validationState.uidValidation === 'valid' && !hasUserInteracted && fieldName !== 'free_fire_uid' && fieldName !== 'region') {
+      setHasUserInteracted(true);
+      setVerificationExpanded(false);
+    }
+  };
+
+  // Enhanced change handler with interaction tracking
+  const handleChangeWithTracking = (e) => {
+    handleFormInteraction(e.target.name);
+    handleChange(e);
+  };
+
+  // Toggle verification panel
+  const toggleVerificationPanel = () => {
+    setVerificationExpanded(!verificationExpanded);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative overflow-hidden">
       <div className="absolute inset-0 overflow-y-auto overflow-x-hidden register-scrollbar">
