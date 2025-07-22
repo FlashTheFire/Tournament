@@ -135,7 +135,7 @@ async def validate_freefire_uid(uid: str, region: str):
 @app.post("/api/auth/register")
 async def register_user(user_data: dict):
     """
-    Register a new user with Free Fire validation
+    Register a new user with Free Fire validation and save data
     """
     try:
         # Extract user data
@@ -149,6 +149,13 @@ async def register_user(user_data: dict):
             return {
                 "success": False,
                 "error": "All fields are required"
+            }
+        
+        # Check if user already exists
+        if email in users_db:
+            return {
+                "success": False,
+                "error": "User with this email already exists"
             }
         
         # Validate Free Fire UID
@@ -167,21 +174,60 @@ async def register_user(user_data: dict):
                 "error": "Invalid Free Fire UID or region"
             }
         
-        # Simulate successful registration
-        # In a real app, you would:
-        # 1. Hash the password
-        # 2. Store user in database
-        # 3. Generate JWT token
+        # Generate user ID and hash password (simplified)
+        user_id = str(uuid.uuid4())
+        password_hash = hashlib.sha256(password.encode()).hexdigest()
+        
+        # Save user data to in-memory database
+        users_db[email] = {
+            "id": user_id,
+            "email": email,
+            "password_hash": password_hash,
+            "free_fire_uid": free_fire_uid,
+            "region": region,
+            "nickname": player_info["nickname"],
+            "level": player_info["level"],
+            "avatar_id": player_info["avatarId"],
+            "liked": player_info["liked"],
+            "exp": player_info["exp"],
+            "clan_name": player_info["clan_name"],
+            "clan_level": player_info["clan_level"],
+            "is_admin": False,
+            "created_at": datetime.utcnow().isoformat(),
+            "player_info": player_info  # Store complete player info
+        }
+        
+        # Generate session token
+        import base64
+        import json
+        import time
+        
+        token_data = {
+            "user_id": user_id,
+            "email": email,
+            "exp": time.time() + 86400  # 24 hours
+        }
+        
+        token = base64.b64encode(json.dumps(token_data).encode()).decode()
+        active_sessions[token] = user_id
         
         return {
             "success": True,
             "message": f"Welcome to the Arena, {player_info['nickname']}! 🎉🔥",
+            "token": token,
             "user": {
+                "id": user_id,
                 "email": email,
+                "nickname": player_info["nickname"],
+                "level": player_info["level"],
+                "avatar_id": player_info["avatarId"],
                 "free_fire_uid": free_fire_uid,
                 "region": region,
-                "nickname": player_info["nickname"],
-                "level": player_info["level"]
+                "liked": player_info["liked"],
+                "exp": player_info["exp"],
+                "clan_name": player_info["clan_name"],
+                "clan_level": player_info["clan_level"],
+                "is_admin": False
             }
         }
         
