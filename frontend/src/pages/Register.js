@@ -378,8 +378,8 @@ const Register = () => {
                   />
                 </div>
 
-                {/* Free Fire UID and Region Row - 2 Columns */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
+                {/* Free Fire UID and Region Row - Always 2 Columns on All Devices */}
+                <div className="grid grid-cols-2 gap-3">
                   {/* Free Fire UID Field */}
                   <div>
                     <label htmlFor="free_fire_uid" className="block text-xs font-semibold text-white mb-2 flex items-center space-x-2">
