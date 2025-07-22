@@ -764,7 +764,8 @@ const Register = () => {
                         type={showPassword ? 'text' : 'password'}
                         required
                         value={formData.password}
-                        onChange={handleChange}
+                        onChange={handleChangeWithTracking}
+                        onFocus={() => handleFormInteraction('password')}
                         className={`w-full px-4 pr-12 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-300 text-sm lg:text-base ${
                           validationState.passwordMatch === 'initial' ? 'focus:ring-yellow-400 border-yellow-400' :
                           validationState.passwordMatch === 'match' ? 'focus:ring-green-500 border-green-500' :
