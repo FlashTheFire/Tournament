@@ -49,16 +49,14 @@ const Register = () => {
         setValidationState(prev => ({ ...prev, uidValidation: 'validating' }));
         
         try {
-          const response = await fetch(
-            `${process.env.REACT_APP_BACKEND_URL}/api/validate-freefire?uid=${formData.free_fire_uid}&region=${formData.region}`
-          );
-          const data = await response.json();
+          const response = await apiService.validateFreeFireUID(formData.free_fire_uid, formData.region);
+          console.log('🔑 Free Fire validation response:', response);
           
-          if (data.valid) {
+          if (response.valid) {
             setValidationState(prev => ({
               ...prev,
               uidValidation: 'valid',
-              playerInfo: data.player_info
+              playerInfo: response.player_info
             }));
           } else {
             setValidationState(prev => ({
