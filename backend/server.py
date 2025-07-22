@@ -36,18 +36,20 @@ async def validate_free_fire_uid_api(uid: str, region: str) -> dict:
             if response.status_code == 200:
                 data = response.json()
                 
-                # Check if we have valid player info
-                if "basicInfo" in data:
-                    basic_info = data.get("basicInfo", {})
-                    clan_basic_info = data.get("clanBasicInfo", {})
+                # Check if we have valid player info with the correct structure
+                if "player_info" in data and "basicInfo" in data["player_info"]:
+                    player_info = data["player_info"]
+                    basic_info = player_info.get("basicInfo", {})
+                    clan_basic_info = player_info.get("clanBasicInfo", {})
+                    profile_info = player_info.get("profileInfo", {})
                     
                     return {
                         "uid": uid,
                         "region": region.upper(),
                         "nickname": basic_info.get("nickname", "Unknown"),
                         "level": basic_info.get("level", 1),
-                        "avatarId": basic_info.get("avatarId", "1"),
-                        "liked": data.get("liked", 0),
+                        "avatarId": profile_info.get("avatarId", "102000007"),
+                        "liked": basic_info.get("liked", 0),
                         "exp": basic_info.get("exp", 0),
                         "clan_name": clan_basic_info.get("clanName", "No Guild"),
                         "clan_level": clan_basic_info.get("clanLevel", 1),
