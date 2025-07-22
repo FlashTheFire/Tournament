@@ -6,10 +6,9 @@ import { useAuth } from '../context/AuthContext';
 import safeToast from '../utils/safeToast';
 import { apiService } from '../services/api';
 
-// Player Avatar Component with fallback system
+// Player Avatar Component with external API priority
 const PlayerAvatar = ({ avatarId, className = "w-full h-full" }) => {
-  const [useExternal, setUseExternal] = useState(true);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
   
   // If no avatarId, use fallback immediately
   if (!avatarId) {
@@ -24,36 +23,19 @@ const PlayerAvatar = ({ avatarId, className = "w-full h-full" }) => {
   
   const handleImageError = () => {
     console.log('🔄 External avatar failed to load, using fallback');
-    setUseExternal(false);
+    setImageError(true);
   };
   
-  const handleImageLoad = () => {
-    setImageLoaded(true);
-  };
-  
-  // If external failed or we're not using external, show fallback
-  if (!useExternal || !imageLoaded) {
+  // If image failed to load, show fallback
+  if (imageError) {
     return (
-      <div className={`${className} flex items-center justify-center`}>
-        {useExternal && (
-          // Try to load external image first
-          <img
-            src={externalUrl}
-            alt="Player Avatar"
-            className={`${className} object-cover rounded-full ${imageLoaded ? 'block' : 'hidden'}`}
-            onLoad={handleImageLoad}
-            onError={handleImageError}
-          />
-        )}
-        {/* Fallback icon - always rendered until external loads */}
-        <div className={`${!imageLoaded ? 'flex' : 'hidden'} ${className} items-center justify-center text-lg bg-gradient-to-br from-blue-500 to-purple-600 rounded-full`}>
-          <User className="h-4 w-4 text-white" />
-        </div>
+      <div className={`${className} flex items-center justify-center text-lg bg-gradient-to-br from-blue-500 to-purple-600 rounded-full`}>
+        <User className="h-4 w-4 text-white" />
       </div>
     );
   }
   
-  // External image loaded successfully
+  // Try to load external image
   return (
     <img
       src={externalUrl}
