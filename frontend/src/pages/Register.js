@@ -545,7 +545,7 @@ const Register = () => {
                   )}
                 </AnimatePresence>
 
-                {/* Advanced Player Info Display */}
+                {/* Premium Collapsible Player Verification Display */}
                 <AnimatePresence>
                   {validationState.uidValidation === 'valid' && validationState.playerInfo && (
                     <motion.div
@@ -560,7 +560,7 @@ const Register = () => {
                       
                       {/* Main Content */}
                       <div className="relative p-3 lg:p-4">
-                        {/* Header with Verified Badge */}
+                        {/* Header with Verified Badge and Avatar Toggle */}
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center space-x-3">
                             <motion.div
@@ -575,98 +575,175 @@ const Register = () => {
                               <p className="text-gray-400 text-xs">Free Fire account authenticated</p>
                             </div>
                           </div>
-                          <motion.div
-                            animate={{ rotate: [0, 10, -10, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                            className="w-8 h-8 rounded-full overflow-hidden border-2 border-green-400/30 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-blue-500/20"
+                          
+                          {/* Premium Avatar Toggle Button */}
+                          <motion.button
+                            onClick={toggleVerificationPanel}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            className={`relative w-10 h-10 rounded-full overflow-hidden border-2 transition-all duration-300 cursor-pointer group ${
+                              verificationExpanded 
+                                ? 'border-green-400/50 shadow-lg shadow-green-400/30' 
+                                : 'border-blue-400/50 shadow-lg shadow-blue-400/30 ring-2 ring-blue-400/20'
+                            }`}
                           >
-                            {/* Avatar with fallback system */}
-                            <PlayerAvatar 
-                              avatarId={validationState.playerInfo.profileInfo?.avatarId}
-                              className="w-full h-full"
+                            {/* Premium Avatar with External Image */}
+                            <div className="relative w-full h-full">
+                              <PlayerAvatar 
+                                avatarId={validationState.playerInfo.profileInfo?.avatarId}
+                                className="w-full h-full object-cover"
+                              />
+                              
+                              {/* Premium Overlay with Expand/Collapse Indicator */}
+                              <div className={`absolute inset-0 bg-black/20 flex items-center justify-center transition-opacity duration-300 ${
+                                verificationExpanded ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'
+                              }`}>
+                                <motion.div
+                                  animate={{ rotate: verificationExpanded ? 180 : 0 }}
+                                  transition={{ duration: 0.3 }}
+                                  className="w-4 h-4 text-white/80"
+                                >
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                  </svg>
+                                </motion.div>
+                              </div>
+                            </div>
+                            
+                            {/* Premium Glow Ring Animation */}
+                            <motion.div
+                              animate={{ 
+                                rotate: 360,
+                                scale: verificationExpanded ? 1 : 1.2
+                              }}
+                              transition={{ 
+                                rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+                                scale: { duration: 0.3 }
+                              }}
+                              className={`absolute inset-0 rounded-full border-2 border-dashed pointer-events-none ${
+                                verificationExpanded ? 'border-green-400/30' : 'border-blue-400/40'
+                              }`}
                             />
-                          </motion.div>
+                          </motion.button>
                         </div>
                         
-                        {/* Player Stats Grid with separate level display */}
-                        <div className="grid grid-cols-2 gap-2 lg:gap-3">
-                          {/* Nickname Card */}
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20"
-                          >
-                            <div className="flex items-center justify-between mb-1">
-                              <div className="flex items-center space-x-2">
-                                <User className="h-3 w-3 text-blue-400" />
-                                <span className="text-gray-400 text-xs font-medium">Nickname</span>
+                        {/* Collapsible Player Details */}
+                        <AnimatePresence>
+                          {verificationExpanded && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0, y: -10 }}
+                              animate={{ opacity: 1, height: 'auto', y: 0 }}
+                              exit={{ opacity: 0, height: 0, y: -10 }}
+                              transition={{ duration: 0.3, ease: "easeInOut" }}
+                              className="overflow-hidden"
+                            >
+                              {/* Player Stats Grid with Premium Animations */}
+                              <div className="grid grid-cols-2 gap-2 lg:gap-3 mt-3">
+                                {/* Nickname Card */}
+                                <motion.div
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  transition={{ delay: 0.1 }}
+                                  className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20 hover:border-blue-400/40 transition-all duration-300"
+                                >
+                                  <div className="flex items-center justify-between mb-1">
+                                    <div className="flex items-center space-x-2">
+                                      <User className="h-3 w-3 text-blue-400" />
+                                      <span className="text-gray-400 text-xs font-medium">Nickname</span>
+                                    </div>
+                                    <span className="text-blue-300 text-xs font-bold">Lv.{validationState.playerInfo.level}</span>
+                                  </div>
+                                  <p className="text-white font-bold text-sm truncate">
+                                    {validationState.playerInfo.nickname.length > 15 
+                                      ? `${validationState.playerInfo.nickname.slice(0, 15)}.` 
+                                      : validationState.playerInfo.nickname}
+                                  </p>
+                                </motion.div>
+                                
+                                {/* Total Likes Card */}
+                                <motion.div
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: 20 }}
+                                  transition={{ delay: 0.2 }}
+                                  className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-400/20 hover:border-yellow-400/40 transition-all duration-300"
+                                >
+                                  <div className="flex items-center space-x-2 mb-1">
+                                    <Star className="h-3 w-3 text-yellow-400" />
+                                    <span className="text-gray-400 text-xs font-medium">Total Likes</span>
+                                  </div>
+                                  <p className="text-white font-bold text-sm">{validationState.playerInfo.liked?.toLocaleString() || '0'}</p>
+                                </motion.div>
+                                
+                                {/* Guild Card */}
+                                <motion.div
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  transition={{ delay: 0.3 }}
+                                  className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-400/20 hover:border-purple-400/40 transition-all duration-300"
+                                >
+                                  <div className="flex items-center justify-between mb-1">
+                                    <div className="flex items-center space-x-2">
+                                      <Crown className="h-3 w-3 text-purple-400" />
+                                      <span className="text-gray-400 text-xs font-medium">Guild</span>
+                                    </div>
+                                    <span className="text-purple-300 text-xs font-bold">Lv.{validationState.playerInfo.clan_level}</span>
+                                  </div>
+                                  <p className="text-white font-bold text-sm truncate">
+                                    {validationState.playerInfo.clan_name && validationState.playerInfo.clan_name !== "No Guild" 
+                                      ? (validationState.playerInfo.clan_name.length > 15 
+                                          ? `${validationState.playerInfo.clan_name.slice(0, 15)}.` 
+                                          : validationState.playerInfo.clan_name)
+                                      : 'No Guild'}
+                                  </p>
+                                </motion.div>
+                                
+                                {/* Experience Card */}
+                                <motion.div
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: 20 }}
+                                  transition={{ delay: 0.4 }}
+                                  className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-green-500/10 to-teal-500/10 border border-green-400/20 hover:border-green-400/40 transition-all duration-300"
+                                >
+                                  <div className="flex items-center space-x-2 mb-1">
+                                    <Zap className="h-3 w-3 text-green-400" />
+                                    <span className="text-gray-400 text-xs font-medium">Experience</span>
+                                  </div>
+                                  <p className="text-white font-bold text-sm">{validationState.playerInfo.exp?.toLocaleString() || '0'}</p>
+                                </motion.div>
                               </div>
-                              <span className="text-blue-300 text-xs font-bold">Lv.{validationState.playerInfo.level}</span>
-                            </div>
-                            <p className="text-white font-bold text-sm truncate">
-                              {validationState.playerInfo.nickname.length > 15 
-                                ? `${validationState.playerInfo.nickname.slice(0, 15)}.` 
-                                : validationState.playerInfo.nickname}
-                            </p>
-                          </motion.div>
-                          
-                          {/* Total Likes Card */}
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-400/20"
-                          >
-                            <div className="flex items-center space-x-2 mb-1">
-                              <Star className="h-3 w-3 text-yellow-400" />
-                              <span className="text-gray-400 text-xs font-medium">Total Likes</span>
-                            </div>
-                            <p className="text-white font-bold text-sm">{validationState.playerInfo.liked?.toLocaleString() || '0'}</p>
-                          </motion.div>
-                          
-                          {/* Guild Card */}
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-400/20"
-                          >
-                            <div className="flex items-center justify-between mb-1">
-                              <div className="flex items-center space-x-2">
-                                <Crown className="h-3 w-3 text-purple-400" />
-                                <span className="text-gray-400 text-xs font-medium">Guild</span>
-                              </div>
-                              <span className="text-purple-300 text-xs font-bold">Lv.{validationState.playerInfo.clan_level}</span>
-                            </div>
-                            <p className="text-white font-bold text-sm truncate">
-                              {validationState.playerInfo.clan_name && validationState.playerInfo.clan_name !== "No Guild" 
-                                ? (validationState.playerInfo.clan_name.length > 15 
-                                    ? `${validationState.playerInfo.clan_name.slice(0, 15)}.` 
-                                    : validationState.playerInfo.clan_name)
-                                : 'No Guild'}
-                            </p>
-                          </motion.div>
-                          
-                          {/* Experience Card */}
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                            className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-green-500/10 to-teal-500/10 border border-green-400/20"
-                          >
-                            <div className="flex items-center space-x-2 mb-1">
-                              <Zap className="h-3 w-3 text-green-400" />
-                              <span className="text-gray-400 text-xs font-medium">Experience</span>
-                            </div>
-                            <p className="text-white font-bold text-sm">{validationState.playerInfo.exp?.toLocaleString() || '0'}</p>
-                          </motion.div>
-                        </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                         
-                        {/* Floating Particles */}
-                        <div className="absolute top-2 right-4 w-1 h-1 bg-green-400 rounded-full animate-ping"></div>
-                        <div className="absolute bottom-3 left-6 w-1 h-1 bg-blue-400 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
-                        <div className="absolute top-1/2 right-8 w-0.5 h-0.5 bg-purple-400 rounded-full animate-ping" style={{animationDelay: '2s'}}></div>
+                        {/* Premium Floating Particles */}
+                        <motion.div 
+                          animate={{ 
+                            opacity: [0.6, 1, 0.6],
+                            scale: [1, 1.2, 1]
+                          }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          className="absolute top-2 right-4 w-1 h-1 bg-green-400 rounded-full"
+                        />
+                        <motion.div 
+                          animate={{ 
+                            opacity: [0.4, 0.8, 0.4],
+                            scale: [0.8, 1.1, 0.8]
+                          }}
+                          transition={{ duration: 2.5, repeat: Infinity, delay: 1 }}
+                          className="absolute bottom-3 left-6 w-1 h-1 bg-blue-400 rounded-full"
+                        />
+                        <motion.div 
+                          animate={{ 
+                            opacity: [0.3, 0.7, 0.3],
+                            scale: [0.6, 1, 0.6]
+                          }}
+                          transition={{ duration: 3, repeat: Infinity, delay: 2 }}
+                          className="absolute top-1/2 right-8 w-0.5 h-0.5 bg-purple-400 rounded-full"
+                        />
                       </div>
                     </motion.div>
                   )}
