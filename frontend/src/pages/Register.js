@@ -411,7 +411,7 @@ const Register = () => {
                           validationState.uidValidation === 'invalid' ? 'focus:ring-red-500 border-red-500' :
                           'focus:ring-neon-blue'
                         }`}
-                        placeholder="Enter Free Fire UID (6-12 digits)"
+                        placeholder="Enter Free Fire UID (8-12 digits)"
                         autoComplete="off"
                       />
                       
