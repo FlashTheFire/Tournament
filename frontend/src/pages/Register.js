@@ -511,21 +511,26 @@ const Register = () => {
                           </motion.div>
                         </div>
                         
-                        {/* Player Stats Grid with reduced spacing */}
+                        {/* Player Stats Grid with separate level display */}
                         <div className="grid grid-cols-2 gap-2 lg:gap-3">
-                          {/* Nickname with Level Card */}
+                          {/* Nickname Card */}
                           <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
                             className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20"
                           >
-                            <div className="flex items-center space-x-2 mb-1">
-                              <User className="h-3 w-3 text-blue-400" />
-                              <span className="text-gray-400 text-xs font-medium">Nickname</span>
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center space-x-2">
+                                <User className="h-3 w-3 text-blue-400" />
+                                <span className="text-gray-400 text-xs font-medium">Nickname</span>
+                              </div>
+                              <span className="text-blue-300 text-xs font-bold">Lv.{validationState.playerInfo.level}</span>
                             </div>
                             <p className="text-white font-bold text-sm truncate">
-                              {validationState.playerInfo.nickname} Lv.{validationState.playerInfo.level}
+                              {validationState.playerInfo.nickname.length > 15 
+                                ? `${validationState.playerInfo.nickname.slice(0, 15)}.` 
+                                : validationState.playerInfo.nickname}
                             </p>
                           </motion.div>
                           
@@ -550,13 +555,18 @@ const Register = () => {
                             transition={{ delay: 0.3 }}
                             className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-400/20"
                           >
-                            <div className="flex items-center space-x-2 mb-1">
-                              <Crown className="h-3 w-3 text-purple-400" />
-                              <span className="text-gray-400 text-xs font-medium">Guild</span>
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center space-x-2">
+                                <Crown className="h-3 w-3 text-purple-400" />
+                                <span className="text-gray-400 text-xs font-medium">Guild</span>
+                              </div>
+                              <span className="text-purple-300 text-xs font-bold">Lv.{validationState.playerInfo.clan_level}</span>
                             </div>
                             <p className="text-white font-bold text-sm truncate">
                               {validationState.playerInfo.clan_name && validationState.playerInfo.clan_name !== "No Guild" 
-                                ? `${validationState.playerInfo.clan_name.slice(0, 15)}${validationState.playerInfo.clan_name.length > 15 ? '...' : ''} Lv.${validationState.playerInfo.clan_level}` 
+                                ? (validationState.playerInfo.clan_name.length > 15 
+                                    ? `${validationState.playerInfo.clan_name.slice(0, 15)}.` 
+                                    : validationState.playerInfo.clan_name)
                                 : 'No Guild'}
                             </p>
                           </motion.div>
