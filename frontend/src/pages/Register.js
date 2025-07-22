@@ -764,6 +764,7 @@ const Register = () => {
           </motion.div>
         </motion.div>
       </div>
+      </div>
     </div>
   );
 };
