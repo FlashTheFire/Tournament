@@ -79,6 +79,10 @@ const Register = () => {
     playerInfo: null
   });
   
+  // Premium verification panel state
+  const [verificationExpanded, setVerificationExpanded] = useState(true);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
