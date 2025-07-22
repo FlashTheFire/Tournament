@@ -514,7 +514,7 @@ const Register = () => {
                         
                         {/* Player Stats Grid with reduced spacing */}
                         <div className="grid grid-cols-2 gap-2 lg:gap-3">
-                          {/* Nickname Card */}
+                          {/* Nickname with Level Card */}
                           <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -525,10 +525,12 @@ const Register = () => {
                               <User className="h-3 w-3 text-blue-400" />
                               <span className="text-gray-400 text-xs font-medium">Nickname</span>
                             </div>
-                            <p className="text-white font-bold text-sm truncate">{validationState.playerInfo.nickname}</p>
+                            <p className="text-white font-bold text-sm truncate">
+                              {validationState.playerInfo.nickname} Lv.{validationState.playerInfo.level}
+                            </p>
                           </motion.div>
                           
-                          {/* Level Card */}
+                          {/* Total Likes Card */}
                           <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -537,9 +539,9 @@ const Register = () => {
                           >
                             <div className="flex items-center space-x-2 mb-1">
                               <Star className="h-3 w-3 text-yellow-400" />
-                              <span className="text-gray-400 text-xs font-medium">Level</span>
+                              <span className="text-gray-400 text-xs font-medium">Total Likes</span>
                             </div>
-                            <p className="text-white font-bold text-sm">{validationState.playerInfo.level}</p>
+                            <p className="text-white font-bold text-sm">{validationState.playerInfo.liked?.toLocaleString() || '0'}</p>
                           </motion.div>
                           
                           {/* Guild Card */}
@@ -553,10 +555,14 @@ const Register = () => {
                               <Crown className="h-3 w-3 text-purple-400" />
                               <span className="text-gray-400 text-xs font-medium">Guild</span>
                             </div>
-                            <p className="text-white font-bold text-sm">{validationState.playerInfo.clan_name} {validationState.playerInfo.clan_level} level</p>
+                            <p className="text-white font-bold text-sm truncate">
+                              {validationState.playerInfo.clan_name && validationState.playerInfo.clan_name !== "No Guild" 
+                                ? `${validationState.playerInfo.clan_name.slice(0, 15)}${validationState.playerInfo.clan_name.length > 15 ? '...' : ''} Lv.${validationState.playerInfo.clan_level}` 
+                                : 'No Guild'}
+                            </p>
                           </motion.div>
                           
-                          {/* Region Card */}
+                          {/* Experience Card */}
                           <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -564,15 +570,10 @@ const Register = () => {
                             className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-green-500/10 to-teal-500/10 border border-green-400/20"
                           >
                             <div className="flex items-center space-x-2 mb-1">
-                              <MapPin className="h-3 w-3 text-green-400" />
-                              <span className="text-gray-400 text-xs font-medium">Region</span>
+                              <Zap className="h-3 w-3 text-green-400" />
+                              <span className="text-gray-400 text-xs font-medium">Experience</span>
                             </div>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-white font-bold text-sm">{validationState.playerInfo.region}</span>
-                              <span className="text-lg">
-                                {regions.find(r => r.code === formData.region)?.flag}
-                              </span>
-                            </div>
+                            <p className="text-white font-bold text-sm">{validationState.playerInfo.exp?.toLocaleString() || '0'}</p>
                           </motion.div>
                         </div>
                         
