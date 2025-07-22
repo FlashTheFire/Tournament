@@ -443,11 +443,7 @@ const Register = () => {
                             <span className="text-red-400">
                               UID too long (maximum 12 digits)
                             </span>
-                          ) : (
-                            <span className="text-green-400">
-                              {formData.free_fire_uid.length}/12 digits
-                            </span>
-                          )}
+                          ) : null}
                         </div>
                       )}
                     </div>
