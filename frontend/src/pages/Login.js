@@ -261,7 +261,7 @@ const Login = () => {
                   disabled={loading}
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full btn-premium py-4 text-xl font-bold ripple mobile-friendly group relative overflow-hidden"
+                  className="w-full btn-premium py-4 text-xl font-bold ripple mobile-friendly group relative overflow-hidden rounded-xl"
                 >
                   <AnimatePresence mode="wait">
                     {loading ? (
