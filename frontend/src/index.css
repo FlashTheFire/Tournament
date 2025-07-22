@@ -46,6 +46,11 @@
   --shadow-glow-lg: 0 0 40px;
   --shadow-glow-xl: 0 0 60px;
 
+  /* Custom Scrollbar Colors */
+  --scrollbar-thumb: #8b5cf6;
+  --scrollbar-track: #1a1a2e;
+  --scrollbar-thumb-hover: #a855f7;
+
   /* Typography Scale */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
