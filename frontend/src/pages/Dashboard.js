@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { apiService } from '../services/api';
+import safeToast from '../utils/safeToast';
 import { formatNumber, formatCurrency, formatPrizePool, formatPercentage } from '../utils/numberFormatter';
 
 const Dashboard = () => {
