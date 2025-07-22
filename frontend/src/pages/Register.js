@@ -300,7 +300,7 @@ const Register = () => {
               className="hidden lg:block space-y-4"
             >
               <p className="text-lg text-gray-300 leading-relaxed">
-                Create your account and join thousands of elite warriors in the ultimate Free Fire arena
+                Create your account and join the ultimate Free Fire battle arena
               </p>
               
               {/* Benefits List */}
