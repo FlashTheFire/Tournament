@@ -185,5 +185,94 @@ async def register_user(user_data: dict):
             "error": f"Registration failed: {str(e)}"
         }
 
+@app.post("/api/auth/login")
+async def login_user(credentials: dict):
+    """
+    Login user with email/password or Free Fire UID/password
+    """
+    try:
+        # Extract credentials
+        email = credentials.get("email", "")
+        password = credentials.get("password", "")
+        
+        # Basic validation
+        if not email or not password:
+            return {
+                "success": False,
+                "error": "Email and password are required"
+            }
+        
+        # Demo user credentials for testing
+        if email == "demo@tournament.com" and password == "demo123":
+            # Generate a simple JWT-like token
+            import base64
+            import json
+            import time
+            
+            token_data = {
+                "user_id": "demo_user_123",
+                "email": "demo@tournament.com",
+                "nickname": "DemoWarrior",
+                "exp": time.time() + 86400  # 24 hours
+            }
+            
+            token = base64.b64encode(json.dumps(token_data).encode()).decode()
+            
+            return {
+                "success": True,
+                "message": "Login successful",
+                "token": token,
+                "user": {
+                    "id": "demo_user_123",
+                    "email": "demo@tournament.com",
+                    "nickname": "DemoWarrior",
+                    "level": 45,
+                    "is_admin": True
+                }
+            }
+        
+        # For other credentials, simulate authentication failure
+        return {
+            "success": False,
+            "error": "Invalid email or password"
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": f"Login failed: {str(e)}"
+        }
+
+@app.get("/api/auth/me")
+async def get_current_user():
+    """
+    Get current authenticated user information
+    """
+    try:
+        # In a real app, you would:
+        # 1. Verify JWT token from Authorization header
+        # 2. Extract user ID from token
+        # 3. Fetch user from database
+        
+        # For demo purposes, return demo user data
+        return {
+            "success": True,
+            "user": {
+                "id": "demo_user_123",
+                "email": "demo@tournament.com",
+                "nickname": "DemoWarrior",
+                "level": 45,
+                "is_admin": True,
+                "free_fire_uid": "1234567890",
+                "region": "IND"
+            }
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": f"Failed to get user info: {str(e)}"
+        }
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8001)
