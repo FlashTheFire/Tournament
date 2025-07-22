@@ -204,7 +204,12 @@ export const apiService = {
   },
 
   async getCurrentUser() {
-    const response = await api.get('/api/auth/me');
+    const token = localStorage.getItem('token');
+    const response = await api.get('/api/auth/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response;
   },
 
