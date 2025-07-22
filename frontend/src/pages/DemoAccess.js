@@ -285,6 +285,7 @@ const DemoAccess = () => {
           </motion.div>
         </div>
       </div>
+      </div>
     </div>
   );
 };
