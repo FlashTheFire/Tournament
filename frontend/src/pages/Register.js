@@ -6,6 +6,64 @@ import { useAuth } from '../context/AuthContext';
 import safeToast from '../utils/safeToast';
 import { apiService } from '../services/api';
 
+// Player Avatar Component with fallback system
+const PlayerAvatar = ({ avatarId, className = "w-full h-full" }) => {
+  const [useExternal, setUseExternal] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
+  // If no avatarId, use fallback immediately
+  if (!avatarId) {
+    return (
+      <div className={`${className} flex items-center justify-center text-lg bg-gradient-to-br from-blue-500 to-purple-600 rounded-full`}>
+        <User className="h-4 w-4 text-white" />
+      </div>
+    );
+  }
+  
+  const externalUrl = `https://freefireinfo.vercel.app/icon?id=${avatarId}`;
+  
+  const handleImageError = () => {
+    console.log('🔄 External avatar failed to load, using fallback');
+    setUseExternal(false);
+  };
+  
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+  
+  // If external failed or we're not using external, show fallback
+  if (!useExternal || !imageLoaded) {
+    return (
+      <div className={`${className} flex items-center justify-center`}>
+        {useExternal && (
+          // Try to load external image first
+          <img
+            src={externalUrl}
+            alt="Player Avatar"
+            className={`${className} object-cover rounded-full ${imageLoaded ? 'block' : 'hidden'}`}
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+          />
+        )}
+        {/* Fallback icon - always rendered until external loads */}
+        <div className={`${!imageLoaded ? 'flex' : 'hidden'} ${className} items-center justify-center text-lg bg-gradient-to-br from-blue-500 to-purple-600 rounded-full`}>
+          <User className="h-4 w-4 text-white" />
+        </div>
+      </div>
+    );
+  }
+  
+  // External image loaded successfully
+  return (
+    <img
+      src={externalUrl}
+      alt="Player Avatar"
+      className={`${className} object-cover rounded-full`}
+      onError={handleImageError}
+    />
+  );
+};
+
 const Register = () => {
   const [formData, setFormData] = useState({
     email: '',
