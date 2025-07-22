@@ -591,7 +591,7 @@ const Register = () => {
                                 : 'border border-green-400/30'
                             }`}>
                               <PlayerAvatar 
-                                avatarId={validationState.playerInfo.profileInfo?.avatarId}
+                                avatarId={validationState.playerInfo.avatarId || validationState.playerInfo.profileInfo?.avatarId}
                                 className="w-full h-full object-cover"
                               />
                             </div>
