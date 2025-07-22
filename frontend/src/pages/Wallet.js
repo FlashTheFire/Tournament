@@ -27,11 +27,42 @@ const Wallet = () => {
   const [showQRPayment, setShowQRPayment] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [activeTab, setActiveTab] = useState('balance');
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handlePaymentSuccess = (paymentData) => {
+  useEffect(() => {
+    if (activeTab === 'history') {
+      loadTransactions();
+    }
+  }, [activeTab]);
+
+  const loadTransactions = async () => {
+    try {
+      setLoading(true);
+      const data = await apiService.getWalletTransactions();
+      setTransactions(data.transactions || []);
+    } catch (error) {
+      console.error('Failed to load transactions:', error);
+      safeToast.error('Failed to load transaction history');
+      setTransactions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePaymentSuccess = async (paymentData) => {
     console.log('Payment successful:', paymentData);
-    // Update user balance in context/API
-    // Show success toast is already handled in component
+    try {
+      await apiService.addFunds(selectedAmount);
+      safeToast.success('Funds added successfully!');
+      // Reload transactions if on history tab
+      if (activeTab === 'history') {
+        loadTransactions();
+      }
+    } catch (error) {
+      console.error('Failed to add funds:', error);
+      safeToast.error('Failed to update wallet balance');
+    }
   };
 
   const openQRPayment = (amount) => {
