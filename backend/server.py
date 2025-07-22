@@ -1,25 +1,30 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, EmailStr
-from datetime import datetime
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 import httpx
-import os
-from dotenv import load_dotenv
+from datetime import datetime
+from typing import Dict, Optional
 
-# Load environment variables
-load_dotenv()
+app = FastAPI(title="Free Fire Tournament API", version="1.0.0")
 
-# Initialize FastAPI app
-app = FastAPI(title="Tournament Platform API", version="1.0.0")
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Free Fire API configuration
 FREE_FIRE_API_BASE = "https://region-info-api.vercel.app"
 
-async def validate_free_fire_uid(uid: str, region: str) -> dict:
+async def validate_free_fire_uid_api(uid: str, region: str) -> dict:
     """
     Validate Free Fire UID using the region info API
     Returns player info if valid, raises HTTPException if invalid
     """
-    async with httpx.AsyncClient(timeout=10.0) as client:
+    async with httpx.AsyncClient(timeout=15.0) as client:
         try:
             response = await client.get(
                 f"{FREE_FIRE_API_BASE}/player-info",
@@ -28,87 +33,98 @@ async def validate_free_fire_uid(uid: str, region: str) -> dict:
             
             if response.status_code == 200:
                 data = response.json()
-                if "player_info" in data:
+                
+                # Check if we have valid player info with the correct structure
+                if "player_info" in data and "basicInfo" in data["player_info"]:
                     player_info = data["player_info"]
-                    # Extract essential player information
                     basic_info = player_info.get("basicInfo", {})
+                    clan_basic_info = player_info.get("clanBasicInfo", {})
+                    profile_info = player_info.get("profileInfo", {})
+                    
                     return {
                         "uid": uid,
                         "region": region.upper(),
                         "nickname": basic_info.get("nickname", "Unknown"),
-                        "level": basic_info.get("level", 0),
-                        "rank": basic_info.get("rank", 0),
-                        "account_id": basic_info.get("accountId", ""),
-                        "last_login": basic_info.get("lastLoginAt", ""),
+                        "level": basic_info.get("level", 1),
+                        "avatarId": profile_info.get("avatarId", "102000007"),
+                        "liked": basic_info.get("liked", 0),
+                        "exp": basic_info.get("exp", 0),
+                        "clan_name": clan_basic_info.get("clanName", "No Guild"),
+                        "clan_level": clan_basic_info.get("clanLevel", 1),
                         "validated_at": datetime.utcnow().isoformat(),
-                        "full_info": player_info  # Store complete info for admin use
+                        "profileInfo": {"avatarId": profile_info.get("avatarId", "102000007")}
                     }
                 else:
-                    raise HTTPException(status_code=400, detail="Invalid Free Fire UID or region")
+                    return None
             else:
-                raise HTTPException(status_code=400, detail="Free Fire UID validation failed")
+                return None
                 
         except httpx.TimeoutException:
             raise HTTPException(status_code=408, detail="Free Fire API timeout - please try again")
-        except httpx.RequestError:
-            raise HTTPException(status_code=500, detail="Free Fire API connection error")
+        except httpx.RequestError as e:
+            raise HTTPException(status_code=500, detail=f"Free Fire API connection error: {str(e)}")
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
-class UserCreate(BaseModel):
-    email: EmailStr
-    password: str
-    free_fire_uid: str
-    region: str  # Free Fire region code
-    player_info: dict = None  # Store validated Free Fire player info
-
-# API Routes
 @app.get("/api/health")
 async def health_check():
-    return {"status": "healthy", "timestamp": datetime.utcnow()}
+    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
+
+@app.post("/api/auth/generate-key")
+async def generate_api_key(client_data: dict):
+    """Generate a simple API key for testing"""
+    import base64
+    import time
+    
+    client_id = client_data.get("client_id", "default_client")
+    api_key = base64.b64encode(f"ff_key_{client_id}_{int(time.time())}".encode()).decode()
+    
+    return {
+        "success": True,
+        "api_key": api_key,
+        "client_id": client_id,
+        "expires_at": datetime.fromtimestamp(time.time() + 86400).isoformat(),
+        "expires_in_seconds": 86400
+    }
 
 @app.get("/api/validate-freefire")
 async def validate_freefire_uid(uid: str, region: str):
     """
-    Real-time validation endpoint for Free Fire UID and region
-    Used by frontend for instant validation feedback
+    Validate Free Fire UID and return player information
     """
     try:
-        player_info = await validate_free_fire_uid(uid, region)
-        return {
-            "valid": True,
-            "player_info": {
-                "nickname": player_info["nickname"],
-                "level": player_info["level"],
-                "rank": player_info["rank"],
-                "region": player_info["region"],
-                "account_id": player_info["account_id"]
+        # Validate UID format (6-12 digits)
+        if not uid.isdigit() or not (6 <= len(uid) <= 12):
+            return {
+                "valid": False, 
+                "error": "Free Fire UID must be 6-12 digits"
             }
-        }
-    except HTTPException as e:
+        
+        # Call the Free Fire API
+        player_info = await validate_free_fire_uid_api(uid, region)
+        
+        if player_info:
+            return {
+                "valid": True,
+                "player_info": player_info,
+                "timestamp": datetime.utcnow().isoformat()
+            }
+        else:
+            return {
+                "valid": False,
+                "error": "Invalid Free Fire UID or region"
+            }
+            
+    except HTTPException as he:
         return {
             "valid": False,
-            "error": e.detail
+            "error": he.detail
         }
     except Exception as e:
         return {
             "valid": False,
-            "error": str(e)
+            "error": f"Server error: {str(e)}"
         }
 
-@app.post("/api/auth/register")
-async def register(user_data: UserCreate):
-    # Validate Free Fire UID and region first
-    try:
-        player_info = await validate_free_fire_uid(user_data.free_fire_uid, user_data.region)
-        return {
-            "message": "Free Fire validation successful",
-            "player_info": {
-                "nickname": player_info["nickname"],
-                "level": player_info["level"],
-                "rank": player_info["rank"],
-                "region": player_info["region"]
-            }
-        }
-    except HTTPException as e:
-        raise e
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Free Fire validation error: {str(e)}")
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8001)
