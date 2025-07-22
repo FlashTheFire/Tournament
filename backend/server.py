@@ -223,19 +223,69 @@ async def validate_free_fire_uid_api(uid: str, region: str) -> dict:
 
 @app.get("/api/health")
 async def health_check():
-    return {"status": "healthy"}
+    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
+
+@app.post("/api/auth/generate-key")
+async def generate_api_key(client_data: dict):
+    """Generate encrypted API key for authorized clients"""
+    try:
+        # Basic client validation (you can enhance this)
+        client_id = client_data.get("client_id", "")
+        app_name = client_data.get("app_name", "")
+        
+        if not client_id or not app_name:
+            raise HTTPException(
+                status_code=400,
+                detail="client_id and app_name are required"
+            )
+        
+        # Generate unique client identifier
+        unique_client_id = hashlib.sha256(
+            f"{client_id}:{app_name}:{time.time()}".encode()
+        ).hexdigest()[:16]
+        
+        # Generate API key
+        key_data = APIKeySecurity.generate_api_key(
+            client_id=unique_client_id,
+            expires_in_minutes=1440  # 24 hours
+        )
+        
+        return {
+            "success": True,
+            "api_key": key_data["api_key"],
+            "client_id": unique_client_id,
+            "expires_at": datetime.fromtimestamp(key_data["expires_at"]).isoformat(),
+            "expires_in_seconds": key_data["expires_in"],
+            "rate_limit": f"{MAX_REQUESTS_PER_MINUTE} requests per minute"
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate API key: {str(e)}"
+        )
 
 @app.get("/api/validate-freefire")
-async def validate_freefire_uid(uid: str, region: str):
+async def validate_freefire_uid(
+    uid: str, 
+    region: str,
+    auth_data: dict = Depends(verify_api_key)
+):
     """
     Validate Free Fire UID and return player information
+    Requires valid API key for access
     """
     try:
+        # Log API usage
+        client_id = auth_data["client_id"]
+        print(f"API Request from client: {client_id} - UID: {uid}, Region: {region}")
+        
         # Validate UID format (8-12 digits)
         if not uid.isdigit() or not (8 <= len(uid) <= 12):
             return {
                 "valid": False, 
-                "error": "Free Fire UID must be 8-12 digits"
+                "error": "Free Fire UID must be 8-12 digits",
+                "client_id": client_id
             }
         
         # Call the Free Fire API
@@ -251,23 +301,28 @@ async def validate_freefire_uid(uid: str, region: str):
                 },
                 "profileInfo": {
                     "avatarId": player_info["avatarId"]
-                }
+                },
+                "client_id": client_id,
+                "timestamp": datetime.utcnow().isoformat()
             }
         else:
             return {
                 "valid": False,
-                "error": "Invalid Free Fire UID or region"
+                "error": "Invalid Free Fire UID or region",
+                "client_id": client_id
             }
             
     except HTTPException as he:
         return {
             "valid": False,
-            "error": he.detail
+            "error": he.detail,
+            "client_id": auth_data.get("client_id", "unknown")
         }
     except Exception as e:
         return {
             "valid": False,
-            "error": f"Server error: {str(e)}"
+            "error": f"Server error: {str(e)}",
+            "client_id": auth_data.get("client_id", "unknown")
         }
 
 if __name__ == "__main__":
