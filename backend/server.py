@@ -126,5 +126,64 @@ async def validate_freefire_uid(uid: str, region: str):
             "error": f"Server error: {str(e)}"
         }
 
+@app.post("/api/auth/register")
+async def register_user(user_data: dict):
+    """
+    Register a new user with Free Fire validation
+    """
+    try:
+        # Extract user data
+        email = user_data.get("email")
+        password = user_data.get("password")
+        free_fire_uid = user_data.get("free_fire_uid")
+        region = user_data.get("region")
+        
+        # Basic validation
+        if not all([email, password, free_fire_uid, region]):
+            return {
+                "success": False,
+                "error": "All fields are required"
+            }
+        
+        # Validate Free Fire UID
+        if not free_fire_uid.isdigit() or not (8 <= len(free_fire_uid) <= 12):
+            return {
+                "success": False,
+                "error": "Free Fire UID must be 8-12 digits"
+            }
+        
+        # Validate Free Fire player info
+        player_info = await validate_free_fire_uid_api(free_fire_uid, region)
+        
+        if not player_info:
+            return {
+                "success": False,
+                "error": "Invalid Free Fire UID or region"
+            }
+        
+        # Simulate successful registration
+        # In a real app, you would:
+        # 1. Hash the password
+        # 2. Store user in database
+        # 3. Generate JWT token
+        
+        return {
+            "success": True,
+            "message": f"Welcome to the Arena, {player_info['nickname']}! 🎉🔥",
+            "user": {
+                "email": email,
+                "free_fire_uid": free_fire_uid,
+                "region": region,
+                "nickname": player_info["nickname"],
+                "level": player_info["level"]
+            }
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": f"Registration failed: {str(e)}"
+        }
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8001)
