@@ -27,7 +27,7 @@ const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  // Free Fire regions with country flags
+  // Free Fire regions with country flags (removed Middle East and CIS as requested)
   const regions = [
     { code: 'ind', name: 'India', flag: '🇮🇳' },
     { code: 'br', name: 'Brazil', flag: '🇧🇷' },
@@ -38,9 +38,7 @@ const Register = () => {
     { code: 'us', name: 'United States', flag: '🇺🇸' },
     { code: 'vn', name: 'Vietnam', flag: '🇻🇳' },
     { code: 'th', name: 'Thailand', flag: '🇹🇭' },
-    { code: 'me', name: 'Middle East', flag: '🌍' },
     { code: 'pk', name: 'Pakistan', flag: '🇵🇰' },
-    { code: 'cis', name: 'CIS', flag: '🌍' },
     { code: 'bd', name: 'Bangladesh', flag: '🇧🇩' }
   ];
 
