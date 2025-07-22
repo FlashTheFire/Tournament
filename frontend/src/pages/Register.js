@@ -683,7 +683,7 @@ const Register = () => {
                   disabled={loading || validationState.uidValidation !== 'valid' || validationState.passwordMatch !== 'match'}
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`w-full py-4 text-xl font-bold ripple mobile-friendly group relative overflow-hidden transition-all duration-300 ${
+                  className={`w-full py-4 text-xl font-bold ripple mobile-friendly group relative overflow-hidden transition-all duration-300 rounded-xl ${
                     loading || validationState.uidValidation !== 'valid' || validationState.passwordMatch !== 'match'
                       ? 'bg-gray-600 cursor-not-allowed opacity-50'
                       : 'btn-premium'
