@@ -120,6 +120,9 @@ const Register = () => {
               uidValidation: 'valid',
               playerInfo: response.player_info
             }));
+            // Reset expansion state for new validation
+            setVerificationExpanded(true);
+            setHasUserInteracted(false);
           } else {
             setValidationState(prev => ({
               ...prev,
