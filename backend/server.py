@@ -240,7 +240,7 @@ async def register_user(user_data: dict):
 @app.post("/api/auth/login")
 async def login_user(credentials: dict):
     """
-    Login user with email/password or Free Fire UID/password
+    Login user with email/password and return their saved data
     """
     try:
         # Extract credentials
@@ -264,11 +264,11 @@ async def login_user(credentials: dict):
             token_data = {
                 "user_id": "demo_user_123",
                 "email": "demo@tournament.com",
-                "nickname": "DemoWarrior",
                 "exp": time.time() + 86400  # 24 hours
             }
             
             token = base64.b64encode(json.dumps(token_data).encode()).decode()
+            active_sessions[token] = "demo_user_123"
             
             return {
                 "success": True,
@@ -279,11 +279,58 @@ async def login_user(credentials: dict):
                     "email": "demo@tournament.com",
                     "nickname": "DemoWarrior",
                     "level": 45,
+                    "avatar_id": "102000007",
+                    "free_fire_uid": "1234567890",
+                    "region": "IND",
+                    "liked": 15000,
+                    "exp": 500000,
+                    "clan_name": "Elite Squad",
+                    "clan_level": 10,
                     "is_admin": True
                 }
             }
         
-        # For other credentials, simulate authentication failure
+        # Check registered users
+        if email in users_db:
+            user = users_db[email]
+            password_hash = hashlib.sha256(password.encode()).hexdigest()
+            
+            if user["password_hash"] == password_hash:
+                # Generate session token
+                import base64
+                import json
+                import time
+                
+                token_data = {
+                    "user_id": user["id"],
+                    "email": email,
+                    "exp": time.time() + 86400  # 24 hours
+                }
+                
+                token = base64.b64encode(json.dumps(token_data).encode()).decode()
+                active_sessions[token] = user["id"]
+                
+                return {
+                    "success": True,
+                    "message": "Login successful",
+                    "token": token,
+                    "user": {
+                        "id": user["id"],
+                        "email": user["email"],
+                        "nickname": user["nickname"],
+                        "level": user["level"],
+                        "avatar_id": user["avatar_id"],
+                        "free_fire_uid": user["free_fire_uid"],
+                        "region": user["region"],
+                        "liked": user["liked"],
+                        "exp": user["exp"],
+                        "clan_name": user["clan_name"],
+                        "clan_level": user["clan_level"],
+                        "is_admin": user["is_admin"]
+                    }
+                }
+        
+        # Invalid credentials
         return {
             "success": False,
             "error": "Invalid email or password"
