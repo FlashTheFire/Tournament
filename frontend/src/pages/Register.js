@@ -89,7 +89,7 @@ const Register = () => {
   // Debounced Free Fire UID validation
   useEffect(() => {
     const validateUID = async () => {
-      if (formData.free_fire_uid && formData.region && formData.free_fire_uid.length >= 8) {
+      if (formData.free_fire_uid && formData.region && formData.free_fire_uid.length >= 6) {
         setValidationState(prev => ({ ...prev, uidValidation: 'validating' }));
         
         try {
