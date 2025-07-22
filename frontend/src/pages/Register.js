@@ -162,7 +162,11 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative overflow-hidden overflow-y-auto">
+    <div className="min-h-screen bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative overflow-hidden">
+      <div className="absolute inset-0 overflow-y-auto overflow-x-hidden" style={{
+        scrollbarWidth: 'thin',
+        scrollbarColor: '#8b5cf6 #1a1a2e'
+      }}>
       {/* Advanced Particle Background */}
       <div className="absolute inset-0 opacity-30">
         <div className="kinetic-waves"></div>
