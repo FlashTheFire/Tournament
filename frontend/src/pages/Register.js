@@ -432,8 +432,8 @@ const Register = () => {
                         )}
                       </div>
 
-                      {/* UID Length Helper Text */}
-                      {formData.free_fire_uid && (
+                      {/* UID Length Helper Text - only show when input is 6+ digits */}
+                      {formData.free_fire_uid && formData.free_fire_uid.length >= 6 && (
                         <div className="absolute -bottom-5 left-0 text-xs">
                           <span className={`${
                             formData.free_fire_uid.length >= 6 && formData.free_fire_uid.length <= 12 
