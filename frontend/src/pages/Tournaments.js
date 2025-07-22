@@ -111,72 +111,11 @@ const Tournaments = () => {
     try {
       setLoading(true);
       const data = await apiService.getTournaments(currentFilters);
-      
-      // Enhanced Free Fire tournaments for demo
-      const mockTournaments = [
-        {
-          tournament_id: 'ff-br-championship',
-          name: 'Free Fire Battle Royale World Championship',
-          game_type: 'battle_royale',
-          tournament_type: 'elimination',
-          entry_fee: 250,
-          prize_pool: 50000,
-          max_participants: 200,
-          current_participants: 178,
-          start_time: new Date(Date.now() + 86400000).toISOString(),
-          registration_deadline: new Date(Date.now() + 43200000).toISOString(),
-          mode: 'squad',
-          country: 'IN',
-          status: 'upcoming',
-          description: 'Ultimate Free Fire Battle Royale tournament with massive prizes!',
-          battle_map: battleMaps[0],
-          kills_required: 15,
-          survival_time: '20 min'
-        },
-        {
-          tournament_id: 'ff-clash-masters',
-          name: 'Clash Squad Masters Pro League',
-          game_type: 'clash_squad',
-          tournament_type: 'league',
-          entry_fee: 150,
-          prize_pool: 25000,
-          max_participants: 128,
-          current_participants: 128,
-          start_time: new Date(Date.now() + 3600000).toISOString(),
-          registration_deadline: new Date(Date.now() - 3600000).toISOString(),
-          mode: 'squad',
-          country: 'BR',
-          status: 'live',
-          description: 'Professional Clash Squad tournament for elite players',
-          battle_map: battleMaps[1],
-          rounds: 5,
-          elimination_style: 'single'
-        },
-        {
-          tournament_id: 'ff-rush-hour-blitz',
-          name: 'Rush Hour Blitz Tournament',
-          game_type: 'rush_hour',
-          tournament_type: 'speed',
-          entry_fee: 75,
-          prize_pool: 8000,
-          max_participants: 64,
-          current_participants: 45,
-          start_time: new Date(Date.now() + 259200000).toISOString(),
-          registration_deadline: new Date(Date.now() + 216000000).toISOString(),
-          mode: 'duo',
-          country: 'TH',
-          status: 'upcoming',
-          description: 'Fast-paced battles with reduced match time',
-          battle_map: battleMaps[3],
-          match_duration: '10 min',
-          special_mode: 'Speed Boost'
-        }
-      ];
-
-      setTournaments([...mockTournaments, ...(data.tournaments || [])]);
+      setTournaments(data.tournaments || []);
     } catch (error) {
       console.error('Failed to load tournaments:', error);
       safeToast.error('Failed to load tournaments');
+      setTournaments([]);
     } finally {
       setLoading(false);
     }
