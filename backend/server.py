@@ -342,29 +342,77 @@ async def login_user(credentials: dict):
             "error": f"Login failed: {str(e)}"
         }
 
-@app.get("/api/auth/me")
-async def get_current_user():
-    """
-    Get current authenticated user information
-    """
+def get_user_from_token(authorization: str = None):
+    """Extract user from authorization token"""
+    if not authorization or not authorization.startswith('Bearer '):
+        return None
+    
     try:
-        # In a real app, you would:
-        # 1. Verify JWT token from Authorization header
-        # 2. Extract user ID from token
-        # 3. Fetch user from database
+        token = authorization.split(' ')[1]
+        if token not in active_sessions:
+            return None
+            
+        user_id = active_sessions[token]
         
-        # For demo purposes, return demo user data
-        return {
-            "success": True,
-            "user": {
+        # Check for demo user
+        if user_id == "demo_user_123":
+            return {
                 "id": "demo_user_123",
                 "email": "demo@tournament.com",
                 "nickname": "DemoWarrior",
                 "level": 45,
-                "is_admin": True,
+                "avatar_id": "102000007",
                 "free_fire_uid": "1234567890",
-                "region": "IND"
+                "region": "IND",
+                "liked": 15000,
+                "exp": 500000,
+                "clan_name": "Elite Squad",
+                "clan_level": 10,
+                "is_admin": True
             }
+        
+        # Find registered user
+        for email, user_data in users_db.items():
+            if user_data["id"] == user_id:
+                return {
+                    "id": user_data["id"],
+                    "email": user_data["email"],
+                    "nickname": user_data["nickname"],
+                    "level": user_data["level"],
+                    "avatar_id": user_data["avatar_id"],
+                    "free_fire_uid": user_data["free_fire_uid"],
+                    "region": user_data["region"],
+                    "liked": user_data["liked"],
+                    "exp": user_data["exp"],
+                    "clan_name": user_data["clan_name"],
+                    "clan_level": user_data["clan_level"],
+                    "is_admin": user_data["is_admin"],
+                    "created_at": user_data["created_at"]
+                }
+        
+        return None
+    except:
+        return None
+
+@app.get("/api/auth/me")
+async def get_current_user(authorization: str = None):
+    """
+    Get current authenticated user information
+    """
+    try:
+        # Extract authorization header manually since we're not using FastAPI's Depends
+        # In a real app, use proper dependency injection
+        user = get_user_from_token(authorization)
+        
+        if not user:
+            return {
+                "success": False,
+                "error": "Not authenticated"
+            }
+        
+        return {
+            "success": True,
+            "user": user
         }
         
     except Exception as e:
