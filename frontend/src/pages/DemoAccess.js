@@ -112,15 +112,12 @@ const DemoAccess = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative">
+    <div className="min-h-screen bg-gradient-to-br from-cosmic-black via-cosmic-dark to-cosmic-deep relative overflow-hidden">
+      <div className="absolute inset-0 overflow-y-auto overflow-x-hidden register-scrollbar">
       {/* Particle Background */}
       <div className="absolute inset-0 particle-effect opacity-20 pointer-events-none"></div>
       
-      <div className="relative z-10 p-4 md:p-8 overflow-y-auto scrollbar-visible h-screen" style={{
-        scrollbarWidth: 'auto',
-        scrollbarColor: '#00d4ff #1a1a2e',
-        WebkitOverflowScrolling: 'touch'
-      }}>
+      <div className="relative z-10 p-4 md:p-8">
         <div className="max-w-7xl mx-auto space-y-8 pb-8">
           {/* Header */}
           <motion.div
