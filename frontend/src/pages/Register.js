@@ -544,9 +544,9 @@ const Register = () => {
                       <div className="absolute inset-0 bg-gradient-to-r from-green-400/5 via-blue-400/5 to-purple-400/5"></div>
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400"></div>
                       
-                      {/* Main Content - Compact when collapsed */}
-                      <div className={`relative transition-all duration-300 ${verificationExpanded ? 'p-4' : 'p-2'}`}>
-                        {/* Clickable Header with Verified Badge and Avatar - Compact */}
+                      {/* Main Content - More compact when collapsed */}
+                      <div className={`relative transition-all duration-300 ${verificationExpanded ? 'p-4' : 'p-1.5'}`}>
+                        {/* Clickable Header with Verified Badge and Avatar - Extra Compact */}
                         <motion.div 
                           onClick={toggleVerificationPanel}
                           className={`flex items-center justify-between cursor-pointer group transition-all duration-300 ${
@@ -555,19 +555,19 @@ const Register = () => {
                           whileHover={{ scale: 1.01 }}
                           whileTap={{ scale: 0.99 }}
                         >
-                          <div className="flex items-center space-x-3">
+                          <div className="flex items-center space-x-2">
                             <motion.div
                               initial={{ scale: 0, rotate: -180 }}
                               animate={{ scale: 1, rotate: 0 }}
                               className={`bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg shadow-green-400/30 transition-all duration-300 ${
-                                verificationExpanded ? 'w-7 h-7' : 'w-5 h-5'
+                                verificationExpanded ? 'w-7 h-7' : 'w-4 h-4'
                               }`}
                             >
-                              <CheckCircle className={`text-white ${verificationExpanded ? 'h-4 w-4' : 'h-3 w-3'}`} />
+                              <CheckCircle className={`text-white ${verificationExpanded ? 'h-4 w-4' : 'h-2.5 w-2.5'}`} />
                             </motion.div>
                             <div>
                               <h4 className={`text-green-400 font-bold transition-all duration-300 ${
-                                verificationExpanded ? 'text-base' : 'text-sm'
+                                verificationExpanded ? 'text-base' : 'text-xs'
                               }`}>
                                 Player Verified
                               </h4>
@@ -579,11 +579,11 @@ const Register = () => {
                             </div>
                           </div>
                           
-                          {/* Premium Avatar Display - Smaller when collapsed */}
+                          {/* Premium Avatar Display - Much smaller when collapsed */}
                           <div className={`relative transition-all duration-300 ${
                             verificationExpanded 
                               ? 'w-10 h-10' 
-                              : 'w-8 h-8 ring-1 ring-blue-400/20'
+                              : 'w-6 h-6 ring-1 ring-blue-400/20'
                           }`}>
                             <div className={`w-full h-full rounded-full overflow-hidden shadow-lg transition-all duration-300 ${
                               verificationExpanded 
@@ -596,18 +596,18 @@ const Register = () => {
                               />
                             </div>
                             
-                            {/* Premium Glow Ring Animation - Smaller when collapsed */}
+                            {/* Premium Glow Ring Animation - Much smaller when collapsed */}
                             <motion.div
                               animate={{ 
                                 rotate: 360,
-                                scale: verificationExpanded ? 1 : 0.9
+                                scale: verificationExpanded ? 1 : 0.8
                               }}
                               transition={{ 
                                 rotate: { duration: 8, repeat: Infinity, ease: "linear" },
                                 scale: { duration: 0.3 }
                               }}
                               className={`absolute inset-0 rounded-full border border-dashed pointer-events-none transition-all duration-300 ${
-                                verificationExpanded ? 'border-green-400/30' : 'border-blue-400/25'
+                                verificationExpanded ? 'border-green-400/30' : 'border-blue-400/20'
                               }`}
                             />
                           </div>
