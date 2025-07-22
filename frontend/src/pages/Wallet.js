@@ -72,54 +72,6 @@ const Wallet = () => {
 
   const paymentAmounts = paytmService.getPaymentAmounts();
 
-  const transactions = [
-    {
-      id: 1,
-      type: 'credit',
-      amount: 1500,
-      description: '🏆 Victory! Free Fire Battle Royale Championship',
-      date: '2025-01-20',
-      status: 'completed',
-      category: 'prize'
-    },
-    {
-      id: 2,
-      type: 'debit',
-      amount: 100,
-      description: '⚔️ Entry Fee - Squad Battle Tournament',
-      date: '2025-01-19',
-      status: 'completed',
-      category: 'entry'
-    },
-    {
-      id: 3,
-      type: 'credit',
-      amount: 2000,
-      description: '💎 Battle Funds Added via Paytm',
-      date: '2025-01-18',
-      status: 'completed',
-      category: 'topup'
-    },
-    {
-      id: 4,
-      type: 'credit',
-      amount: 500,
-      description: '🎁 Daily Login Bonus',
-      date: '2025-01-17',
-      status: 'completed',
-      category: 'bonus'
-    },
-    {
-      id: 5,
-      type: 'debit',
-      amount: 250,
-      description: '🔥 Elite Tournament Entry',
-      date: '2025-01-16',
-      status: 'completed',
-      category: 'entry'
-    }
-  ];
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
