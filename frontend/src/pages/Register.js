@@ -499,10 +499,11 @@ const Register = () => {
                             transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
                             className="w-8 h-8 rounded-full overflow-hidden border-2 border-green-400/30 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-blue-500/20"
                           >
-                            {/* Secure inbuilt avatar - no external API exposure */}
-                            <div className="w-full h-full flex items-center justify-center text-lg bg-gradient-to-br from-blue-500 to-purple-600 rounded-full">
-                              <User className="h-4 w-4 text-white" />
-                            </div>
+                            {/* Avatar with fallback system */}
+                            <PlayerAvatar 
+                              avatarId={validationState.playerInfo.profileInfo?.avatarId}
+                              className="w-full h-full"
+                            />
                           </motion.div>
                         </div>
                         
