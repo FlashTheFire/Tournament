@@ -192,6 +192,7 @@ const Home = () => {
         'Brain': Brain,
         'Target': Target,
         'Trophy': Trophy,
+        'Crosshair': Crosshair,
         'Zap': Zap,
         'Crown': Crown,
         'Shield': Shield,
@@ -207,40 +208,7 @@ const Home = () => {
       setAiPredictions(processedPredictions);
     } catch (error) {
       console.error('Failed to load AI predictions:', error);
-      // Fallback to default predictions
-      const defaultPredictions = [
-        {
-          id: 'ai-1',
-          type: 'matchmaking',
-          title: 'Smart Match Ready',
-          prediction: 'Perfect opponents found with 94% skill match',
-          confidence: 94,
-          action: 'Start Battle',
-          icon: Brain,
-          gradient: 'from-cyan-500 to-blue-600'
-        },
-        {
-          id: 'ai-2',
-          type: 'performance',
-          title: 'Win Probability',
-          prediction: 'High chance of victory in next tournament',
-          confidence: 78,
-          action: 'View Strategy',
-          icon: Target,
-          gradient: 'from-green-500 to-emerald-600'
-        },
-        {
-          id: 'ai-3',
-          type: 'tournament',
-          title: 'Tournament Alert',
-          prediction: 'New high-prize tournament in 2 hours',
-          confidence: 100,
-          action: 'Register Now',
-          icon: Trophy,
-          gradient: 'from-yellow-500 to-orange-600'
-        }
-      ];
-      setAiPredictions(defaultPredictions);
+      setAiPredictions([]); // No fallback, empty array on error
     }
   };
 
