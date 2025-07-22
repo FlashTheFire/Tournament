@@ -96,7 +96,7 @@ const Dashboard = () => {
               WARRIOR DASHBOARD
             </span>
           </h1>
-          <p className="text-gray-300 text-lg">Welcome back, {user?.username || 'Elite Warrior'}! 🎮</p>
+          <p className="text-gray-300 text-lg">Welcome back, {user?.clan_name || 'Battle Champion'}! 🎮</p>
         </div>
 
         <div className="flex items-center space-x-4">
