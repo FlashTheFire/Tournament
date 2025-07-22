@@ -10,13 +10,74 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// API Key Management
+class APIKeyManager {
+  static API_KEY_STORAGE_KEY = 'ff_api_key';
+  static API_CLIENT_ID_KEY = 'ff_client_id';
+
+  static async generateAPIKey() {
+    try {
+      const clientData = {
+        client_id: `ff_client_${Date.now()}`,
+        app_name: 'Free Fire Tournament Platform'
+      };
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/auth/generate-key`,
+        clientData
+      );
+
+      if (response.data.success) {
+        localStorage.setItem(this.API_KEY_STORAGE_KEY, response.data.api_key);
+        localStorage.setItem(this.API_CLIENT_ID_KEY, response.data.client_id);
+        console.log('✅ API Key generated and stored');
+        return response.data.api_key;
+      }
+    } catch (error) {
+      console.error('❌ Failed to generate API key:', error);
+      throw error;
+    }
+  }
+
+  static getAPIKey() {
+    return localStorage.getItem(this.API_KEY_STORAGE_KEY);
+  }
+
+  static getClientId() {
+    return localStorage.getItem(this.API_CLIENT_ID_KEY);
+  }
+
+  static async ensureAPIKey() {
+    let apiKey = this.getAPIKey();
+    if (!apiKey) {
+      console.log('🔑 Generating new API key...');
+      apiKey = await this.generateAPIKey();
+    }
+    return apiKey;
+  }
+}
+
+// Request interceptor to add auth token and API key
 api.interceptors.request.use(
-  (config) => {
+  async (config) => {
+    // Add JWT token for authenticated endpoints
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // Add API key for secure endpoints (like Free Fire validation)
+    if (config.url && config.url.includes('/api/validate-freefire')) {
+      try {
+        const apiKey = await APIKeyManager.ensureAPIKey();
+        config.headers.Authorization = `Bearer ${apiKey}`;
+        console.log('🔑 Added API key to request');
+      } catch (error) {
+        console.error('❌ Failed to get API key:', error);
+        throw new Error('Failed to authenticate API request');
+      }
+    }
+
     return config;
   },
   (error) => {
