@@ -25,14 +25,14 @@ load_dotenv()
 
 app = FastAPI(title="Free Fire Tournament API", version="2.0.0")
 
-# Add CORS middleware - temporarily disabled for debugging
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"]
-# )
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 # Database configuration
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/tournament_db")
