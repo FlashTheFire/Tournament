@@ -195,7 +195,7 @@ const Login = () => {
                 <div>
                   <label htmlFor="email" className="block text-sm font-semibold text-white mb-3 flex items-center space-x-2">
                     <Mail className="h-4 w-4 text-neon-blue" />
-                    <span>Email or Username</span>
+                    <span>Email or Free Fire UID</span>
                   </label>
                   <motion.div 
                     className="relative"
