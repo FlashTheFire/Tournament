@@ -386,7 +386,8 @@ const Register = () => {
                     type="email"
                     required
                     value={formData.email}
-                    onChange={handleChange}
+                    onChange={handleChangeWithTracking}
+                    onFocus={() => handleFormInteraction('email')}
                     className="w-full px-4 py-2.5 lg:py-3 glass rounded-lg lg:rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-green transition-all duration-300 text-sm lg:text-base"
                     placeholder="Enter your email"
                   />
