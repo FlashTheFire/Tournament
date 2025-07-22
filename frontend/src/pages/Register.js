@@ -672,13 +672,13 @@ const Register = () => {
                   </div>
                 )}
 
-                {/* Submit Button */}
+                {/* Enhanced Submit Button - Same as Login */}
                 <motion.button
                   type="submit"
                   disabled={loading || validationState.uidValidation !== 'valid' || validationState.passwordMatch !== 'match'}
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`w-full py-3 lg:py-4 text-lg lg:text-xl font-bold ripple mobile-friendly group relative overflow-hidden mt-4 transition-all duration-300 ${
+                  className={`w-full py-4 text-xl font-bold ripple mobile-friendly group relative overflow-hidden transition-all duration-300 ${
                     loading || validationState.uidValidation !== 'valid' || validationState.passwordMatch !== 'match'
                       ? 'bg-gray-600 cursor-not-allowed opacity-50'
                       : 'btn-premium'
@@ -696,9 +696,9 @@ const Register = () => {
                         <motion.div
                           animate={{ rotate: 360 }}
                           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                          className="w-6 h-6 border-2 border-white border-t-transparent rounded-full"
                         />
-                        <span>Creating Account...</span>
+                        <span>Entering Arena...</span>
                       </motion.div>
                     ) : (
                       <motion.div
@@ -708,9 +708,9 @@ const Register = () => {
                         exit={{ opacity: 0 }}
                         className="flex items-center justify-center space-x-3"
                       >
-                        <UserPlus className="h-5 w-5 group-hover:animate-pulse" />
+                        <Gamepad2 className="h-6 w-6 group-hover:animate-pulse" />
                         <span>JOIN ARENA</span>
-                        <Zap className="h-5 w-5 group-hover:animate-bounce" />
+                        <Zap className="h-6 w-6 group-hover:animate-bounce" />
                       </motion.div>
                     )}
                   </AnimatePresence>
