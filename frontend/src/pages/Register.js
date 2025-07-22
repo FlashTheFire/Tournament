@@ -544,12 +544,14 @@ const Register = () => {
                       <div className="absolute inset-0 bg-gradient-to-r from-green-400/5 via-blue-400/5 to-purple-400/5"></div>
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400"></div>
                       
-                      {/* Main Content */}
-                      <div className="relative p-4">
-                        {/* Clickable Header with Verified Badge and Avatar */}
+                      {/* Main Content - Compact when collapsed */}
+                      <div className={`relative transition-all duration-300 ${verificationExpanded ? 'p-4' : 'p-2'}`}>
+                        {/* Clickable Header with Verified Badge and Avatar - Compact */}
                         <motion.div 
                           onClick={toggleVerificationPanel}
-                          className="flex items-center justify-between cursor-pointer group mb-4"
+                          className={`flex items-center justify-between cursor-pointer group transition-all duration-300 ${
+                            verificationExpanded ? 'mb-4' : 'mb-0'
+                          }`}
                           whileHover={{ scale: 1.01 }}
                           whileTap={{ scale: 0.99 }}
                         >
@@ -557,41 +559,55 @@ const Register = () => {
                             <motion.div
                               initial={{ scale: 0, rotate: -180 }}
                               animate={{ scale: 1, rotate: 0 }}
-                              className="w-7 h-7 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg shadow-green-400/30"
+                              className={`bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg shadow-green-400/30 transition-all duration-300 ${
+                                verificationExpanded ? 'w-7 h-7' : 'w-5 h-5'
+                              }`}
                             >
-                              <CheckCircle className="h-4 w-4 text-white" />
+                              <CheckCircle className={`text-white ${verificationExpanded ? 'h-4 w-4' : 'h-3 w-3'}`} />
                             </motion.div>
                             <div>
-                              <h4 className="text-green-400 font-bold text-base">Player Verified</h4>
-                              <p className="text-gray-400 text-sm">Free Fire account authenticated</p>
+                              <h4 className={`text-green-400 font-bold transition-all duration-300 ${
+                                verificationExpanded ? 'text-base' : 'text-sm'
+                              }`}>
+                                Player Verified
+                              </h4>
+                              <p className={`text-gray-400 transition-all duration-300 ${
+                                verificationExpanded ? 'text-sm' : 'text-xs'
+                              }`}>
+                                Free Fire account authenticated
+                              </p>
                             </div>
                           </div>
                           
-                          {/* Premium Avatar Display */}
+                          {/* Premium Avatar Display - Smaller when collapsed */}
                           <div className={`relative transition-all duration-300 ${
                             verificationExpanded 
                               ? 'w-10 h-10' 
-                              : 'w-12 h-12 ring-2 ring-blue-400/30'
+                              : 'w-8 h-8 ring-1 ring-blue-400/20'
                           }`}>
-                            <div className="w-full h-full rounded-full overflow-hidden border-2 border-green-400/40 shadow-lg">
+                            <div className={`w-full h-full rounded-full overflow-hidden shadow-lg transition-all duration-300 ${
+                              verificationExpanded 
+                                ? 'border-2 border-green-400/40'
+                                : 'border border-green-400/30'
+                            }`}>
                               <PlayerAvatar 
                                 avatarId={validationState.playerInfo.profileInfo?.avatarId}
                                 className="w-full h-full object-cover"
                               />
                             </div>
                             
-                            {/* Premium Glow Ring Animation */}
+                            {/* Premium Glow Ring Animation - Smaller when collapsed */}
                             <motion.div
                               animate={{ 
                                 rotate: 360,
-                                scale: verificationExpanded ? 1 : 1.1
+                                scale: verificationExpanded ? 1 : 0.9
                               }}
                               transition={{ 
                                 rotate: { duration: 8, repeat: Infinity, ease: "linear" },
                                 scale: { duration: 0.3 }
                               }}
-                              className={`absolute inset-0 rounded-full border-2 border-dashed pointer-events-none ${
-                                verificationExpanded ? 'border-green-400/30' : 'border-blue-400/40'
+                              className={`absolute inset-0 rounded-full border border-dashed pointer-events-none transition-all duration-300 ${
+                                verificationExpanded ? 'border-green-400/30' : 'border-blue-400/25'
                               }`}
                             />
                           </div>
