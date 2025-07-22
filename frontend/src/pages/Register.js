@@ -287,7 +287,7 @@ const Register = () => {
                   transition={{ delay: 0.6 }}
                   className="text-xl lg:text-2xl font-bold text-white"
                 >
-                  ELITE WARRIORS
+                  BATTLE ARENA
                 </motion.h2>
               </div>
             </div>
