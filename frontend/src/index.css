@@ -758,3 +758,30 @@ body {
     box-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
   }
 }
+
+/* Premium Register Page Scrollbar */
+.register-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.register-scrollbar::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 4px;
+}
+
+.register-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--scrollbar-thumb), var(--neon-purple));
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+}
+
+.register-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--scrollbar-thumb-hover), var(--electric-purple));
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+}
+
+/* Firefox scrollbar support */
+.register-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
