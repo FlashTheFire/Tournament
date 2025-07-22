@@ -499,15 +499,10 @@ const Register = () => {
                             transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
                             className="w-8 h-8 rounded-full overflow-hidden border-2 border-green-400/30 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-blue-500/20"
                           >
-                            <img
-                              src={`https://freefireinfo.vercel.app/icon?id=${validationState.playerInfo.avatarId || '102000007'}`}
-                              alt="Player Avatar"
-                              className="w-full h-full object-cover rounded-full"
-                              onError={(e) => {
-                                // Fallback to Shield security icon if image fails to load
-                                e.target.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center text-lg"><svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 6 5 11 9 11s9-5 9-11V7l-9-5zm-1 9v6h2v-6h2l-3-3-3 3h2z"/></svg></div>';
-                              }}
-                            />
+                            {/* Secure inbuilt avatar - no external API exposure */}
+                            <div className="w-full h-full flex items-center justify-center text-lg bg-gradient-to-br from-blue-500 to-purple-600 rounded-full">
+                              <User className="h-4 w-4 text-white" />
+                            </div>
                           </motion.div>
                         </div>
                         
