@@ -280,11 +280,11 @@ async def validate_freefire_uid(
         client_id = auth_data["client_id"]
         print(f"API Request from client: {client_id} - UID: {uid}, Region: {region}")
         
-        # Validate UID format (8-12 digits)
-        if not uid.isdigit() or not (8 <= len(uid) <= 12):
+        # Validate UID format (6-12 digits)
+        if not uid.isdigit() or not (6 <= len(uid) <= 12):
             return {
                 "valid": False, 
-                "error": "Free Fire UID must be 8-12 digits",
+                "error": "Free Fire UID must be 6-12 digits",
                 "client_id": client_id
             }
         
