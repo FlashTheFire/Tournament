@@ -93,11 +93,11 @@ async def validate_freefire_uid(uid: str, region: str):
     Validate Free Fire UID and return player information
     """
     try:
-        # Validate UID format (6-12 digits)
-        if not uid.isdigit() or not (6 <= len(uid) <= 12):
+        # Validate UID format (8-12 digits)
+        if not uid.isdigit() or not (8 <= len(uid) <= 12):
             return {
                 "valid": False, 
-                "error": "Free Fire UID must be 6-12 digits"
+                "error": "Free Fire UID must be 8-12 digits"
             }
         
         # Call the Free Fire API
