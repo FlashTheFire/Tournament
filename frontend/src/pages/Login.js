@@ -236,6 +236,7 @@ const Login = () => {
                       onChange={handleChange}
                       className="w-full pl-12 pr-14 py-4 glass rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-purple focus:border-neon-purple transition-all duration-300 text-lg"
                       placeholder="Enter your password"
+                      autoComplete="current-password"
                     />
                     <motion.button
                       type="button"
