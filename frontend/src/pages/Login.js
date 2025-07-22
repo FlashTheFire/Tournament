@@ -210,7 +210,8 @@ const Login = () => {
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full pl-12 pr-4 py-4 glass rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-blue focus:border-neon-blue transition-all duration-300 text-lg"
-                      placeholder="Enter email or username"
+                      placeholder="Enter email or Free Fire UID"
+                      autoComplete="off"
                     />
                   </motion.div>
                 </div>
