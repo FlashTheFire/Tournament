@@ -216,19 +216,18 @@ const Home = () => {
     try {
       const data = await apiService.getLiveStats();
       setLiveStats({
-        totalTournaments: data.totalTournaments,
-        totalPrizePool: data.totalPrizePool,
-        activePlayers: data.activePlayers,
-        liveMatches: data.liveMatches
+        totalTournaments: data.total_tournaments || 0,
+        totalPrizePool: data.total_prize_pool || 0,
+        activePlayers: data.active_players || 0,
+        liveMatches: data.live_matches || 0
       });
     } catch (error) {
       console.error('Failed to load live stats:', error);
-      // Keep realistic default stats as fallback
       setLiveStats({
-        totalTournaments: 150,
-        totalPrizePool: 5000000, // ₹5M
-        activePlayers: 45000,   // 45K
-        liveMatches: 200
+        totalTournaments: 0,
+        totalPrizePool: 0,
+        activePlayers: 0,
+        liveMatches: 0
       });
     }
   };
