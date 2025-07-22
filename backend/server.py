@@ -1,11 +1,17 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import httpx
-from datetime import datetime
-from typing import Dict, Optional
+from datetime import datetime, timedelta
+from typing import Dict, Optional, List
 import hashlib
 import uuid
+import os
+from pymongo import MongoClient
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI(title="Free Fire Tournament API", version="1.0.0")
 
@@ -18,7 +24,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory user storage (in production, use a proper database)
+# MongoDB connection
+MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
+client = MongoClient(MONGO_URL)
+db = client.tournament_db
+
+# Collections
+users_collection = db.users
+tournaments_collection = db.tournaments
+leaderboards_collection = db.leaderboards
+registrations_collection = db.registrations
+payments_collection = db.payments
+
+# In-memory user storage (in production, use a proper database) - keeping for backward compatibility
 users_db = {}
 active_sessions = {}
 
