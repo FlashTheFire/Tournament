@@ -545,9 +545,14 @@ const Register = () => {
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400"></div>
                       
                       {/* Main Content */}
-                      <div className="relative p-3 lg:p-4">
-                        {/* Header with Verified Badge and Avatar Toggle */}
-                        <div className="flex items-center justify-between mb-3">
+                      <div className="relative p-4">
+                        {/* Clickable Header with Verified Badge and Avatar */}
+                        <motion.div 
+                          onClick={toggleVerificationPanel}
+                          className="flex items-center justify-between cursor-pointer group mb-4"
+                          whileHover={{ scale: 1.01 }}
+                          whileTap={{ scale: 0.99 }}
+                        >
                           <div className="flex items-center space-x-3">
                             <motion.div
                               initial={{ scale: 0, rotate: -180 }}
@@ -557,50 +562,29 @@ const Register = () => {
                               <CheckCircle className="h-4 w-4 text-white" />
                             </motion.div>
                             <div>
-                              <h4 className="text-green-400 font-bold text-sm lg:text-base">Player Verified</h4>
-                              <p className="text-gray-400 text-xs">Free Fire account authenticated</p>
+                              <h4 className="text-green-400 font-bold text-base">Player Verified</h4>
+                              <p className="text-gray-400 text-sm">Free Fire account authenticated</p>
                             </div>
                           </div>
                           
-                          {/* Premium Avatar Toggle Button */}
-                          <motion.button
-                            onClick={toggleVerificationPanel}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.95 }}
-                            className={`relative w-10 h-10 rounded-full overflow-hidden border-2 transition-all duration-300 cursor-pointer group ${
-                              verificationExpanded 
-                                ? 'border-green-400/50 shadow-lg shadow-green-400/30' 
-                                : 'border-blue-400/50 shadow-lg shadow-blue-400/30 ring-2 ring-blue-400/20'
-                            }`}
-                          >
-                            {/* Premium Avatar with External Image */}
-                            <div className="relative w-full h-full">
+                          {/* Premium Avatar Display */}
+                          <div className={`relative transition-all duration-300 ${
+                            verificationExpanded 
+                              ? 'w-10 h-10' 
+                              : 'w-12 h-12 ring-2 ring-blue-400/30'
+                          }`}>
+                            <div className="w-full h-full rounded-full overflow-hidden border-2 border-green-400/40 shadow-lg">
                               <PlayerAvatar 
                                 avatarId={validationState.playerInfo.profileInfo?.avatarId}
                                 className="w-full h-full object-cover"
                               />
-                              
-                              {/* Premium Overlay with Expand/Collapse Indicator */}
-                              <div className={`absolute inset-0 bg-black/20 flex items-center justify-center transition-opacity duration-300 ${
-                                verificationExpanded ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'
-                              }`}>
-                                <motion.div
-                                  animate={{ rotate: verificationExpanded ? 180 : 0 }}
-                                  transition={{ duration: 0.3 }}
-                                  className="w-4 h-4 text-white/80"
-                                >
-                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                  </svg>
-                                </motion.div>
-                              </div>
                             </div>
                             
                             {/* Premium Glow Ring Animation */}
                             <motion.div
                               animate={{ 
                                 rotate: 360,
-                                scale: verificationExpanded ? 1 : 1.2
+                                scale: verificationExpanded ? 1 : 1.1
                               }}
                               transition={{ 
                                 rotate: { duration: 8, repeat: Infinity, ease: "linear" },
@@ -610,8 +594,8 @@ const Register = () => {
                                 verificationExpanded ? 'border-green-400/30' : 'border-blue-400/40'
                               }`}
                             />
-                          </motion.button>
-                        </div>
+                          </div>
+                        </motion.div>
                         
                         {/* Collapsible Player Details */}
                         <AnimatePresence>
@@ -624,14 +608,14 @@ const Register = () => {
                               className="overflow-hidden"
                             >
                               {/* Player Stats Grid with Premium Animations */}
-                              <div className="grid grid-cols-2 gap-2 lg:gap-3 mt-3">
+                              <div className="grid grid-cols-2 gap-3">
                                 {/* Nickname Card */}
                                 <motion.div
                                   initial={{ opacity: 0, x: -20 }}
                                   animate={{ opacity: 1, x: 0 }}
                                   exit={{ opacity: 0, x: -20 }}
                                   transition={{ delay: 0.1 }}
-                                  className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20 hover:border-blue-400/40 transition-all duration-300"
+                                  className="glass rounded-lg p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20 hover:border-blue-400/40 transition-all duration-300"
                                 >
                                   <div className="flex items-center justify-between mb-1">
                                     <div className="flex items-center space-x-2">
@@ -653,7 +637,7 @@ const Register = () => {
                                   animate={{ opacity: 1, x: 0 }}
                                   exit={{ opacity: 0, x: 20 }}
                                   transition={{ delay: 0.2 }}
-                                  className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-400/20 hover:border-yellow-400/40 transition-all duration-300"
+                                  className="glass rounded-lg p-3 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-400/20 hover:border-yellow-400/40 transition-all duration-300"
                                 >
                                   <div className="flex items-center space-x-2 mb-1">
                                     <Star className="h-3 w-3 text-yellow-400" />
@@ -668,7 +652,7 @@ const Register = () => {
                                   animate={{ opacity: 1, x: 0 }}
                                   exit={{ opacity: 0, x: -20 }}
                                   transition={{ delay: 0.3 }}
-                                  className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-400/20 hover:border-purple-400/40 transition-all duration-300"
+                                  className="glass rounded-lg p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-400/20 hover:border-purple-400/40 transition-all duration-300"
                                 >
                                   <div className="flex items-center justify-between mb-1">
                                     <div className="flex items-center space-x-2">
@@ -692,7 +676,7 @@ const Register = () => {
                                   animate={{ opacity: 1, x: 0 }}
                                   exit={{ opacity: 0, x: 20 }}
                                   transition={{ delay: 0.4 }}
-                                  className="glass rounded-lg p-2 lg:p-3 bg-gradient-to-br from-green-500/10 to-teal-500/10 border border-green-400/20 hover:border-green-400/40 transition-all duration-300"
+                                  className="glass rounded-lg p-3 bg-gradient-to-br from-green-500/10 to-teal-500/10 border border-green-400/20 hover:border-green-400/40 transition-all duration-300"
                                 >
                                   <div className="flex items-center space-x-2 mb-1">
                                     <Zap className="h-3 w-3 text-green-400" />
@@ -704,32 +688,6 @@ const Register = () => {
                             </motion.div>
                           )}
                         </AnimatePresence>
-                        
-                        {/* Premium Floating Particles */}
-                        <motion.div 
-                          animate={{ 
-                            opacity: [0.6, 1, 0.6],
-                            scale: [1, 1.2, 1]
-                          }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                          className="absolute top-2 right-4 w-1 h-1 bg-green-400 rounded-full"
-                        />
-                        <motion.div 
-                          animate={{ 
-                            opacity: [0.4, 0.8, 0.4],
-                            scale: [0.8, 1.1, 0.8]
-                          }}
-                          transition={{ duration: 2.5, repeat: Infinity, delay: 1 }}
-                          className="absolute bottom-3 left-6 w-1 h-1 bg-blue-400 rounded-full"
-                        />
-                        <motion.div 
-                          animate={{ 
-                            opacity: [0.3, 0.7, 0.3],
-                            scale: [0.6, 1, 0.6]
-                          }}
-                          transition={{ duration: 3, repeat: Infinity, delay: 2 }}
-                          className="absolute top-1/2 right-8 w-0.5 h-0.5 bg-purple-400 rounded-full"
-                        />
                       </div>
                     </motion.div>
                   )}
