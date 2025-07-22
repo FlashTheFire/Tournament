@@ -4,6 +4,8 @@ import uvicorn
 import httpx
 from datetime import datetime
 from typing import Dict, Optional
+import hashlib
+import uuid
 
 app = FastAPI(title="Free Fire Tournament API", version="1.0.0")
 
@@ -15,6 +17,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# In-memory user storage (in production, use a proper database)
+users_db = {}
+active_sessions = {}
 
 # Free Fire API configuration
 FREE_FIRE_API_BASE = "https://region-info-api.vercel.app"
