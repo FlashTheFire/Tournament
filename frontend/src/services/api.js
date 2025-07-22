@@ -406,6 +406,38 @@ export const apiService = {
   },
 
   // =====================
+  // Free Fire APIs
+  // =====================
+  
+  async validateFreeFireUID(uid, region) {
+    try {
+      console.log('🔑 Validating Free Fire UID with API key...');
+      const response = await api.get(`/api/validate-freefire?uid=${uid}&region=${region}`);
+      console.log('✅ Free Fire validation response:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ Free Fire validation error:', error);
+      throw error;
+    }
+  },
+
+  // =====================
+  // API Key Management
+  // =====================
+  
+  async generateAPIKey() {
+    return await APIKeyManager.generateAPIKey();
+  },
+
+  getAPIKey() {
+    return APIKeyManager.getAPIKey();
+  },
+
+  getClientId() {
+    return APIKeyManager.getClientId();
+  },
+
+  // =====================
   // Utility Functions
   // =====================
 
