@@ -364,56 +364,84 @@ const Wallet = () => {
             </div>
 
             <div className="space-y-3">
-              {transactions.map((transaction, index) => (
-                <motion.div
-                  key={transaction.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 + index * 0.1 }}
-                  whileHover={{ scale: 1.01, x: 5 }}
-                  className="flex items-center justify-between p-4 glass rounded-xl border border-white/5 hover:border-white/10 transition-all duration-300 group"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${
-                      transaction.type === 'credit' 
-                        ? 'bg-gradient-to-r from-neon-green to-emerald-500' 
-                        : 'bg-gradient-to-r from-red-500 to-pink-500'
-                    } group-hover:scale-110 transition-transform`}>
-                      {transaction.type === 'credit' ? (
-                        <ArrowDownLeft className="h-5 w-5 text-white" />
-                      ) : (
-                        <ArrowUpRight className="h-5 w-5 text-white" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-white font-semibold text-sm mb-1">
-                        {transaction.description}
-                      </p>
-                      <div className="flex items-center space-x-3">
-                        <p className="text-gray-400 text-xs">{transaction.date}</p>
-                        <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                          transaction.category === 'prize' ? 'bg-yellow-400/20 text-yellow-400' :
-                          transaction.category === 'bonus' ? 'bg-green-500/20 text-green-400' :
-                          transaction.category === 'topup' ? 'bg-blue-500/20 text-blue-400' :
-                          'bg-gray-500/20 text-gray-400'
-                        }`}>
-                          {transaction.category.toUpperCase()}
-                        </span>
+              {loading ? (
+                <div className="space-y-3">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="animate-pulse flex items-center space-x-4 p-4 glass rounded-xl border border-white/5">
+                      <div className="h-10 w-10 bg-white/10 rounded-xl"></div>
+                      <div className="flex-1 space-y-2">
+                        <div className="h-4 bg-white/10 rounded w-3/4"></div>
+                        <div className="h-3 bg-white/10 rounded w-1/2"></div>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="h-4 bg-white/10 rounded w-16"></div>
+                        <div className="h-3 bg-white/10 rounded w-12"></div>
                       </div>
                     </div>
+                  ))}
+                </div>
+              ) : transactions.length === 0 ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
+                    <History className="h-8 w-8 text-gray-500" />
                   </div>
-                  <div className="text-right">
-                    <p className={`font-bold ${
-                      transaction.type === 'credit' ? 'text-neon-green' : 'text-red-400'
-                    }`}>
-                      {transaction.type === 'credit' ? '+' : '-'}₹{transaction.amount}
-                    </p>
-                    <p className="text-gray-400 text-xs">
-                      {transaction.type === 'credit' ? '+' : '-'}{paytmService.amountToCoins(transaction.amount)} coins
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+                  <p className="text-gray-400 text-lg font-semibold mb-2">No Transaction History</p>
+                  <p className="text-gray-500 text-sm">Your battle transactions will appear here</p>
+                </div>
+              ) : (
+                transactions.map((transaction, index) => (
+                  <motion.div
+                    key={transaction.transaction_id || transaction.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    whileHover={{ scale: 1.01, x: 5 }}
+                    className="flex items-center justify-between p-4 glass rounded-xl border border-white/5 hover:border-white/10 transition-all duration-300 group"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${
+                        transaction.type === 'credit' 
+                          ? 'bg-gradient-to-r from-neon-green to-emerald-500' 
+                          : 'bg-gradient-to-r from-red-500 to-pink-500'
+                      } group-hover:scale-110 transition-transform`}>
+                        {transaction.type === 'credit' ? (
+                          <ArrowDownLeft className="h-5 w-5 text-white" />
+                        ) : (
+                          <ArrowUpRight className="h-5 w-5 text-white" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-white font-semibold text-sm mb-1">
+                          {transaction.description}
+                        </p>
+                        <div className="flex items-center space-x-3">
+                          <p className="text-gray-400 text-xs">
+                            {new Date(transaction.created_at || transaction.date).toLocaleDateString()}
+                          </p>
+                          <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                            transaction.category === 'prize' ? 'bg-yellow-400/20 text-yellow-400' :
+                            transaction.category === 'bonus' ? 'bg-green-500/20 text-green-400' :
+                            transaction.category === 'topup' ? 'bg-blue-500/20 text-blue-400' :
+                            'bg-gray-500/20 text-gray-400'
+                          }`}>
+                            {transaction.category?.toUpperCase() || 'TRANSACTION'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className={`font-bold ${
+                        transaction.type === 'credit' ? 'text-neon-green' : 'text-red-400'
+                      }`}>
+                        {transaction.type === 'credit' ? '+' : '-'}₹{transaction.amount}
+                      </p>
+                      <p className="text-gray-400 text-xs">
+                        {transaction.type === 'credit' ? '+' : '-'}{paytmService.amountToCoins(transaction.amount)} coins
+                      </p>
+                    </div>
+                  </motion.div>
+                ))
+              )}
             </div>
           </motion.div>
         </motion.div>
