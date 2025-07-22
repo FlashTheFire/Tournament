@@ -461,5 +461,8 @@ export const apiService = {
   }
 };
 
+// Export both APIKeyManager and apiService
+export { APIKeyManager };
+
 // Export default for easier importing
 export default apiService;
