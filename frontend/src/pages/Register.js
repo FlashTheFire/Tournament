@@ -531,14 +531,14 @@ const Register = () => {
                   )}
                 </AnimatePresence>
 
-                {/* Premium Collapsible Player Verification Display */}
+                {/* Premium Collapsible Player Verification Display - with top margin for spacing */}
                 <AnimatePresence>
                   {validationState.uidValidation === 'valid' && validationState.playerInfo && (
                     <motion.div
                       initial={{ opacity: 0, height: 0, scale: 0.95 }}
                       animate={{ opacity: 1, height: 'auto', scale: 1 }}
                       exit={{ opacity: 0, height: 0, scale: 0.95 }}
-                      className="relative overflow-hidden rounded-xl bg-gradient-to-r from-green-500/10 via-blue-500/10 to-purple-500/10 border border-green-500/30 backdrop-blur-xl"
+                      className="relative overflow-hidden rounded-xl bg-gradient-to-r from-green-500/10 via-blue-500/10 to-purple-500/10 border border-green-500/30 backdrop-blur-xl mt-6"
                     >
                       {/* Animated Background Elements */}
                       <div className="absolute inset-0 bg-gradient-to-r from-green-400/5 via-blue-400/5 to-purple-400/5"></div>
