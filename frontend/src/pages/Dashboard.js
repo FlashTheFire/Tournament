@@ -48,44 +48,7 @@ const Dashboard = () => {
       setDashboardData(data);
     } catch (error) {
       console.error('Failed to load dashboard:', error);
-      // Fallback to mock data only if API fails
-      const mockData = {
-        stats: {
-          tournamentsJoined: 12,
-          totalWinnings: 15600,
-          currentRank: 42,
-          winRate: 73.2,
-          killsTotal: 1847,
-          averageRank: 12.5,
-          hoursPlayed: 156
-        },
-        recentTournaments: [
-          {
-            id: 'ff-championship',
-            name: 'Free Fire Championship 2025',
-            status: 'live',
-            prize: 50000,
-            participants: '89/100',
-            date: new Date().toISOString(),
-            registered: true
-          }
-        ],
-        achievements: [
-          { id: 1, name: 'Tournament Warrior', description: 'Join your first tournament', earned: true, rarity: 'common' },
-          { id: 2, name: 'Elite Player', description: 'Reach top 50 in leaderboards', earned: true, rarity: 'rare' },
-          { id: 3, name: 'Prize Winner', description: 'Win tournament earnings', earned: false, rarity: 'epic' }
-        ],
-        weeklyProgress: [
-          { day: 'Mon', matches: 3, wins: 2 },
-          { day: 'Tue', matches: 5, wins: 4 },
-          { day: 'Wed', matches: 4, wins: 3 },
-          { day: 'Thu', matches: 6, wins: 5 },
-          { day: 'Fri', matches: 4, wins: 3 },
-          { day: 'Sat', matches: 8, wins: 6 },
-          { day: 'Sun', matches: 5, wins: 4 }
-        ]
-      };
-      setDashboardData(mockData);
+      safeToast.error('Failed to load dashboard data. Please refresh the page.');
     } finally {
       setLoading(false);
     }
