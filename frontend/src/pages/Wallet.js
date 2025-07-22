@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Wallet as WalletIcon, 
@@ -17,6 +17,8 @@ import {
   History
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { apiService } from '../services/api';
+import safeToast from '../utils/safeToast';
 import PremiumQRPayment from '../components/PremiumQRPayment';
 import { paytmService } from '../services/PaytmService';
 
